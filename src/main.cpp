@@ -1,10 +1,15 @@
 #include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include "htmlreader.h"
 
-using namespace std;
-
-int main()
+int main(int argc, char* argv[])
 {
-    cout << "Hello World!" << endl;
+
+    FILE *HTMLDocument;
+    HTMLDocument = fopen(argv[1], "r");
+
+    HTMLReader::parseDocument(HTMLDocument);
+
     return 0;
 }
-
