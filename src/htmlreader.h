@@ -7,7 +7,7 @@ class HTMLReader
 {
 public:
     HTMLReader();
-    static void parseDocument(FILE* HTMLDocument);
+    static void parseDocument(char HTMLFilepath[]);
 };
 
 #endif // HTMLREADER_H
