@@ -11,7 +11,6 @@ public:
 private:
     std::string text;
 
-
 };
 
 #endif // RENDEROBJECT_H

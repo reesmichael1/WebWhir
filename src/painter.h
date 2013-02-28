@@ -1,7 +1,7 @@
 #ifndef PAINTER_H
 #define PAINTER_H
 
-#include renderobject.h
+#include "renderobject.h"
 
 class Painter
 {

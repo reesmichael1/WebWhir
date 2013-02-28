@@ -6,5 +6,5 @@ Painter::Painter()
 
 Painter::drawNode(RenderObject *node)
 {
-
+    SkCanvas
 }

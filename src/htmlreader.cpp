@@ -20,6 +20,20 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
         {
             std::cout << "Now entering the parser." << std::endl;
         }
+
+        std::string line;
+
+        while (HTMLDocument.good())
+        {
+            std::getline(HTMLDocument, line);
+            RenderObject renderNode;
+            renderNode.setText(line);
+        }
+
+        HTMLDocument.close();
+
+        Painter::drawNode(&renderNode);
+
     }
 
     catch (int i)
