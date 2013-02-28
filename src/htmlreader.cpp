@@ -8,9 +8,7 @@ HTMLReader::HTMLReader()
 
 void HTMLReader::parseDocument(char HTMLFilepath[])
 {
-<<<<<<< HEAD
 
-=======
     try
     {
         std::ifstream HTMLDocument(HTMLFilepath);
