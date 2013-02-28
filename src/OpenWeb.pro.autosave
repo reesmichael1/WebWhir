@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-LIBS += -L/usr/lib/skia -skia
+LIBS += -L/usr/lib/skia/trunk -skia
 
 SOURCES += main.cpp \
     htmlreader.cpp \
