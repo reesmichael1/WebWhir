@@ -29,5 +29,5 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
             std::cerr << "Error: Could not open the document." << std::endl;
         }
     }
->>>>>>> bb6e85ace0634183f8aa5940903cde59aee0c863
+
 }
