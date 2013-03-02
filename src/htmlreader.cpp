@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "htmlreader.h"
+#include "rendernode.h"
+#include "painter.h"
 
 HTMLReader::HTMLReader()
 {
@@ -15,10 +18,16 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
         {
             throw 0;
         }
-        else
-        {
-            std::cout << "Now entering the parser." << std::endl;
-        }
+
+        std::string line;
+        RenderNode node;
+
+        //For some reason, this doesn't work when I try to put it through a loop
+        //and use std::getline() to read each line. This needs more investigation.
+        std::getline(HTMLDocument, line);
+        node.setText(line);
+        Painter::paintNode(&node);
+
     }
 
     catch (int i)
