@@ -7,7 +7,7 @@ class RenderNode
 {
 public:
     RenderNode();
-    void setText(std::string textToSet);
+    void appendText(std::string *textToSet);
     std::string getText();
 
 private:

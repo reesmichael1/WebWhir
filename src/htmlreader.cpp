@@ -19,36 +19,21 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
         {
             throw 0;
         }
-<<<<<<< HEAD
 
-        std::string line;
+        std::string line = "Error: no text.";
         RenderNode node;
 
-        //For some reason, this doesn't work when I try to put it through a loop
-        //and use std::getline() to read each line. This needs more investigation.
-        std::getline(HTMLDocument, line);
-        node.setText(line);
-        Painter::paintNode(&node);
-=======
-        else
-        {
-            std::cout << "Now entering the parser." << std::endl;
-        }
-
-        std::string line;
-
-        while (HTMLDocument.good())
+        while (!line.empty())
         {
             std::getline(HTMLDocument, line);
-            RenderObject renderNode;
-            renderNode.setText(line);
+            if (!line.empty())
+            {
+                node.appendText(&line);
+            }
         }
 
+        Painter::paintNode(&node);
         HTMLDocument.close();
-
-        Painter::drawNode(&renderNode);
->>>>>>> caf0e5f71f03e2eeef0c2e69104f8692afffc831
-
     }
 
     catch (int i)
