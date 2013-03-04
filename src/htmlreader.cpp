@@ -20,16 +20,20 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
             throw 0;
         }
 
-        std::string line = "Error: no text.";
+        std::string line;
         RenderNode node;
+
+        std::getline(HTMLDocument, line);
+
+        if (line.empty())
+        {
+            throw 1;
+        }
 
         while (!line.empty())
         {
+            node.appendText(&line);
             std::getline(HTMLDocument, line);
-            if (!line.empty())
-            {
-                node.appendText(&line);
-            }
         }
 
         Painter::paintNode(&node);
@@ -42,6 +46,12 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
         {
             std::cerr << "Error: Could not open the document." << std::endl;
         }
+
+        if (i == 1)
+        {
+            std::cerr << "Error: Document is empty." << std::endl;
+        }
+
     }
 
 }

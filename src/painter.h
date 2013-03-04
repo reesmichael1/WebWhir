@@ -8,6 +8,9 @@ class Painter
 public:
     Painter();
     static void paintNode(RenderNode *node);
+
+private:
+    void drawScreen();
 };
 
 #endif // PAINTER_H

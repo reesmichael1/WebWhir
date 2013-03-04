@@ -3,7 +3,11 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-LIBS += -L/usr/lib/sdl
+LIBS += -L/usr/local/lib/sdl/ -lSDL
+LIBS += -L/usr/local/lib/freetype/ -lfreetype -lz
+
+INCLUDEPATH += /usr/local/include/freetype2
+INCLUDEPATH += /usr/X11/include
 
 SOURCES += main.cpp \
     htmlreader.cpp \
