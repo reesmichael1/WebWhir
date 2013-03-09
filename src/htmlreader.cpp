@@ -30,7 +30,7 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
             throw 1;
         }
 
-        while (!line.empty())
+        while (!HTMLDocument.eof())
         {
             node.appendText(&line);
             std::getline(HTMLDocument, line);

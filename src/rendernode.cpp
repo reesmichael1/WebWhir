@@ -1,6 +1,6 @@
-#include "rendernode.h"
 #include <iostream>
 #include <string>
+#include "rendernode.h"
 
 RenderNode::RenderNode()
 {

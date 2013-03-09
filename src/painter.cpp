@@ -9,17 +9,9 @@ Painter::Painter()
 
 void Painter::paintNode(RenderNode *node)
 {
-
-        SDL_Init(SDL_INIT_VIDEO);
-        std::cout << node->getText() << std::endl;
-
-        SDL_Quit();
-
+    std::cout << node->getText() << std::endl;
 }
 
 void Painter::drawScreen()
 {
-    SDL_Surface *screen;
-
-    screen = SDL_SetVideoMode(640, 480, 16, SDL_SWSURFACE);
 }
