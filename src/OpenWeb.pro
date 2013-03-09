@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-LIBS += -L/usr/local/lib/sdl -lSDL -SDLmain
+LIBS += -L\usr\local\lib\sdl -lSDL -lSDLmain
 
 INCLUDEPATH += /usr/local/include/freetype2
 INCLUDEPATH += /usr/X11/include
