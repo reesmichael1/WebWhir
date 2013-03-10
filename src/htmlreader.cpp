@@ -17,7 +17,7 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
         std::ifstream HTMLDocument(HTMLFilepath);
         if (!HTMLDocument.is_open())
         {
-            throw 0;
+            throw "Error: Could not open document.";
         }
 
         std::string line;
@@ -27,7 +27,7 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
 
         if (line.empty())
         {
-            throw 1;
+            throw "Error: Document is empty.";
         }
 
         while (!HTMLDocument.eof())
@@ -36,23 +36,13 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
             std::getline(HTMLDocument, line);
         }
 
-        Painter display;
-        display.paintNode(&node);
+        Painter display(&node);
         HTMLDocument.close();
     }
 
-    catch (int i)
+    catch (char error[])
     {
-        if (i == 0)
-        {
-            std::cerr << "Error: Could not open the document." << std::endl;
-        }
-
-        if (i == 1)
-        {
-            std::cerr << "Error: Document is empty." << std::endl;
-        }
-
+        std::cerr << error << std::endl;
     }
 
 }
