@@ -3,10 +3,6 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-LIBS += -L/usr/local/lib/sdl -lSDL
-
-INCLUDEPATH += /usr/local/include
-
 SOURCES += main.cpp \
     htmlreader.cpp \
     rendernode.cpp \
