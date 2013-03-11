@@ -1,16 +1,17 @@
 #ifndef PAINTER_H
 #define PAINTER_H
 
+#include "SDL/SDL.h"
 #include "rendernode.h"
 
 class Painter
 {
 public:
-    Painter();
-    static void paintNode(RenderNode *node);
+    Painter(RenderNode *node);
+    void paintNode(RenderNode *node);
 
 private:
-    void drawScreen();
+    SDL_Surface *renderScreen;
 };
 
 #endif // PAINTER_H
