@@ -216,7 +216,7 @@ pip-log.txt
 <<<<<<< HEAD
 .mr.developer.cfg
 
-/Debug
+/Builds
 =======
 .mr.developer.cfg
 >>>>>>> dc113adead94d1349a54c1047c4dea019f56290f
