@@ -1,7 +1,7 @@
 #ifndef PAINTER_H
 #define PAINTER_H
 
-#include "SDL.h"
+#include "SDL/SDL.h"
 #include "rendernode.h"
 
 class Painter

@@ -7,9 +7,7 @@ LIBS += -L\usr\local\lib\sdl -lSDL -lSDLmain
 LIBS += -L\usr\local\lib\sdl_ttf -lSDL_ttf
 LIBS += -L\usr\local\lib\freetype2 -lfreetype
 
-INCLUDEPATH += /usr/local/include/sdl
-INCLUDEPATH += /usr/local/include/sdl_ttf
-INCLUDEPATH += /usr/local/include/freetype2
+INCLUDEPATH += /usr/local/include/
 
 SOURCES += main.cpp \
     htmlreader.cpp \

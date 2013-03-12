@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include "painter.h"
-#include "SDL.h"
-#include "SDL_ttf.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_ttf.h"
 
 Painter::Painter(RenderNode *node)
 {
@@ -49,10 +49,10 @@ void Painter::paintNode(RenderNode *node)
             throw "Error: Could not initialize SDL.";
         }
 
-        TTF_Font *tungaFont = NULL;
-        tungaFont = TTF_OpenFont("fonts/tunga.ttf", 100);
+        TTF_Font *typeFont = NULL;
+        typeFont = TTF_OpenFont("fonts/tunga.ttf", 100);
 
-        if (tungaFont == NULL)
+        if (typeFont == NULL)
         {
             throw "Error: Could not initialize the font library.";
         }
@@ -60,19 +60,21 @@ void Painter::paintNode(RenderNode *node)
         SDL_Surface *tempScreen = NULL;
         SDL_Surface *returnScreen = NULL;
 
-        if((tempScreen = SDL_LoadBMP("bitmap.bmp")) == NULL)
-        {
-            throw "Error: Could not load the bitmap.";
-        }
-
-        returnScreen = SDL_DisplayFormat(tempScreen);
-        SDL_FreeSurface(tempScreen);
-
         SDL_Color textColor;
         textColor.b = 100;
         textColor.g = 100;
         textColor.r = 100;
-        tempScreen = TTF_RenderText_Blended(tungaFont, node->getText().c_str(), textColor);
+
+        tempScreen = (TTF_RenderText_Blended(typeFont,
+                                             node->getText().c_str(), textColor));
+
+        if(tempScreen == NULL)
+        {
+            throw "Error: Could not render the text properly.";
+        }
+
+        returnScreen = SDL_DisplayFormat(tempScreen);
+        SDL_FreeSurface(tempScreen);
 
         if (returnScreen == NULL)
         {
@@ -81,8 +83,8 @@ void Painter::paintNode(RenderNode *node)
 
         SDL_Rect rectangle;
 
-        rectangle.x = 10;
-        rectangle.y = 25;
+        rectangle.x = 0;
+        rectangle.y = 0;
 
         SDL_BlitSurface(returnScreen, NULL, renderScreen, &rectangle);
 
