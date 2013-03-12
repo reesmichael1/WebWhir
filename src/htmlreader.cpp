@@ -36,8 +36,8 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
             std::getline(HTMLDocument, line);
         }
 
-        //Painter display(&node);
-        Painter::paintNode(&node);
+        Painter display(&node);
+        //Painter::paintNode(&node);
         HTMLDocument.close();
     }
 

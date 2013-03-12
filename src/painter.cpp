@@ -1,25 +1,46 @@
 #include <iostream>
 #include <string>
-#include "SFML/Window.hpp"
+#include "SFML/Graphics/Sprite.hpp"
+#include "SFML/Graphics/Text.hpp"
+#include "SFML/Graphics.hpp"
 #include "painter.h"
 
 Painter::Painter(RenderNode *node)
 {
-    sf::Window window(sf::VideoMode(800,600), "OpenWeb");
-
-    while (window.isOpen())
+    try
     {
-        sf::Event event;
-        while (window.pollEvent(event))
+        sf::RenderWindow window(sf::VideoMode(800, 600, 32), "OpenWeb");
+
+        while (window.isOpen())
         {
-            if (sf::Event::Closed == event.type)
+            sf::Font font;
+
+            if (!font.loadFromFile("fonts/Timeless-Bold.ttf"))
             {
-                window.close();
+                throw "Error: Could not load the font.";
+            }
+
+            sf::Text text;
+            text.setColor(sf::Color(255,255,255));
+            text.setString(node->getText());
+            window.draw(text);
+            window.display();
+
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (sf::Event::Closed == event.type)
+                {
+                    window.close();
+                }
             }
         }
-    }
 
-    paintNode(node);
+    }
+    catch (std::string error)
+    {
+        std::cout << error << std::endl;
+    }
 }
 
 void Painter::paintNode(RenderNode *node)
