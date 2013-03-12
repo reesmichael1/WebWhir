@@ -7,6 +7,18 @@ Painter::Painter(RenderNode *node)
 {
     sf::Window window(sf::VideoMode(800,600), "OpenWeb");
 
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (sf::Event::Closed == event.type)
+            {
+                window.close();
+            }
+        }
+    }
+
     paintNode(node);
 }
 
