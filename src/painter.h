@@ -7,7 +7,7 @@ class Painter
 {
 public:
     Painter(RenderNode *node);
-    void paintNode(RenderNode *node);
+    static void paintNode(RenderNode *node);
 
 };
 
