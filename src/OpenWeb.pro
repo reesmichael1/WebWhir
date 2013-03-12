@@ -3,23 +3,13 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-#LIBS += /usr/local/lib -sfml-audio.2.0
-#LIBS += /usr/local/lib -sfml-audio.2
-#LIBS += /usr/local/lib -sfml-audio
-#LIBS += /usr/local/lib -sfml-graphics.2.0
-#LIBS += /usr/local/lib -sfml-graphics.2
-#LIBS += /usr/local/lib -sfml-graphics
-#LIBS += /usr/local/lib -sfml-network.2.0
-#LIBS += /usr/local/lib -sfml-network.2
-#LIBS += /usr/local/lib -sfml-network
-#LIBS += /usr/local/lib -sfml-system.2.0
-#LIBS += /usr/local/lib -sfml-system.2
-#LIBS += /usr/local/lib -sfml-system
-#LIBS += /usr/local/lib -sfml-window.2.0
-#LIBS += /usr/local/lib -sfml-window.2
-#LIBS += /usr/local/lib -sfml-window
+INCLUDEPATH += /usr/local/include
+DEPENDPATH += /usr/local/include
 
-INCLUDEPATH += /usr/local/include/
+LIBS += -L/usr/local/lib/SFML
+
+CONFIG(release, debug|release): LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+CONFIG(debug, debug|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
 
 SOURCES += main.cpp \
     htmlreader.cpp \

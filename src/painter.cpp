@@ -5,18 +5,9 @@
 
 Painter::Painter(RenderNode *node)
 {
-    sf::Window window(sf::VideoMode(800,600), "OpenWeb", sf::Style::Default);
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-            }
-        }
-    }
+    sf::Window window(sf::VideoMode(800,600), "OpenWeb");
+
+    paintNode(node);
 }
 
 void Painter::paintNode(RenderNode *node)
@@ -26,7 +17,7 @@ void Painter::paintNode(RenderNode *node)
         std::cout << node->getText() << std::endl;
         if (node->getText().empty())
         {
-            throw "Error: Empty text.";
+            throw "Error: The text was not parsed correctly.";
         }
     }
     catch (char error[])
