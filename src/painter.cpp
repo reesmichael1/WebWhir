@@ -23,6 +23,7 @@ Painter::Painter(RenderNode *node)
             sf::Text text;
             text.setColor(sf::Color(255,255,255));
             text.setString(node->getText());
+            text.setCharacterSize(15);
             window.draw(text);
             window.display();
 
@@ -34,6 +35,7 @@ Painter::Painter(RenderNode *node)
                     window.close();
                 }
             }
+            window.clear();
         }
 
     }
