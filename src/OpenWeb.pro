@@ -3,11 +3,12 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-LIBS += -L\usr\local\lib\sdl -lSDL -lSDLmain
-LIBS += -L\usr\local\lib\sdl_ttf -lSDL_ttf
-LIBS += -L\usr\local\lib\freetype2 -lfreetype
+INCLUDEPATH += /usr/local/include
+DEPENDPATH += /usr/local/include
 
-INCLUDEPATH += /usr/local/include/
+LIBS += -L\usr\local\lib\SFML\
+
+LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
 
 SOURCES += main.cpp \
     htmlreader.cpp \

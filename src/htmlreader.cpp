@@ -37,6 +37,7 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
         }
 
         Painter display(&node);
+        //Painter::paintNode(&node);
         HTMLDocument.close();
     }
 
