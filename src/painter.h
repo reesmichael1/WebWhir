@@ -12,6 +12,8 @@ public:
     static void paintNode(RenderNode *node, sf::RenderWindow *window);
 
 private:
+    static std::string parseTextToLines(std::string textToParse, int windowBoundary);
+
 
 };
 
