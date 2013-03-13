@@ -9,7 +9,7 @@
 Painter::Painter(RenderNode *node)
 {
 
-    sf::RenderWindow window(sf::VideoMode(800, 600, 32), "OpenWeb");
+    sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "OpenWeb");
     paintNode(node, &window);
 }
 

@@ -6,7 +6,7 @@ CONFIG -= qt
 INCLUDEPATH += /usr/local/include
 DEPENDPATH += /usr/local/include
 
-LIBS += -L\usr\local\lib\SFML\
+LIBS += -L/usr/local/lib/SFML/
 
 LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
 
