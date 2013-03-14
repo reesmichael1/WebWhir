@@ -30,7 +30,7 @@ std::string Painter::parseTextToLines(std::string textToParse, int windowBoundar
     std::string temporaryString;
     sf::Text tempString;
 
-    for (int i = 0; i < wordVector.size(); i++)
+    for (unsigned int i = 0; i < wordVector.size(); i++)
     {
         temporaryString = temporaryString + wordVector.at(i) + " ";
         tempString.setString(temporaryString);
@@ -57,7 +57,7 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
         sf::Text text;
 
 
-        text.setString(parseTextToLines(node->getText(), 2048));
+        text.setString(parseTextToLines(node->getText(), 2000));
         text.setCharacterSize(15);
 
         sf::Font font;
