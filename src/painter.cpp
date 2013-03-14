@@ -57,7 +57,7 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
         sf::Text text;
 
 
-        text.setString(parseTextToLines(node->getText(), 2000));
+        text.setString(parseTextToLines(node->getText(), window->getSize().x));
         text.setCharacterSize(15);
 
         sf::Font font;
