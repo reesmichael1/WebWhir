@@ -18,6 +18,8 @@ Painter::Painter(RenderNode *node)
 
 //SFML does not automatically wrap text to fit the window. This is a hurriedly
 //implemented, temporary solution, and will receive more attention in the future.
+//Right now, I am considering adopting SFGUI as an additional graphics library
+//to address this (and other) issues I have found with SFML.
 std::string Painter::parseTextToLines(std::string textToParse, int windowBoundary)
 {
     std::vector<std::string> wordVector;
@@ -30,15 +32,17 @@ std::string Painter::parseTextToLines(std::string textToParse, int windowBoundar
 
     for (int i = 0; i < wordVector.size(); i++)
     {
-        temporaryString = temporaryString + wordVector.at(i) + "\n";
+        temporaryString = temporaryString + wordVector.at(i) + " ";
         tempString.setString(temporaryString);
-        if (!tempString.getLocalBounds().width)
+        if (tempString.getLocalBounds().width < windowBoundary)
         {
             parsedString = parsedString + wordVector.at(i) + " ";
         }
         else
         {
-            parsedString += "\n";
+            parsedString = parsedString + "\n" + wordVector.at(i) + " ";
+            tempString.setString("");
+            temporaryString.clear();
         }
     }
 
