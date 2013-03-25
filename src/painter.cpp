@@ -2,11 +2,7 @@
 #include <string>
 #include "STRTK/strtk.hpp"
 #include "SFML/System.hpp"
-#include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Text.hpp"
 #include "SFML/Graphics.hpp"
-#include "SFML/Window/Keyboard.hpp"
-#include "SFML/Graphics/Rect.hpp"
 #include "painter.h"
 
 #define WINDOW_WIDTH 800
@@ -25,9 +21,7 @@ Painter::Painter(RenderNode *node)
 //implemented, temporary solution, and will receive more attention in the future.
 //Right now, I am considering adopting SFGUI as an additional graphics library
 //to address this (and other) issues I have found with SFML.
-//Due to some issue with the width function, this doesn't work properly on Linux,
-//but works fine on Mac OS X. I have not yet tested it on Windows.
-std::string Painter::parseTextToLines(std::string textToParse, sf::RenderWindow *window)
+std::string Painter::parseTextToLines(std::string textToParse, int windowBoundary)
 {
     std::vector<std::string> wordVector;
 
@@ -42,13 +36,8 @@ std::string Painter::parseTextToLines(std::string textToParse, sf::RenderWindow 
         temporaryString = temporaryString + wordVector.at(i) + " ";
         tempString.setString(temporaryString);
 
-        //The issue is in this line. For some reason, on Linux, width is always 0.
-        //if (!tempString.getLocalBounds().width < windowBoundary)
-
-        //This is a temporary fix for the Linux issue. There's just one problem: it doesn't work either.
-        sf::FloatRect windowBounds(0.f, 0.f, static_cast<float>(window->getSize().x),
-                                                            static_cast<float>(window->getSize().y));
-        if (!tempString.getLocalBounds().intersects(windowBounds))
+        //This is a temporary fix for the issue on Linux.
+        if (tempString.getString().getSize() < windowBoundary)
         {
             parsedString = parsedString + wordVector.at(i) + " ";
         }
@@ -79,7 +68,11 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
         sf::View mainView = window->getDefaultView();
 
         sf::Text mainText;
-        mainText.setString(parseTextToLines(node->getText(), window));
+
+        //The second parameter is here to fix the issue with the text wrapping function on Linux,
+        //where the width of the sf::Rect that bounds the text is not properly defined.
+        //This is a magic number, and is here temporarily because it works.
+        mainText.setString(parseTextToLines(node->getText(), 100));
         mainText.setFont(font);
         mainText.setCharacterSize(12);
         mainText.setPosition(10, 10);
