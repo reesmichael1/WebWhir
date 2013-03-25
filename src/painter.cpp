@@ -36,8 +36,7 @@ std::string Painter::parseTextToLines(std::string textToParse, int windowBoundar
         temporaryString = temporaryString + wordVector.at(i) + " ";
         tempString.setString(temporaryString);
 
-        //This is a temporary fix for the issue on Linux.
-        if (tempString.getString().getSize() < windowBoundary)
+        if (tempString.getLocalBounds().width < windowBoundary)
         {
             parsedString = parsedString + wordVector.at(i) + " ";
         }
@@ -72,7 +71,7 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
         //The second parameter is here to fix the issue with the text wrapping function on Linux,
         //where the width of the sf::Rect that bounds the text is not properly defined.
         //This is a magic number, and is here temporarily because it works.
-        mainText.setString(parseTextToLines(node->getText(), 100));
+        mainText.setString(parseTextToLines(node->getText(), WINDOW_WIDTH));
         mainText.setFont(font);
         mainText.setCharacterSize(12);
         mainText.setPosition(10, 10);
@@ -81,6 +80,7 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
         {
             sf::Event event;
             sf::Clock clock;
+            float clockTime = 0.f;
 
             while (window->pollEvent(event))
             {
@@ -91,7 +91,8 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
 
                 //Someday, this line will include a comparison of time to account for different hardware spees.
                 //That time will not be tonight. It's late, and I'm tired.
-                float Offset = 200.f;
+                clockTime = clock.restart().asSeconds();
+                float Offset = 200000.f * clockTime;
 
                 if (event.type == sf::Event::KeyPressed)
                 {
@@ -149,14 +150,4 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
     {
         std::cout << error << std::endl;
     }
-}
-
-
-void Painter::drawPicture(tgui::Window *window)
-{
-
-    tgui::Picture* picture = window->add<tgui::Picture>();
-    picture->load("ThinkLinux.jpg");
-    picture->setSize(240, 180);
-    picture->setPosition(WINDOW_WIDTH/2 - 120, 10);
 }
