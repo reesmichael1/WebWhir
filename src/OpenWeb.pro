@@ -6,9 +6,10 @@ CONFIG -= qt
 INCLUDEPATH += /usr/local/include
 DEPENDPATH += /usr/local/include
 
+LIBS += -L/usr/local/lib/TGUI/
 LIBS += -L/usr/local/lib/SFML/
 
-LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system -ltgui
 
 SOURCES += main.cpp \
     htmlreader.cpp \
