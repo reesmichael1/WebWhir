@@ -126,10 +126,22 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
                     }
                 }
 
+                if (event.type == sf::Event::MouseWheelMoved)
+                {
+                    if (event.mouseWheel.delta > 0)
+                    {
+                        mainView.move(0, Offset);
+                    }
+                    else
+                    {
+                        mainView.move(0, -Offset);
+                    }
+                }
+
                 if (event.type == sf::Event::Resized)
                 {
                     mainView.setSize(static_cast<float>(window->getSize().x),
-                                                    static_cast<float>(window->getSize().y));
+                                     static_cast<float>(window->getSize().y));
                     window->setView(mainView);
                 }
 
