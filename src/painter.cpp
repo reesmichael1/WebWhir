@@ -128,7 +128,7 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
 
                 if (event.type == sf::Event::MouseWheelMoved)
                 {
-                    if (event.mouseWheel.delta > 0)
+                    if (event.mouseWheel.delta < 0)
                     {
                         mainView.move(0, Offset);
                     }
