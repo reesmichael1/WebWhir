@@ -14,7 +14,6 @@ public:
 private:
     static std::string parseTextToLines(std::string textToParse, int windowBoundary);
 
-
 };
 
 #endif // PAINTER_H

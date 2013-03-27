@@ -2,18 +2,19 @@
 #include <string>
 #include "STRTK/strtk.hpp"
 #include "SFML/System.hpp"
-#include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Text.hpp"
 #include "SFML/Graphics.hpp"
 #include "painter.h"
 
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGHT 768
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
 
 Painter::Painter(RenderNode *node)
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "OpenWeb");
     paintNode(node, &window);
+
+    //tgui::Window window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "OpenWeb");
+    //paintNode(node, &window);
 }
 
 //SFML does not automatically wrap text to fit the window. This is a hurriedly
@@ -34,6 +35,7 @@ std::string Painter::parseTextToLines(std::string textToParse, int windowBoundar
     {
         temporaryString = temporaryString + wordVector.at(i) + " ";
         tempString.setString(temporaryString);
+
         if (tempString.getLocalBounds().width < windowBoundary)
         {
             parsedString = parsedString + wordVector.at(i) + " ";
@@ -54,38 +56,109 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
 {
     try
     {
-        sf::Text text;
-
-
-        text.setString(parseTextToLines(node->getText(), 2000));
-        text.setCharacterSize(15);
 
         sf::Font font;
-        if (!font.loadFromFile("fonts/LinLibertine_R.ttf"))
+
+        if (!font.loadFromFile("fonts/DejaVuSans.ttf"))
         {
-            throw "Error: Could not load the font.";
+            throw "Error: Could not load font.";
         }
 
-        text.setFont(font);
+        sf::View mainView = window->getDefaultView();
+
+        sf::Text mainText;
+
+        //The second parameter is here to fix the issue with the text wrapping function on Linux,
+        //where the width of the sf::Rect that bounds the text is not properly defined.
+        //This is a magic number, and is here temporarily because it works.
+        mainText.setString(parseTextToLines(node->getText(), WINDOW_WIDTH));
+        mainText.setFont(font);
+        mainText.setCharacterSize(12);
+        mainText.setPosition(10, 10);
 
         while (window->isOpen())
         {
-            window->clear();
-            window->draw(text);
-            window->display();
-
             sf::Event event;
+            sf::Clock clock;
+            float clockTime = 0.f;
+
             while (window->pollEvent(event))
             {
-                if (sf::Event::Closed == event.type)
+                if (event.type == sf::Event::Closed)
                 {
                     window->close();
                 }
-            }
-        }
-    }
 
-    catch (std::string error)
+                //Someday, this line will include a comparison of time to account for different hardware spees.
+                //That time will not be tonight. It's late, and I'm tired.
+                clockTime = clock.restart().asSeconds();
+                float Offset = 200000.f * clockTime;
+
+                if (event.type == sf::Event::KeyPressed)
+                {
+                    switch (event.key.code)
+                    {
+                    case sf::Keyboard::Up :
+                    {
+                        mainView.move(0, -Offset);
+                        break;
+                    }
+                    case sf::Keyboard::Down :
+                    {
+                        mainView.move(0, Offset);
+                        break;
+                    }
+                    case sf::Keyboard::Left :
+                    {
+                        mainView.move(-Offset, 0);
+                        break;
+                    }
+                    case sf::Keyboard::Right :
+                    {
+                        mainView.move(Offset, 0);
+                        break;
+                    }
+                    case sf::Keyboard::Escape :
+                    {
+                        window->close();
+                        break;
+                    }
+                    }
+                }
+
+                if (event.type == sf::Event::MouseWheelMoved)
+                {
+                    if (event.mouseWheel.delta < 0)
+                    {
+                        mainView.move(0, Offset);
+                    }
+                    else
+                    {
+                        mainView.move(0, -Offset);
+                    }
+                }
+
+                if (event.type == sf::Event::Resized)
+                {
+                    mainView.setSize(static_cast<float>(window->getSize().x),
+                                     static_cast<float>(window->getSize().y));
+                    window->setView(mainView);
+                }
+
+            }
+
+
+            window->setView(mainView);
+            window->clear();
+            window->draw(mainText);
+            window->display();
+
+            sf::sleep(sf::milliseconds(10));
+            clock.restart();
+        }
+
+    }
+    catch (char error[])
     {
         std::cout << error << std::endl;
     }
