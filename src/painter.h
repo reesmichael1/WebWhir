@@ -1,7 +1,6 @@
 #ifndef PAINTER_H
 #define PAINTER_H
 
-#include "TGUI/TGUI.hpp"
 #include "SFML/Graphics.hpp"
 #include "SFML/Graphics/Text.hpp"
 #include "rendernode.h"

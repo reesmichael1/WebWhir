@@ -7,6 +7,8 @@
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
+#define LEFT_BORDER 10
+#define TOP_BORDER 10
 
 Painter::Painter(RenderNode *node)
 {
@@ -68,19 +70,23 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
 
         sf::Text mainText;
 
+        //I hate to do this, but I'm running out of other options.
+        //This is the easiest way to keep the text on the screen.
+        //It strikes me as too hackish, so I'll keep working on it.
+        int rightKeyPush = 0;
+        int downKeyPush = 0;
+
         //The second parameter is here to fix the issue with the text wrapping function on Linux,
         //where the width of the sf::Rect that bounds the text is not properly defined.
         //This is a magic number, and is here temporarily because it works.
         mainText.setString(parseTextToLines(node->getText(), WINDOW_WIDTH));
         mainText.setFont(font);
         mainText.setCharacterSize(12);
-        mainText.setPosition(10, 10);
+        mainText.setPosition(LEFT_BORDER, TOP_BORDER);
 
         while (window->isOpen())
         {
             sf::Event event;
-            sf::Clock clock;
-            float clockTime = 0.f;
 
             while (window->pollEvent(event))
             {
@@ -90,32 +96,41 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
                 }
 
                 //Someday, this line will include a comparison of time to account for different hardware spees.
-                //That time will not be tonight. It's late, and I'm tired.
-                clockTime = clock.restart().asSeconds();
-                float Offset = 200000.f * clockTime;
+                float Offset = 200.f;
 
                 if (event.type == sf::Event::KeyPressed)
                 {
+
                     switch (event.key.code)
                     {
                     case sf::Keyboard::Up :
                     {
-                        mainView.move(0, -Offset);
+                        if (downKeyPush > 0)
+                        {
+                            mainView.move(0, -Offset);
+                            downKeyPush--;
+                        }
                         break;
                     }
                     case sf::Keyboard::Down :
                     {
-                        mainView.move(0, Offset);
+                        mainView.setCenter(mainView.getCenter().x, mainView.getCenter().y + Offset);
+                        downKeyPush++;
                         break;
                     }
                     case sf::Keyboard::Left :
                     {
-                        mainView.move(-Offset, 0);
+                        if (rightKeyPush > 0)
+                        {
+                            mainView.move(-Offset, 0);
+                            rightKeyPush--;
+                        }
                         break;
                     }
                     case sf::Keyboard::Right :
                     {
-                        mainView.move(Offset, 0);
+                        mainView.setCenter(mainView.getCenter().x + Offset, mainView.getCenter().y);
+                        rightKeyPush++;
                         break;
                     }
                     case sf::Keyboard::Escape :
@@ -130,11 +145,18 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
                 {
                     if (event.mouseWheel.delta < 0)
                     {
-                        mainView.move(0, Offset);
+                        //Scroll up.
+                        if (downKeyPush > 0)
+                        {
+                            mainView.move(0, Offset);
+                            downKeyPush--;
+                        }
                     }
                     else
                     {
+                        //Scroll down.
                         mainView.move(0, -Offset);
+                        downKeyPush++;
                     }
                 }
 
@@ -154,7 +176,6 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
             window->display();
 
             sf::sleep(sf::milliseconds(10));
-            clock.restart();
         }
 
     }
