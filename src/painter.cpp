@@ -127,14 +127,7 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
                         }
                         break;
                     }
-                        /*
-                    case sf::Keyboard::Right :
-                    {
-                        mainView.setCenter(mainView.getCenter().x + Offset, mainView.getCenter().y);
-                        rightKeyPush++;
-                        break;
-                    }
-                    */
+\
                     case sf::Keyboard::Escape :
                     {
                         window->close();
