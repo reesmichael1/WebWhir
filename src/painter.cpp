@@ -127,36 +127,19 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
                         }
                         break;
                     }
+                        /*
                     case sf::Keyboard::Right :
                     {
                         mainView.setCenter(mainView.getCenter().x + Offset, mainView.getCenter().y);
                         rightKeyPush++;
                         break;
                     }
+                    */
                     case sf::Keyboard::Escape :
                     {
                         window->close();
                         break;
                     }
-                    }
-                }
-
-                if (event.type == sf::Event::MouseWheelMoved)
-                {
-                    if (event.mouseWheel.delta < 0)
-                    {
-                        //Scroll up.
-                        if (downKeyPush > 0)
-                        {
-                            mainView.move(0, Offset);
-                            downKeyPush--;
-                        }
-                    }
-                    else
-                    {
-                        //Scroll down.
-                        mainView.move(0, -Offset);
-                        downKeyPush++;
                     }
                 }
 
