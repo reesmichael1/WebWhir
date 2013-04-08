@@ -10,20 +10,17 @@
 #define LEFT_BORDER 10
 #define TOP_BORDER 10
 
-Painter::Painter(RenderNode *node)
+Painter::Painter(TextNode *node)
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "OpenWeb");
-    paintNode(node, &window);
-
-    //tgui::Window window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "OpenWeb");
-    //paintNode(node, &window);
+    paintText(node, &window);
 }
 
 //SFML does not automatically wrap text to fit the window. This is a hurriedly
 //implemented, temporary solution, and will receive more attention in the future.
 //Right now, I am considering adopting SFGUI as an additional graphics library
 //to address this (and other) issues I have found with SFML.
-std::string Painter::parseTextToLines(std::string textToParse, int windowBoundary)
+std::string Painter::parseTextToLines(std::string textToParse, int textCharacterSize, int windowBoundary)
 {
     std::vector<std::string> wordVector;
 
@@ -31,21 +28,18 @@ std::string Painter::parseTextToLines(std::string textToParse, int windowBoundar
 
     std::string parsedString;
     std::string temporaryString;
-    sf::Text tempString;
 
     for (unsigned int i = 0; i < wordVector.size(); i++)
     {
         temporaryString = temporaryString + wordVector.at(i) + " ";
-        tempString.setString(temporaryString);
 
-        if (tempString.getLocalBounds().width < windowBoundary)
+        if (temporaryString.size() * textCharacterSize < windowBoundary)
         {
             parsedString = parsedString + wordVector.at(i) + " ";
         }
         else
         {
             parsedString = parsedString + "\n" + wordVector.at(i) + " ";
-            tempString.setString("");
             temporaryString.clear();
         }
     }
@@ -54,7 +48,7 @@ std::string Painter::parseTextToLines(std::string textToParse, int windowBoundar
 }
 
 
-void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
+void Painter::paintText(TextNode *node, sf::RenderWindow *window)
 {
     try
     {
@@ -73,16 +67,18 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
         //I hate to do this, but I'm running out of other options.
         //This is the easiest way to keep the text on the screen.
         //It strikes me as too hackish, so I'll keep working on it.
-        int rightKeyPush = 0;
         int downKeyPush = 0;
 
-        //The second parameter is here to fix the issue with the text wrapping function on Linux,
-        //where the width of the sf::Rect that bounds the text is not properly defined.
-        //This is a magic number, and is here temporarily because it works.
-        mainText.setString(parseTextToLines(node->getText(), WINDOW_WIDTH));
         mainText.setFont(font);
-        mainText.setCharacterSize(12);
+        mainText.setCharacterSize(node->getTextCharacterSize());
+        mainText.setColor(node->getCharacterColor());
+        mainText.setString(parseTextToLines(node->getText(), mainText.getCharacterSize(), WINDOW_WIDTH));
         mainText.setPosition(LEFT_BORDER, TOP_BORDER);
+
+        //Draw the background color of text.
+        sf::FloatRect backgroundRect = mainText.getLocalBounds();
+        sf::RectangleShape background(sf::Vector2f(backgroundRect.width, backgroundRect.height + 2*TOP_BORDER));
+        background.setFillColor(node->getTextBackgroundColor());
 
         while (window->isOpen())
         {
@@ -96,7 +92,7 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
                 }
 
                 //Someday, this line will include a comparison of time to account for different hardware spees.
-                float Offset = 200.f;
+                float Offset = 100.f;
 
                 if (event.type == sf::Event::KeyPressed)
                 {
@@ -118,16 +114,6 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
                         downKeyPush++;
                         break;
                     }
-                    case sf::Keyboard::Left :
-                    {
-                        if (rightKeyPush > 0)
-                        {
-                            mainView.move(-Offset, 0);
-                            rightKeyPush--;
-                        }
-                        break;
-                    }
-\
                     case sf::Keyboard::Escape :
                     {
                         window->close();
@@ -145,9 +131,9 @@ void Painter::paintNode(RenderNode *node, sf::RenderWindow *window)
 
             }
 
-
             window->setView(mainView);
             window->clear();
+            window->draw(background);
             window->draw(mainText);
             window->display();
 

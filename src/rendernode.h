@@ -2,16 +2,17 @@
 #define RENDERNODE_H
 
 #include <string>
+#include "SFML/Graphics.hpp"
 
 class RenderNode
 {
 public:
     RenderNode();
-    void appendText(std::string *textToSet);
-    std::string getText();
+    void setBackgroundColorOfNode(sf::Color colorToSet);
+    sf::Color getBackgroundColorOfNode();
 
 private:
-    std::string text;
+    sf::Color backgroundColor;
 };
 
 #endif // RENDERNODE_H

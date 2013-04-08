@@ -13,9 +13,13 @@ LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
 SOURCES += main.cpp \
     htmlreader.cpp \
     rendernode.cpp \
-    painter.cpp
+    painter.cpp \
+    textnode.cpp \
+    coloroperations.cpp
 
 HEADERS += \
     htmlreader.h \
     rendernode.h \
-    painter.h
+    painter.h \
+    textnode.h \
+    coloroperations.h

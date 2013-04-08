@@ -4,23 +4,16 @@
 
 RenderNode::RenderNode()
 {
+    backgroundColor = sf::Color::Black;
 }
 
-void RenderNode::appendText(std::string *textToSet)
+//This will be fixed--I simply wanted to have something to actually see.
+void RenderNode::setBackgroundColorOfNode(sf::Color colorToSet)
 {
-    if (!text.empty())
-    {
-        std::string oldText = text;
-        text = oldText + "\n" + *textToSet;
-    }
-
-    else
-    {
-        text = *textToSet;
-    }
+    backgroundColor = colorToSet;
 }
 
-std::string RenderNode::getText()
+sf::Color RenderNode::getBackgroundColorOfNode()
 {
-    return text;
+    return backgroundColor;
 }

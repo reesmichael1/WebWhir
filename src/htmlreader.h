@@ -2,8 +2,9 @@
 #define HTMLREADER_H
 
 #include <fstream>
+#include "coloroperations.h"
 
-class HTMLReader
+class HTMLReader : protected ColorOperations
 {
 public:
     HTMLReader();

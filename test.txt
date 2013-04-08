@@ -1,6 +1,9 @@
+TextBackgroundColor:Red
+TextColor:White
+TextSize:18
 This is a test for the open source rendering engine OpenWeb.
 
-OpenWeb is, right now, in a very early stage of development. It does not read HTML files--only text files. In fact, this is a text file that is being displayed right now. However, I hope to be able to take the mechanism that I have developed to paint these text files and expand it to rendering HTML properly.
+OpenWeb is, right now, in a very early stage of development. It does not read HTML files--only text files.  In fact, this is a text file that is being displayed right now. However, I hope to be able to take the mechanism that I have developed to paint these text files and expand it to rendering HTML properly.
 
 At this point, you may be wondering: How does a rendering engine work? For an incredibly basic overview, let's look at it this way: As the document is parsed, objects called "nodes" are created. These nodes contain all of the information necessary to display a certain part of a web page. These nodes are then taken and linked together as a linked list. This list is passed to the painter, which takes the information in the nodes and displays the web page.
 

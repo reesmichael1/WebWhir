@@ -3,16 +3,16 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/Graphics/Text.hpp"
-#include "rendernode.h"
+#include "textnode.h"
 
 class Painter
 {
 public:
-    Painter(RenderNode *node);
-    static void paintNode(RenderNode *node, sf::RenderWindow *window);
+    Painter(TextNode *node);
+    static void paintText(TextNode *node, sf::RenderWindow *window);
 
 private:
-    static std::string parseTextToLines(std::string textToParse, int windowBoundary);
+    static std::string parseTextToLines(std::string textToParse, int textCharacterSize, int windowBoundary);
 
 };
 

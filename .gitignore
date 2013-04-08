@@ -219,6 +219,7 @@ pip-log.txt
 *.pro
 
 /Builds
+/Release
 /include
 /lib
 =======
