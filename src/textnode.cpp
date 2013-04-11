@@ -7,18 +7,9 @@ TextNode::TextNode()
     textCharacterSize = 12;
 }
 
-void TextNode::appendText(std::string *textToSet)
+void TextNode::setText(std::string textToSet)
 {
-    if (!text.empty())
-    {
-        std::string oldText = text;
-        text = oldText + "\n" + *textToSet;
-    }
-
-    else
-    {
-        text = *textToSet;
-    }
+    text = textToSet;
 }
 
 sf::Color TextNode::getCharacterColor()

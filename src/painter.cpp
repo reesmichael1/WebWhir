@@ -1,19 +1,37 @@
 #include <iostream>
 #include <string>
+#include <memory>
+#include <vector>
 #include "STRTK/strtk.hpp"
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "rendernode.h"
 #include "painter.h"
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 768
 #define LEFT_BORDER 10
 #define TOP_BORDER 10
 
-Painter::Painter(TextNode *node)
+Painter::Painter()
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "OpenWeb");
-    paintText(node, &window);
+    window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "OpenWeb");
+}
+
+std::string Painter::appendText(std::string textToSet, std::string text)
+{
+    if (!text.empty())
+    {
+        std::string oldText = text;
+        text = oldText + "\n" + textToSet;
+    }
+
+    else
+    {
+        text = textToSet;
+    }
+
+    return text;
 }
 
 //SFML does not automatically wrap text to fit the window. This is a hurriedly
@@ -48,7 +66,7 @@ std::string Painter::parseTextToLines(std::string textToParse, int textCharacter
 }
 
 
-void Painter::paintText(TextNode *node, sf::RenderWindow *window)
+void Painter::paintNodes(std::vector<std::unique_ptr<RenderNode> > *vectorOfNodes)
 {
     try
     {
@@ -70,15 +88,22 @@ void Painter::paintText(TextNode *node, sf::RenderWindow *window)
         int downKeyPush = 0;
 
         mainText.setFont(font);
-        mainText.setCharacterSize(node->getTextCharacterSize());
-        mainText.setColor(node->getCharacterColor());
-        mainText.setString(parseTextToLines(node->getText(), mainText.getCharacterSize(), WINDOW_WIDTH));
+        mainText.setCharacterSize(18);
+        //mainText.setColor(node->getCharacterColor());
+        std::string temporaryString;
+        for (int i = 0; i < vectorOfNodes->size(); i++)
+        {
+            temporaryString = appendText(vectorOfNodes->at(i)->getText(), temporaryString);
+        }
+
+        mainText.setString(parseTextToLines(temporaryString, mainText.getCharacterSize(), WINDOW_WIDTH));
+        //mainText.setString(parseTextToLines(node->getText(), mainText.getCharacterSize(), WINDOW_WIDTH));
         mainText.setPosition(LEFT_BORDER, TOP_BORDER);
 
         //Draw the background color of text.
-        sf::FloatRect backgroundRect = mainText.getLocalBounds();
-        sf::RectangleShape background(sf::Vector2f(backgroundRect.width, backgroundRect.height + 2*TOP_BORDER));
-        background.setFillColor(node->getTextBackgroundColor());
+        //sf::FloatRect backgroundRect = mainText.getLocalBounds();
+        //sf::RectangleShape background(sf::Vector2f(backgroundRect.width + 2*LEFT_BORDER, backgroundRect.height + 2*TOP_BORDER));
+        //background.setFillColor(node->getTextBackgroundColor());
 
         while (window->isOpen())
         {
@@ -133,7 +158,7 @@ void Painter::paintText(TextNode *node, sf::RenderWindow *window)
 
             window->setView(mainView);
             window->clear();
-            window->draw(background);
+            //window->draw(background);
             window->draw(mainText);
             window->display();
 

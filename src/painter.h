@@ -8,11 +8,13 @@
 class Painter
 {
 public:
-    Painter(TextNode *node);
-    static void paintText(TextNode *node, sf::RenderWindow *window);
+    Painter();
+    void paintNodes(std::vector<std::unique_ptr<RenderNode>> *vectorOfNodes);
 
 private:
     static std::string parseTextToLines(std::string textToParse, int textCharacterSize, int windowBoundary);
+    std::string appendText(std::string textToSet, std::string text);
+    sf::RenderWindow *window;
 
 };
 

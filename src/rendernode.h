@@ -8,8 +8,9 @@ class RenderNode
 {
 public:
     RenderNode();
-    void setBackgroundColorOfNode(sf::Color colorToSet);
-    sf::Color getBackgroundColorOfNode();
+    virtual void setBackgroundColorOfNode(sf::Color colorToSet);
+    virtual sf::Color getBackgroundColorOfNode();
+    virtual std::string getText();
 
 private:
     sf::Color backgroundColor;

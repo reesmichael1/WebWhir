@@ -1,5 +1,7 @@
 #include <iostream>
-#include <sstream>
+#include <vector>
+#include <memory>
+//#include <sstream>
 #include <fstream>
 #include <string>
 #include "coloroperations.h"
@@ -11,6 +13,7 @@ HTMLReader::HTMLReader()
 {
 }
 
+/*
 void HTMLReader::parseDocument(char HTMLFilepath[])
 {
 
@@ -76,6 +79,62 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
     catch (char error[])
     {
         std::cerr << error << std::endl;
+    }
+
+}
+*/
+
+void HTMLReader::parseDocument(char HTMLFilepath[])
+{
+    try
+    {
+        std::ifstream HTMLDocument(HTMLFilepath);
+        if (!HTMLDocument.is_open())
+        {
+            throw "Error: Could not open document.";
+        }
+
+        std::string line;
+
+        std::getline(HTMLDocument, line);
+
+        if (line.empty())
+        {
+            throw "Error: Document is empty.";
+        }
+
+        std::vector<std::unique_ptr<RenderNode>> vectorOfNodes;
+
+        while (!HTMLDocument.eof())
+        {
+
+            if (line.find("<") != std::string::npos)
+            {
+                line.erase(line.begin(), line.begin()+1);
+                if (line.at(0) == 'p')
+                {
+                    line.erase(line.begin(), line.begin()+2);
+                    TextNode *textNode = new TextNode;
+                    line.erase(line.end() - 4, line.end());
+                    textNode->setText(line);
+                    vectorOfNodes.emplace_back(textNode);
+                }
+                else
+                {
+                    std::cout << "\n\nUnknown tag in line: <" << line << std::endl;
+                }
+            }
+
+            std::getline(HTMLDocument, line);
+        }
+
+        Painter painterOfNodes;
+        painterOfNodes.paintNodes(&vectorOfNodes);
+
+    }
+    catch (std::string error)
+    {
+        std::cout << error << std::endl;
     }
 
 }
