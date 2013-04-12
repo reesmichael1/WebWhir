@@ -15,7 +15,8 @@
 
 Painter::Painter()
 {
-    window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "OpenWeb");
+    window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH,
+                                                WINDOW_HEIGHT, 32), "OpenWeb");
 }
 
 std::string Painter::appendText(std::string textToSet, std::string text)
@@ -38,7 +39,8 @@ std::string Painter::appendText(std::string textToSet, std::string text)
 //implemented, temporary solution, and will receive more attention in the future.
 //Right now, I am considering adopting SFGUI as an additional graphics library
 //to address this (and other) issues I have found with SFML.
-std::string Painter::parseTextToLines(std::string textToParse, int textCharacterSize, int windowBoundary)
+std::string Painter::parseTextToLines(std::string textToParse,
+                                      int textCharacterSize, int windowBoundary)
 {
     std::vector<std::string> wordVector;
 
@@ -66,7 +68,8 @@ std::string Painter::parseTextToLines(std::string textToParse, int textCharacter
 }
 
 
-void Painter::paintNodes(std::vector<std::unique_ptr<RenderNode> > *vectorOfNodes)
+void Painter::paintNodes(
+        std::vector<std::unique_ptr<RenderNode>> *vectorOfNodes)
 {
     try
     {
@@ -89,20 +92,24 @@ void Painter::paintNodes(std::vector<std::unique_ptr<RenderNode> > *vectorOfNode
 
         mainText.setFont(font);
         mainText.setCharacterSize(18);
-        //mainText.setColor(node->getCharacterColor());
         std::string temporaryString;
         for (int i = 0; i < vectorOfNodes->size(); i++)
         {
-            temporaryString = appendText(vectorOfNodes->at(i)->getText(), temporaryString);
+            temporaryString = appendText(
+                        vectorOfNodes->at(i)->getText(), temporaryString);
         }
 
-        mainText.setString(parseTextToLines(temporaryString, mainText.getCharacterSize(), WINDOW_WIDTH));
-        //mainText.setString(parseTextToLines(node->getText(), mainText.getCharacterSize(), WINDOW_WIDTH));
+        mainText.setString(parseTextToLines(temporaryString,
+                                            mainText.getCharacterSize(),
+                                            WINDOW_WIDTH));
         mainText.setPosition(LEFT_BORDER, TOP_BORDER);
 
         //Draw the background color of text.
         //sf::FloatRect backgroundRect = mainText.getLocalBounds();
-        //sf::RectangleShape background(sf::Vector2f(backgroundRect.width + 2*LEFT_BORDER, backgroundRect.height + 2*TOP_BORDER));
+        //sf::RectangleShape background(sf::Vector2f(
+                                    //backgroundRect.width +
+                                    //2*LEFT_BORDER,
+                                    //backgroundRect.height + 2*TOP_BORDER));
         //background.setFillColor(node->getTextBackgroundColor());
 
         while (window->isOpen())
@@ -116,7 +123,8 @@ void Painter::paintNodes(std::vector<std::unique_ptr<RenderNode> > *vectorOfNode
                     window->close();
                 }
 
-                //Someday, this line will include a comparison of time to account for different hardware spees.
+                //Someday, this line will include a comparison of time to
+                //account for different hardware spees.
                 float Offset = 100.f;
 
                 if (event.type == sf::Event::KeyPressed)
@@ -135,7 +143,8 @@ void Painter::paintNodes(std::vector<std::unique_ptr<RenderNode> > *vectorOfNode
                     }
                     case sf::Keyboard::Down :
                     {
-                        mainView.setCenter(mainView.getCenter().x, mainView.getCenter().y + Offset);
+                        mainView.setCenter(mainView.getCenter().x,
+                                           mainView.getCenter().y + Offset);
                         downKeyPush++;
                         break;
                     }

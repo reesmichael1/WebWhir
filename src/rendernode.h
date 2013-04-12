@@ -13,7 +13,9 @@ public:
     virtual std::string getText();
 
 private:
+    RenderNode *parentNode;
     sf::Color backgroundColor;
+    bool needsPainting;
 };
 
 #endif // RENDERNODE_H

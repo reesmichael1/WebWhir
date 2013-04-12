@@ -17,11 +17,13 @@ SOURCES += main.cpp \
     rendernode.cpp \
     painter.cpp \
     textnode.cpp \
-    coloroperations.cpp
+    coloroperations.cpp \
+    document.cpp
 
 HEADERS += \
     htmlreader.h \
     rendernode.h \
     painter.h \
     textnode.h \
-    coloroperations.h
+    coloroperations.h \
+    document.h

@@ -1,22 +1,46 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-//#include <sstream>
 #include <fstream>
 #include <string>
 #include "coloroperations.h"
 #include "htmlreader.h"
 #include "textnode.h"
 #include "painter.h"
+#include "document.h"
 
 HTMLReader::HTMLReader()
 {
 }
 
-/*
-void HTMLReader::parseDocument(char HTMLFilepath[])
+HTMLReader::~HTMLReader()
 {
+    delete webpage;
+}
 
+
+void HTMLReader::parseDocument(std::string textToParse)
+{
+    webpage = new Document;
+    char characterToCheck;
+    for (unsigned int i = 0; i < textToParse.length(); i++)
+    {
+        characterToCheck = textToParse.at(i);
+        if (characterToCheck == '<')
+        {
+            int checkForBracket = i;
+            do
+            {
+                checkForBracket++;
+            } while (textToParse.at(checkForBracket != '>'));
+            webpage->addTagToVector(textToParse.substr(i++, checkForBracket));
+            i--;
+        }
+    }
+}
+
+void HTMLReader::prepareDocument(char HTMLFilepath[])
+{
     try
     {
         std::ifstream HTMLDocument(HTMLFilepath);
@@ -25,112 +49,25 @@ void HTMLReader::parseDocument(char HTMLFilepath[])
             throw "Error: Could not open document.";
         }
 
-        std::string line;
-        TextNode node;
-
-        std::getline(HTMLDocument, line);
-
-        if (line.empty())
-        {
-            throw "Error: Document is empty.";
-        }
+        std::string documentText;
+        std::string temporaryString;
 
         while (!HTMLDocument.eof())
         {
-            if (line.find("TextBackgroundColor:") != std::string::npos)
+            std::getline(HTMLDocument, temporaryString);
+            if (!documentText.empty())
             {
-                line.erase(line.begin(), line.begin()+20);
-                node.setTextBackgroundColor(sf::Color::White);
-                node.setTextBackgroundColor(ColorOperations::convertStringToColor(line));
-                std::getline(HTMLDocument, line);
-            }
-            if (line.find("BackgroundColor:") != std::string::npos)
-            {
-                line.erase(line.begin(), line.begin()+16);
-                node.setBackgroundColorOfNode(ColorOperations::convertStringToColor(line));
-                std::getline(HTMLDocument, line);
-            }
-            if (line.find("TextColor:") != std::string::npos)
-            {
-                line.erase(line.begin(), line.begin()+10);
-                node.setCharacterColor(sf::Color::White);
-                node.setCharacterColor(ColorOperations::convertStringToColor(line));
-                std::getline(HTMLDocument, line);
-            }
-            if (line.find("TextSize") != std::string::npos)
-            {
-                line.erase(line.begin(), line.begin()+9);
-                int characterSize;
-                std::istringstream(line) >> characterSize;
-                node.setTextCharacterSize(characterSize);
-                std::getline(HTMLDocument, line);
+                documentText = documentText + "\n" + temporaryString;
             }
             else
             {
-                node.appendText(&line);
-                std::getline(HTMLDocument, line);
+                documentText = temporaryString;
             }
         }
 
-        Painter display(&node);
         HTMLDocument.close();
-    }
 
-    catch (char error[])
-    {
-        std::cerr << error << std::endl;
-    }
-
-}
-*/
-
-void HTMLReader::parseDocument(char HTMLFilepath[])
-{
-    try
-    {
-        std::ifstream HTMLDocument(HTMLFilepath);
-        if (!HTMLDocument.is_open())
-        {
-            throw "Error: Could not open document.";
-        }
-
-        std::string line;
-
-        std::getline(HTMLDocument, line);
-
-        if (line.empty())
-        {
-            throw "Error: Document is empty.";
-        }
-
-        std::vector<std::unique_ptr<RenderNode>> vectorOfNodes;
-
-        while (!HTMLDocument.eof())
-        {
-
-            if (line.find("<") != std::string::npos)
-            {
-                line.erase(line.begin(), line.begin()+1);
-                if (line.at(0) == 'p')
-                {
-                    line.erase(line.begin(), line.begin()+2);
-                    TextNode *textNode = new TextNode;
-                    line.erase(line.end() - 4, line.end());
-                    textNode->setText(line);
-                    vectorOfNodes.emplace_back(textNode);
-                }
-                else
-                {
-                    std::cout << "\n\nUnknown tag in line: <" << line << std::endl;
-                }
-            }
-
-            std::getline(HTMLDocument, line);
-        }
-
-        Painter painterOfNodes;
-        painterOfNodes.paintNodes(&vectorOfNodes);
-
+         this->parseDocument(documentText);
     }
     catch (std::string error)
     {

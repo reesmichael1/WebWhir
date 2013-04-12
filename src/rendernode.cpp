@@ -4,10 +4,10 @@
 
 RenderNode::RenderNode()
 {
+    needsPainting = true;
     backgroundColor = sf::Color::Black;
 }
 
-//This will be fixed--I simply wanted to have something to actually see.
 void RenderNode::setBackgroundColorOfNode(sf::Color colorToSet)
 {
     backgroundColor = colorToSet;

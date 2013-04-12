@@ -3,12 +3,18 @@
 
 #include <fstream>
 #include "coloroperations.h"
+#include "document.h"
 
 class HTMLReader : protected ColorOperations
 {
 public:
     HTMLReader();
-    static void parseDocument(char HTMLFilepath[]);
+    ~HTMLReader();
+    void prepareDocument(char HTMLFilepath[]);
+    void parseDocument(std::string textToParse);
+
+private:
+    Document *webpage;
 };
 
 #endif // HTMLREADER_H

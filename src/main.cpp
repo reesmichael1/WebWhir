@@ -6,9 +6,10 @@
 int main(int argc, char* argv[])
 {
 
+    HTMLReader reader;
     if (argc > 1)
     {
-        HTMLReader::parseDocument(argv[1]);
+        reader.prepareDocument(argv[1]);
     }
 
     else
@@ -17,7 +18,7 @@ int main(int argc, char* argv[])
         char HTMLFilepath[256];
         std::cin >> HTMLFilepath;
 
-        HTMLReader::parseDocument(HTMLFilepath);
+        reader.prepareDocument(HTMLFilepath);
     }
 
     return 0;
