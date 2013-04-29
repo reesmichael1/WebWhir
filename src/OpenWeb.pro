@@ -6,7 +6,13 @@ CONFIG -= qt
 INCLUDEPATH += /usr/local/include
 DEPENDPATH += /usr/local/include
 
-QMAKE_CXXFLAGS += -std=gnu++0x
+unix {
+    QMAKE_CXXFLAGS += -std=gnu++0x
+}
+
+macx {
+    CONFIG -= x86_64
+}
 
 LIBS += -L/usr/local/lib/SFML/
 

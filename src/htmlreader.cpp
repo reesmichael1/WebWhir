@@ -9,6 +9,8 @@
 #include "painter.h"
 #include "document.h"
 
+#define TAG_START_LOCATION 1
+
 HTMLReader::HTMLReader()
 {
 }
@@ -18,25 +20,59 @@ HTMLReader::~HTMLReader()
     delete webpage;
 }
 
+void HTMLReader::parseTagsIntoNodes()
+{
+    for (unsigned int i = 0; i < webpage->getVectorOfTags().size(); i++)
+    {
+        std::cout << webpage->getVectorOfTags().size();
 
-void HTMLReader::parseDocument(std::string textToParse)
+        std::string tag = webpage->getVectorOfTags().at(i);
+        if (tag.at(TAG_START_LOCATION) == '/')
+        {
+            int lengthOfTag = 0;
+            int locationOfCharacterToCheckForBracket = TAG_START_LOCATION;
+            int stringStartLocation = TAG_START_LOCATION + 1;
+
+            while (webpage->getVectorOfTags().at(i).at(
+                       locationOfCharacterToCheckForBracket) != '>');
+            {
+                std::cout << lengthOfTag;
+                lengthOfTag++;
+                locationOfCharacterToCheckForBracket++;
+            }
+
+            std::string parsedTag = webpage->getVectorOfTags().at(i).substr(
+                        stringStartLocation, lengthOfTag);
+
+            std::cout << parsedTag << std::endl;
+        }
+    }
+}
+
+void HTMLReader::parseDocumentTags(std::string textToParse)
 {
     webpage = new Document;
     char characterToCheck;
+    std::cout << textToParse.length();
     for (unsigned int i = 0; i < textToParse.length(); i++)
     {
         characterToCheck = textToParse.at(i);
         if (characterToCheck == '<')
         {
-            int checkForBracket = i;
-            do
+            int lengthOfTag = 1;
+            int locationOfCharacterToCheckForBracket = i;
+            int stringStartLocation = i;
+
+            while (textToParse.at(locationOfCharacterToCheckForBracket) != '>')
             {
-                checkForBracket++;
-            } while (textToParse.at(checkForBracket != '>'));
-            webpage->addTagToVector(textToParse.substr(i++, checkForBracket));
-            i--;
+                lengthOfTag++;
+                locationOfCharacterToCheckForBracket++;
+            }
+
+            webpage->addTagToVector(textToParse.substr(stringStartLocation, lengthOfTag));
         }
     }
+    this->parseTagsIntoNodes();
 }
 
 void HTMLReader::prepareDocument(char HTMLFilepath[])
@@ -67,7 +103,8 @@ void HTMLReader::prepareDocument(char HTMLFilepath[])
 
         HTMLDocument.close();
 
-         this->parseDocument(documentText);
+        std::cout << documentText << std::endl;
+        this->parseDocumentTags(documentText);
     }
     catch (std::string error)
     {
