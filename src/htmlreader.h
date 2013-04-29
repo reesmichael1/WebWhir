@@ -11,8 +11,6 @@ public:
     HTMLReader();
     ~HTMLReader();
     void prepareDocument(char HTMLFilepath[]);
-    void parseDocumentTags(std::string textToParse);
-    void parseTagsIntoNodes();
 
 private:
     Document *webpage;

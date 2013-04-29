@@ -9,7 +9,7 @@ class Painter
 {
 public:
     Painter();
-    void paintNodes(std::vector<std::unique_ptr<RenderNode>> *vectorOfNodes);
+    void paintNodes();
 
 private:
     static std::string parseTextToLines(std::string textToParse, int textCharacterSize, int windowBoundary);

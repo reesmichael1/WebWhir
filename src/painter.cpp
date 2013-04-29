@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <memory>
 #include <vector>
 #include "STRTK/strtk.hpp"
 #include "SFML/System.hpp"
@@ -68,8 +67,7 @@ std::string Painter::parseTextToLines(std::string textToParse,
 }
 
 
-void Painter::paintNodes(
-        std::vector<std::unique_ptr<RenderNode>> *vectorOfNodes)
+void Painter::paintNodes()
 {
     try
     {
@@ -90,27 +88,11 @@ void Painter::paintNodes(
         //It strikes me as too hackish, so I'll keep working on it.
         int downKeyPush = 0;
 
+        std::string temporaryString = "This string is temporary.";
+
         mainText.setFont(font);
         mainText.setCharacterSize(18);
-        std::string temporaryString;
-        for (int i = 0; i < vectorOfNodes->size(); i++)
-        {
-            temporaryString = appendText(
-                        vectorOfNodes->at(i)->getText(), temporaryString);
-        }
-
-        mainText.setString(parseTextToLines(temporaryString,
-                                            mainText.getCharacterSize(),
-                                            WINDOW_WIDTH));
-        mainText.setPosition(LEFT_BORDER, TOP_BORDER);
-
-        //Draw the background color of text.
-        //sf::FloatRect backgroundRect = mainText.getLocalBounds();
-        //sf::RectangleShape background(sf::Vector2f(
-                                    //backgroundRect.width +
-                                    //2*LEFT_BORDER,
-                                    //backgroundRect.height + 2*TOP_BORDER));
-        //background.setFillColor(node->getTextBackgroundColor());
+        mainText.setString(temporaryString);
 
         while (window->isOpen())
         {
@@ -167,7 +149,6 @@ void Painter::paintNodes(
 
             window->setView(mainView);
             window->clear();
-            //window->draw(background);
             window->draw(mainText);
             window->display();
 
