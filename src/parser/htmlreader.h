@@ -40,6 +40,7 @@ public:
         tagOpen,
         endTagOpen,
         tagName,
+        endTagName,
         bogusComment,
         doctypeDeclaration
     };

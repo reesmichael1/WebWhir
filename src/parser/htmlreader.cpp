@@ -26,7 +26,6 @@ void HTMLReader::parseDocumentText(std::string documentText)
     std::string::iterator i = documentText.begin();
     for (; i != documentText.end(); i++)
     {
-        //std::cout << *i;
         if (currentState == initialMode)
         {
             if (*i == '<')
@@ -38,7 +37,7 @@ void HTMLReader::parseDocumentText(std::string documentText)
         {
             if (*i == '/')
             {
-                currentState = endTagOpen;
+                currentState = endTagName;
             }
             else if (*i == '?')
             {
@@ -50,6 +49,7 @@ void HTMLReader::parseDocumentText(std::string documentText)
             }
             else if (isalpha(*i))
             {
+                i--;
                 currentState = tagName;
             }
         }
@@ -57,16 +57,29 @@ void HTMLReader::parseDocumentText(std::string documentText)
         {
             while (currentState == tagName)
             {
-                std::string currentTagName;
-                currentTagName.push_back(*i);
                 std::cout << *i;
 
                 i++;
                 if (*i == '>')
                 {
                     currentState = endTagOpen;
-                    std::cout << std::endl;
-                    //std::cout << "The name is " << currentTagName << std::endl;
+                }
+
+                if (*i == ' ')
+                {
+                    currentState = endTagName;
+                }
+            }
+            std::cout << std::endl;
+        }
+        else if (currentState == endTagName)
+        {
+            while (currentState == endTagName)
+            {
+                i++;
+                if (*i == '>')
+                {
+                    currentState = endTagOpen;
                 }
             }
         }
@@ -74,7 +87,7 @@ void HTMLReader::parseDocumentText(std::string documentText)
         {
             if (*i == '<')
             {
-                currentState = tagName;
+                currentState = tagOpen;
             }
         }
         else if (currentState == doctypeDeclaration)
