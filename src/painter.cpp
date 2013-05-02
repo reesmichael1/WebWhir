@@ -18,6 +18,11 @@ Painter::Painter()
                                                 WINDOW_HEIGHT, 32), "OpenWeb");
 }
 
+Painter::~Painter()
+{
+    delete window;
+}
+
 std::string Painter::appendText(std::string textToSet, std::string text)
 {
     if (!text.empty())
@@ -161,3 +166,4 @@ void Painter::paintNodes()
         std::cout << error << std::endl;
     }
 }
+

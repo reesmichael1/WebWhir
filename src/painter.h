@@ -9,6 +9,7 @@ class Painter
 {
 public:
     Painter();
+    ~Painter();
     void paintNodes();
 
 private:

@@ -11,10 +11,12 @@ macx {
 }
 
 LIBS += -L/usr/local/lib/SFML/
-LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+
+CONFIG(release, debug|release): LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+CONFIG(debug, debug|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
 
 SOURCES += main.cpp \
-    htmlreader.cpp \
+    parser/htmlreader.cpp \
     rendernode.cpp \
     painter.cpp \
     textnode.cpp \
@@ -22,7 +24,7 @@ SOURCES += main.cpp \
     document.cpp
 
 HEADERS += \
-    htmlreader.h \
+    parser/htmlreader.h \
     rendernode.h \
     painter.h \
     textnode.h \

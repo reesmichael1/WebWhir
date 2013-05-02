@@ -39,3 +39,4 @@ sf::Color ColorOperations::convertStringToColor(std::string colorString)
         return sf::Color::White;
     }
 }
+

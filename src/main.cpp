@@ -1,7 +1,7 @@
 #include <iostream>
+#include <string>
 #include <fstream>
-#include <stdio.h>
-#include "htmlreader.h"
+#include "parser/htmlreader.h"
 
 int main(int argc, char* argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     else
     {
         std::cout << "Please enter the filepath of the HTML Document." << std::endl;
-        char HTMLFilepath[256];
+        std::string HTMLFilepath;
         std::cin >> HTMLFilepath;
 
         reader.prepareDocument(HTMLFilepath);
