@@ -40,7 +40,8 @@ public:
         tagOpen,
         endTagOpen,
         tagName,
-        bogusComment
+        bogusComment,
+        doctypeDeclaration
     };
 
 private:

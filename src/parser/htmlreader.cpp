@@ -38,15 +38,54 @@ void HTMLReader::parseDocumentText(std::string documentText)
         {
             if (*i == '/')
             {
-                currentState == endTagOpen;
+                currentState = endTagOpen;
             }
             else if (*i == '?')
             {
-                currentState == bogusComment;
+                currentState = bogusComment;
+            }
+            else if (*i == '!')
+            {
+                currentState = doctypeDeclaration;
             }
             else if (isalpha(*i))
             {
-                std::cout << "Entered tag." << std::endl;
+                currentState = tagName;
+            }
+        }
+        else if (currentState == tagName)
+        {
+            while (currentState == tagName)
+            {
+                std::string currentTagName;
+                currentTagName.push_back(*i);
+                std::cout << *i;
+
+                i++;
+                if (*i == '>')
+                {
+                    currentState = endTagOpen;
+                    std::cout << std::endl;
+                    //std::cout << "The name is " << currentTagName << std::endl;
+                }
+            }
+        }
+        else if (currentState == endTagOpen)
+        {
+            if (*i == '<')
+            {
+                currentState = tagName;
+            }
+        }
+        else if (currentState == doctypeDeclaration)
+        {
+            while (currentState == doctypeDeclaration)
+            {
+                i++;
+                if (*i == '>')
+                {
+                    currentState = endTagOpen;
+                }
             }
         }
     }
