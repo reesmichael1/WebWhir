@@ -10,6 +10,7 @@ class HTMLReader
 public:
     HTMLReader();
     ~HTMLReader();
+    void paint();
     void prepareDocument(std::string HTMLFilepath);
 
     //These are defined by the W3C HTML5 parser specification.

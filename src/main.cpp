@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
 
     HTMLReader reader;
     reader.prepareDocument(HTMLFilepath);
+    reader.paint();
 
     return 0;
 }

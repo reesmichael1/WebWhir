@@ -28,9 +28,33 @@ void Document::constructTree(RenderNode *nodeToAdd)
 
         iterator = iterator->childNode;
         iterator->childNode = NULL;
-        std::cout << iterator->getText() << std::endl;
     }
 
+}
+
+void Document::paintWebpage()
+{
+    try
+    {
+        if (firstNode == NULL)
+        {
+            throw "Error: Webpage is empty.";
+        }
+
+        RenderNode *iterator;
+        iterator = firstNode;
+        while (iterator->childNode != NULL)
+        {
+            std::cout << iterator->getText() << std::endl;
+            iterator = iterator->childNode;
+        }
+
+        std::cout << iterator->getText() << std::endl;
+    }
+    catch (std::string error)
+    {
+        std::cout << error << std::endl;
+    }
 }
 
 

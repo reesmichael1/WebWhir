@@ -16,6 +16,11 @@ HTMLReader::~HTMLReader()
     delete webpage;
 }
 
+void HTMLReader::paint()
+{
+    webpage->paintWebpage();
+}
+
 void HTMLReader::parseDocumentText(std::string documentText)
 {
     parseState currentState = initialMode;
