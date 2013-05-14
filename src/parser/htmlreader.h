@@ -3,10 +3,9 @@
 
 #include <string>
 #include <fstream>
-#include "coloroperations.h"
 #include "document.h"
 
-class HTMLReader : protected ColorOperations
+class HTMLReader
 {
 public:
     HTMLReader();

@@ -6,20 +6,22 @@
 int main(int argc, char* argv[])
 {
 
-    HTMLReader reader;
+    std::string HTMLFilepath;
+
     if (argc > 1)
     {
-        reader.prepareDocument(argv[1]);
+        HTMLFilepath = argv[1];
     }
 
     else
     {
         std::cout << "Please enter the filepath of the HTML Document." << std::endl;
-        std::string HTMLFilepath;
         std::cin >> HTMLFilepath;
 
-        reader.prepareDocument(HTMLFilepath);
     }
+
+    HTMLReader reader;
+    reader.prepareDocument(HTMLFilepath);
 
     return 0;
 }

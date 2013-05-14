@@ -3,7 +3,6 @@
 #include <fstream>
 #include <string>
 #include <cctype>
-#include "coloroperations.h"
 #include "htmlreader.h"
 #include "textnode.h"
 #include "document.h"
@@ -55,9 +54,11 @@ void HTMLReader::parseDocumentText(std::string documentText)
         }
         else if (currentState == tagName)
         {
+            std::string tagNameString;
             while (currentState == tagName)
             {
-                std::cout << *i;
+
+                tagNameString.push_back(*i);
 
                 i++;
                 if (*i == '>')
@@ -70,7 +71,30 @@ void HTMLReader::parseDocumentText(std::string documentText)
                     currentState = endTagName;
                 }
             }
-            std::cout << std::endl;
+
+            if (tagNameString == "p")
+            {
+                currentState = text;
+                std::string textString;
+                while (currentState == text)
+                {
+                    i++;
+                    if (*i == '<')
+                    {
+                        i--;
+                        currentState = tagOpen;
+                    }
+                    else
+                    {
+                        textString.push_back(*i);
+                    }
+                }
+                TextNode *textNode = new TextNode;
+                textNode->setText(textString);
+                webpage->constructTree(textNode);
+            }
+
+            //std::cout << tagNameString << std::endl;
         }
         else if (currentState == endTagName)
         {
@@ -99,6 +123,13 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 {
                     currentState = endTagOpen;
                 }
+            }
+        }
+        else if (currentState == text)
+        {
+            if (*i == '<')
+            {
+                currentState = tagOpen;
             }
         }
     }
