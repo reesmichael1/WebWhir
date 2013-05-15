@@ -45,7 +45,7 @@ void Document::paintWebpage()
         iterator = firstNode;
         while (iterator->childNode != NULL)
         {
-            std::cout << iterator->getText() << std::endl;
+            std::cout << iterator->getText() << std::endl << std::endl;
             iterator = iterator->childNode;
         }
 
@@ -56,5 +56,3 @@ void Document::paintWebpage()
         std::cout << error << std::endl;
     }
 }
-
-
