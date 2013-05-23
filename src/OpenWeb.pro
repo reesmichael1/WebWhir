@@ -9,12 +9,24 @@ macx {
 
 SOURCES += main.cpp \
     parser/htmlreader.cpp \
-    rendernode.cpp \
-    textnode.cpp \
-    document.cpp
+    nodes/rendernode.cpp \
+    nodes/textnode.cpp \
+    document.cpp \
+    elements/HTMLHeadElement.cpp \
+    elements/HTMLElement.cpp \
+    elements/HTMLPElement.cpp \
+    elements/HTMLBodyElement.cpp \
+    nodes/bodynode.cpp \
+    nodes/headnode.cpp
 
 HEADERS += \
     parser/htmlreader.h \
-    rendernode.h \
-    textnode.h \
-    document.h
+    nodes/rendernode.h \
+    nodes/textnode.h \
+    document.h \
+    elements/HTMLHeadElement.h \
+    elements/HTMLElement.h \
+    elements/HTMLPElement.h \
+    elements/HTMLBodyElement.h \
+    nodes/bodynode.h \
+    nodes/headnode.h

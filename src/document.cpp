@@ -1,5 +1,5 @@
 #include <iostream>
-#include "rendernode.h"
+#include "nodes/rendernode.h"
 #include "document.h"
 
 Document::Document()

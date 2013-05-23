@@ -4,7 +4,9 @@
 #include <string>
 #include <cctype>
 #include "htmlreader.h"
-#include "textnode.h"
+#include "elements/HTMLHeadElement.h"
+#include "elements/HTMLBodyElement.h"
+#include "nodes/textnode.h"
 #include "document.h"
 
 HTMLReader::HTMLReader()
@@ -23,9 +25,10 @@ void HTMLReader::paint()
 
 void HTMLReader::parseDocumentText(std::string documentText)
 {
-    parseState currentState = initialMode;
 
     webpage = new Document;
+
+    parseState currentState = initialMode;
 
     std::string::iterator i = documentText.begin();
     for (; i != documentText.end(); i++)
@@ -99,16 +102,38 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 webpage->constructTree(textNode);
             }
 
-            //std::cout << tagNameString << std::endl;
+            if (tagNameString == "html")
+            {
+                HTMLHeadElement *headElement = new HTMLHeadElement;
+                //webpage->constructTree(headElement);
+            }
+
+            if (tagNameString == "body")
+            {
+                //if (webpage->firstNode == NULL)
+                //{
+                   // HTMLHeadElement *headElement = new HTMLHeadElement;
+                    //webpage->constructTree(headElement);
+               // }
+
+                HTMLBodyElement *bodyElement = new HTMLBodyElement;
+                //webpage->constructTree(bodyElement);
+            }
         }
         else if (currentState == endTagName)
         {
+            std::string tagDataString;
+
             while (currentState == endTagName)
             {
                 i++;
                 if (*i == '>')
                 {
                     currentState = endTagOpen;
+                }
+                else
+                {
+                    tagDataString.push_back(*i);
                 }
             }
         }
