@@ -8,10 +8,16 @@ HTMLPElement::HTMLPElement()
 
 RenderNode* HTMLPElement::returnNode()
 {
-    TextNode *textNode = new TextNode;
-    RenderNode *text = new RenderNode;
+    textNode = new TextNode;
+    text = new RenderNode;
     text = textNode;
-    text->setChildNode(NULL);
+
     return text;
+}
+
+void HTMLPElement::deleteHTMLElement()
+{
+    delete textNode;
+    delete text;
 }
 

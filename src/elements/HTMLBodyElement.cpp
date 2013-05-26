@@ -8,9 +8,15 @@ HTMLBodyElement::HTMLBodyElement()
 
 RenderNode* HTMLBodyElement::returnNode()
 {
-    BodyNode *bodyNode = new BodyNode;
-    RenderNode *body = new RenderNode;
+    bodyNode = new BodyNode;
+    body = new RenderNode;
     body = bodyNode;
-    body->setChildNode(NULL);
+
     return body;
+}
+
+void HTMLBodyElement::deleteHTMLElement()
+{
+    delete bodyNode;
+    delete body;
 }

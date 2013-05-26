@@ -8,6 +8,7 @@ class HTMLElement
 {
 public:
     virtual RenderNode* returnNode() = 0;
+    virtual void deleteHTMLElement() = 0;
 
 };
 

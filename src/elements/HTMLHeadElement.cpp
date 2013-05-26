@@ -8,10 +8,15 @@ HTMLHeadElement::HTMLHeadElement()
 
 RenderNode* HTMLHeadElement::returnNode()
 {
-    HeadNode *headNode = new HeadNode;
-    RenderNode *head = new RenderNode;
+    headNode = new HeadNode;
+    head = new RenderNode;
     head = headNode;
-    head->setChildNode(NULL);
+
     return head;
 }
 
+void HTMLHeadElement::deleteHTMLElement()
+{
+    delete headNode;
+    delete head;
+}
