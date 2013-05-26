@@ -1,16 +1,17 @@
 #ifndef RENDERNODE_H
 #define RENDERNODE_H
 
-#include <string>
-
 class RenderNode
 {
 public:
     RenderNode();
-    virtual std::string getText();
-    RenderNode *childNode;
+    virtual void paintNode();
+    void setNeedsPainting(bool valueToSet);
+    RenderNode* getChildNode();
+    void setChildNode(RenderNode *nodeToAdd);
 
 private:
+    RenderNode *childNodePointer;
     bool needsPainting;
 };
 

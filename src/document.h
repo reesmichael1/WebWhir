@@ -7,8 +7,10 @@ class Document
 {
 public:
     Document();
+    ~Document();
     void constructTree(RenderNode *nodeToAdd);
     void paintWebpage();
+    RenderNode *getFirstNode();
 
 private:
     RenderNode *firstNode;

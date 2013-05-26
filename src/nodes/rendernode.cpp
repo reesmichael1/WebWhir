@@ -5,9 +5,24 @@
 RenderNode::RenderNode()
 {
     needsPainting = true;
+    childNodePointer = NULL;
 }
 
-std::string RenderNode::getText()
+RenderNode* RenderNode::getChildNode()
 {
-    return NULL;
+    return childNodePointer;
+}
+
+void RenderNode::setChildNode(RenderNode *nodeToAdd)
+{
+     childNodePointer = nodeToAdd;
+}
+
+void RenderNode::setNeedsPainting(bool valueToSet)
+{
+    needsPainting = valueToSet;
+}
+
+void RenderNode::paintNode()
+{
 }

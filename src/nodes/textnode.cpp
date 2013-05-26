@@ -1,9 +1,11 @@
 #include <iostream>
+#include <string>
 #include "textnode.h"
 
 TextNode::TextNode()
 {
     textCharacterSize = 12;
+    setNeedsPainting(true);
 }
 
 void TextNode::setText(std::string textToSet)
@@ -21,7 +23,8 @@ int TextNode::getTextCharacterSize()
     return textCharacterSize;
 }
 
-std::string TextNode::getText()
+void TextNode::paintNode()
 {
-    return text;
+    std::cout << text << std::endl << std::endl;
+    setNeedsPainting(false);
 }

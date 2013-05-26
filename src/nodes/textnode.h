@@ -10,7 +10,7 @@ public:
     void setText(std::string textToSet);
     void setTextCharacterSize(int size);
     int getTextCharacterSize();
-    virtual std::string getText();
+    virtual void paintNode();
 
 private:
     std::string text;

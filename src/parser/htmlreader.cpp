@@ -82,6 +82,17 @@ void HTMLReader::parseDocumentText(std::string documentText)
 
             if (tagNameString == "p")
             {
+                if (currentState == endTagName)
+                {
+                    while (currentState == endTagName)
+                    {
+                        i++;
+                        if (*i == '>')
+                        {
+                            currentState = text;
+                        }
+                    }
+                }
                 currentState = text;
                 std::string textString;
                 while (currentState == text)
@@ -104,21 +115,29 @@ void HTMLReader::parseDocumentText(std::string documentText)
 
             if (tagNameString == "html")
             {
-                HTMLHeadElement *headElement = new HTMLHeadElement;
-                //webpage->constructTree(headElement);
+                HTMLHeadElement headElement;
+                RenderNode *head;
+                head = headElement.returnNode();
+
+                webpage->constructTree(head);
             }
 
             if (tagNameString == "body")
             {
-                //if (webpage->firstNode == NULL)
-                //{
-                   // HTMLHeadElement *headElement = new HTMLHeadElement;
-                    //webpage->constructTree(headElement);
-               // }
+                if (webpage->getFirstNode() == NULL)
+                {
+                    HTMLHeadElement headElement;
+                    RenderNode *head = new RenderNode;
+                    head = headElement.returnNode();
+                    webpage->constructTree(head);
+                }
 
-                HTMLBodyElement *bodyElement = new HTMLBodyElement;
-                //webpage->constructTree(bodyElement);
-            }
+                HTMLBodyElement bodyElement;
+                RenderNode *body = new RenderNode;
+                body = bodyElement.returnNode();
+
+                webpage->constructTree(body);
+                }
         }
         else if (currentState == endTagName)
         {
