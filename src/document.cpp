@@ -19,28 +19,18 @@ RenderNode* Document::getFirstNode()
     return firstNode;
 }
 
-void Document::constructTree(RenderNode *nodeToAdd)
-{
-
-    if (firstNode == NULL)
+void Document::constructTree(RenderNode *childNode, RenderNode *parentNode)
+{   
+    //This has the potential to crash if parentNode is somehow passed as NULL.
+    //I will work on this.
+    if (firstNode == NULL && parentNode == NULL)
     {
-        firstNode = nodeToAdd;
-        firstNode->setChildNode(NULL);
+        firstNode = childNode;
     }
     else
     {
-        RenderNode *iterator;
-        iterator = firstNode;
-         while (iterator->getChildNode() != NULL)
-        {
-            iterator = iterator->getChildNode();
-        }
-
-        iterator->setChildNode(nodeToAdd);
-
-        iterator = iterator->getChildNode();
-        iterator->setChildNode(NULL);
-
+        childNode->setParentNode(parentNode);
+        parentNode->addChildNode(childNode);
     }
 }
 
@@ -55,13 +45,6 @@ void Document::paintWebpage()
 
         RenderNode *iterator;
         iterator = firstNode;
-        while (iterator->getChildNode() != NULL)
-        {
-            iterator->paintNode();
-            iterator = iterator->getChildNode();
-        }
-
-        iterator->paintNode();
     }
     catch (std::string error)
     {

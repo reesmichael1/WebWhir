@@ -6,11 +6,17 @@ TextNode::TextNode()
 {
     textCharacterSize = 12;
     setNeedsPainting(true);
+    setTypeOfNode("text");
 }
 
 void TextNode::setText(std::string textToSet)
 {
     text = textToSet;
+}
+
+std::string TextNode::getText()
+{
+    return text;
 }
 
 void TextNode::setTextCharacterSize(int size)

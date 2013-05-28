@@ -8,6 +8,7 @@ class TextNode : public RenderNode
 public:
     TextNode();
     void setText(std::string textToSet);
+    std::string getText();
     void setTextCharacterSize(int size);
     int getTextCharacterSize();
     virtual void paintNode();

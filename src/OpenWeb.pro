@@ -17,7 +17,9 @@ SOURCES += main.cpp \
     elements/HTMLPElement.cpp \
     elements/HTMLBodyElement.cpp \
     nodes/bodynode.cpp \
-    nodes/headnode.cpp
+    nodes/headnode.cpp \
+    elements/HTMLBElement.cpp \
+    nodes/bnode.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -29,4 +31,6 @@ HEADERS += \
     elements/HTMLPElement.h \
     elements/HTMLBodyElement.h \
     nodes/bodynode.h \
-    nodes/headnode.h
+    nodes/headnode.h \
+    elements/HTMLBElement.h \
+    nodes/bnode.h

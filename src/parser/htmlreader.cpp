@@ -11,6 +11,7 @@
 
 HTMLReader::HTMLReader()
 {
+    currentNode = new RenderNode;
 }
 
 HTMLReader::~HTMLReader()
@@ -23,6 +24,10 @@ void HTMLReader::paint()
     webpage->paintWebpage();
 }
 
+//I hate myself for writing this function. I really do.
+//Someday soon, when I don't have any ideas for adding
+//features, I'll do some major refactoring and actually
+//break it into about fifty functions, like it deserves.
 void HTMLReader::parseDocumentText(std::string documentText)
 {
 
@@ -100,8 +105,25 @@ void HTMLReader::parseDocumentText(std::string documentText)
                     i++;
                     if (*i == '<')
                     {
-                        i--;
-                        currentState = tagOpen;
+                        i++;
+                        if (*i == '/')
+                        {
+                            currentState = endTagName;
+                        }
+
+                        else
+                        {
+                            std::string nameOfNode;
+                            while (*i != ' ')
+                            {
+                                nameOfNode.push_back(*i);
+                                i++;
+                            }
+                            if (nameOfNode == "b")
+                            {
+
+                            }
+                        }
                     }
                     else
                     {
@@ -110,7 +132,8 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 }
                 TextNode *textNode = new TextNode;
                 textNode->setText(textString);
-                webpage->constructTree(textNode);
+                webpage->constructTree(textNode, currentNode);
+                currentNode = textNode;
             }
 
             if (tagNameString == "html")
@@ -118,8 +141,11 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 HTMLHeadElement headElement;
                 RenderNode *head;
                 head = headElement.returnNode();
+                head->setIsOpen(true);
 
-                webpage->constructTree(head);
+                webpage->constructTree(head, NULL);
+
+                currentNode = head;
             }
 
             if (tagNameString == "body")
@@ -129,15 +155,21 @@ void HTMLReader::parseDocumentText(std::string documentText)
                     HTMLHeadElement headElement;
                     RenderNode *head = new RenderNode;
                     head = headElement.returnNode();
-                    webpage->constructTree(head);
+                    head->setIsOpen(true);
+                    webpage->constructTree(head, NULL);
+
+                    currentNode = head;
                 }
 
                 HTMLBodyElement bodyElement;
                 RenderNode *body = new RenderNode;
                 body = bodyElement.returnNode();
+                body->setIsOpen(true);
 
-                webpage->constructTree(body);
-                }
+                webpage->constructTree(body, currentNode);
+
+                currentNode = body;
+            }
         }
         else if (currentState == endTagName)
         {
@@ -155,6 +187,8 @@ void HTMLReader::parseDocumentText(std::string documentText)
                     tagDataString.push_back(*i);
                 }
             }
+
+
         }
         else if (currentState == endTagOpen)
         {

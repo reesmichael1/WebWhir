@@ -8,7 +8,7 @@ class Document
 public:
     Document();
     ~Document();
-    void constructTree(RenderNode *nodeToAdd);
+    void constructTree(RenderNode *childNode, RenderNode *parentNode);
     void paintWebpage();
     RenderNode *getFirstNode();
 

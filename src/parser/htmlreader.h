@@ -47,6 +47,7 @@ public:
 
 private:
     Document *webpage;
+    RenderNode *currentNode;
     void parseDocumentText(std::string documentText);
 };
 

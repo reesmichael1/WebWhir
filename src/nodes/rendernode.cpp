@@ -5,17 +5,26 @@
 RenderNode::RenderNode()
 {
     needsPainting = true;
-    childNodePointer = NULL;
 }
 
-RenderNode* RenderNode::getChildNode()
+void RenderNode::setTypeOfNode(std::string typeToSet)
 {
-    return childNodePointer;
+    typeOfNode = typeToSet;
 }
 
-void RenderNode::setChildNode(RenderNode *nodeToAdd)
+std::string RenderNode::getTypeOfNode()
 {
-     childNodePointer = nodeToAdd;
+    return typeOfNode;
+}
+
+void RenderNode::setParentNode(RenderNode *nodeToSet)
+{
+    parentNode = nodeToSet;
+}
+
+void RenderNode::addChildNode(RenderNode *nodeToAdd)
+{
+    childNodes.push_back(nodeToAdd);
 }
 
 void RenderNode::setNeedsPainting(bool valueToSet)
@@ -25,4 +34,14 @@ void RenderNode::setNeedsPainting(bool valueToSet)
 
 void RenderNode::paintNode()
 {
+}
+
+void RenderNode::setIsOpen(bool valueToSet)
+{
+    isOpen = valueToSet;
+}
+
+bool RenderNode::getIsOpen()
+{
+    return isOpen;
 }
