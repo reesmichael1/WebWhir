@@ -6,12 +6,15 @@
 #include "htmlreader.h"
 #include "elements/HTMLHeadElement.h"
 #include "elements/HTMLBodyElement.h"
+#include "elements/HTMLBElement.h"
 #include "nodes/textnode.h"
+#include "nodes/bnode.h"
 #include "document.h"
 
 HTMLReader::HTMLReader()
 {
     currentNode = new RenderNode;
+    currentParentNode = new RenderNode;
 }
 
 HTMLReader::~HTMLReader()
@@ -114,14 +117,42 @@ void HTMLReader::parseDocumentText(std::string documentText)
                         else
                         {
                             std::string nameOfNode;
-                            while (*i != ' ')
+                            while (*i != '>')
                             {
                                 nameOfNode.push_back(*i);
                                 i++;
                             }
+
+                            //Yes, the implementation of this sucks. For that matter,
+                            //the entire implementation of TextNode sucks. This, along
+                            //with rewriting the parser, is one of my top two things
+                            //to do as soon as Stats is done.
                             if (nameOfNode == "b")
                             {
+                                HTMLBElement bElement;
+                                RenderNode *bNode = new BNode;
+                                bNode = bElement.returnNode();
+                                bNode->setIsOpen(true);
 
+                                RenderNode *backupParentNode = currentParentNode;
+
+                                currentParentNode = currentNode;
+                                currentNode = bNode;
+
+                                i++;
+                                std::string textInNode;
+                                while (*i != '<')
+                                {
+                                    textInNode.push_back(*i);
+                                    i++;
+                                }
+
+                                bNode->setText(textInNode);
+                                webpage->constructTree(currentNode, currentParentNode);
+                                currentParentNode = backupParentNode;
+
+                                i++;
+                                currentState = endTagName;
                             }
                         }
                     }
@@ -132,8 +163,8 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 }
                 TextNode *textNode = new TextNode;
                 textNode->setText(textString);
-                webpage->constructTree(textNode, currentNode);
                 currentNode = textNode;
+                webpage->constructTree(currentNode, currentParentNode);
             }
 
             if (tagNameString == "html")
@@ -143,9 +174,10 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 head = headElement.returnNode();
                 head->setIsOpen(true);
 
-                webpage->constructTree(head, NULL);
-
+                currentParentNode = head;
                 currentNode = head;
+
+                webpage->constructTree(currentNode, NULL);
             }
 
             if (tagNameString == "body")
@@ -156,9 +188,11 @@ void HTMLReader::parseDocumentText(std::string documentText)
                     RenderNode *head = new RenderNode;
                     head = headElement.returnNode();
                     head->setIsOpen(true);
-                    webpage->constructTree(head, NULL);
 
+                    currentParentNode = head;
                     currentNode = head;
+
+                    webpage->constructTree(currentNode, NULL);
                 }
 
                 HTMLBodyElement bodyElement;
@@ -166,9 +200,11 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 body = bodyElement.returnNode();
                 body->setIsOpen(true);
 
-                webpage->constructTree(body, currentNode);
-
                 currentNode = body;
+
+                webpage->constructTree(currentNode, currentParentNode);
+
+                currentParentNode = body;
             }
         }
         else if (currentState == endTagName)
@@ -177,7 +213,6 @@ void HTMLReader::parseDocumentText(std::string documentText)
 
             while (currentState == endTagName)
             {
-                i++;
                 if (*i == '>')
                 {
                     currentState = endTagOpen;
@@ -186,8 +221,18 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 {
                     tagDataString.push_back(*i);
                 }
+                i++;
             }
 
+            if (tagDataString == "html")
+            {
+                return;
+            }
+
+            while (!parentNodeClosed(currentNode, tagDataString))
+            {
+                currentNode = currentNode->getParentNode();
+            }
 
         }
         else if (currentState == endTagOpen)
@@ -254,4 +299,17 @@ void HTMLReader::prepareDocument(std::string HTMLFilepath)
         std::cout << error << std::endl;
     }
 
+}
+
+bool HTMLReader::parentNodeClosed(RenderNode *node, std::string typeOfNode)
+{
+    if (node->getTypeOfNode() == typeOfNode)
+    {
+        node->setIsOpen(false);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

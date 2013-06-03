@@ -47,8 +47,10 @@ public:
 
 private:
     Document *webpage;
+    RenderNode *currentParentNode;
     RenderNode *currentNode;
     void parseDocumentText(std::string documentText);
+    bool parentNodeClosed(RenderNode *node, std::string typeOfNode);
 };
 
 #endif // HTMLREADER_H

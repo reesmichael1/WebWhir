@@ -34,6 +34,19 @@ void Document::constructTree(RenderNode *childNode, RenderNode *parentNode)
     }
 }
 
+void Document::paintChildren(RenderNode *parentNode)
+{
+    std::vector<RenderNode*> *childNodesVector = parentNode->getChildNodes();
+    if (!childNodesVector->empty())
+    {
+        for (std::vector<RenderNode*>::iterator i = childNodesVector->begin(); i != childNodesVector->end(); i++)
+        {
+            (*i)->paintNode();
+            paintChildren(*i);
+        }
+    }
+}
+
 void Document::paintWebpage()
 {
     try
@@ -43,8 +56,9 @@ void Document::paintWebpage()
             throw "Error: Webpage is empty.";
         }
 
-        RenderNode *iterator;
-        iterator = firstNode;
+        firstNode->paintNode();
+
+        paintChildren(firstNode);
     }
     catch (std::string error)
     {

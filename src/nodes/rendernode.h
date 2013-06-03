@@ -9,11 +9,14 @@ class RenderNode
 public:
     RenderNode();
     virtual void paintNode();
+    virtual void setText(std::string textToSet);
     void setNeedsPainting(bool valueToSet);
     void setTypeOfNode(std::string typeToSet);
     std::string getTypeOfNode();
     void setParentNode(RenderNode *nodeToSet);
+    RenderNode* getParentNode();
     void addChildNode(RenderNode *nodeToAdd);
+    std::vector<RenderNode *> *getChildNodes();
     void setIsOpen(bool valueToSet);
     bool getIsOpen();
 
@@ -21,7 +24,7 @@ private:
     RenderNode *parentNode;
     bool isOpen;
     bool needsPainting;
-    std::vector<RenderNode*> childNodes;
+    std::vector<RenderNode*> *childNodes;
 
 
     //This strikes me as a really bad idea. I'm doing it now, hopefully temporarily,

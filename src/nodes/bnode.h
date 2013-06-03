@@ -4,11 +4,15 @@
 #include <string>
 #include "nodes/textnode.h"
 
-class BNode : public TextNode
+class BNode : public RenderNode
 {
 public:
     BNode();
-    virtual void paintNode();
+    std::string getText();
+    virtual void setText(std::string textToSet);
+
+private:
+    std::string text;
 };
 
 #endif // BNODE_H

@@ -6,7 +6,4 @@ HeadNode::HeadNode()
     setTypeOfNode("head");
 }
 
-void HeadNode::paintNode()
-{
-    setNeedsPainting(false);
-}
+

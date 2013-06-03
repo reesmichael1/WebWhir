@@ -10,6 +10,7 @@ public:
     ~Document();
     void constructTree(RenderNode *childNode, RenderNode *parentNode);
     void paintWebpage();
+    void paintChildren(RenderNode *parentNode);
     RenderNode *getFirstNode();
 
 private:

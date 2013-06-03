@@ -6,7 +6,7 @@ TextNode::TextNode()
 {
     textCharacterSize = 12;
     setNeedsPainting(true);
-    setTypeOfNode("text");
+    setTypeOfNode("p");
 }
 
 void TextNode::setText(std::string textToSet)
@@ -32,5 +32,4 @@ int TextNode::getTextCharacterSize()
 void TextNode::paintNode()
 {
     std::cout << text << std::endl << std::endl;
-    setNeedsPainting(false);
 }

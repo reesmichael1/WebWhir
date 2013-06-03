@@ -7,7 +7,6 @@ class HeadNode : public RenderNode
 {
 public:
     HeadNode();
-    virtual void paintNode();
 };
 
 #endif // HEADNODE_H
