@@ -4,6 +4,10 @@
 #include <string>
 #include <fstream>
 #include "document.h"
+#include "nodes/rendernode.h"
+#include "nodes/paragraphnode.h"
+#include "nodes/headnode.h"
+#include "nodes/bodynode.h"
 
 class HTMLReader
 {
@@ -44,6 +48,16 @@ public:
         bogusComment,
         doctypeDeclaration
     };
+
+    std::string returnTagName(std::string::iterator &i,
+                              parseState &currentState);
+    RenderNode* createNode(std::string nodeName, std::string::iterator &i,
+                           parseState &currentState);
+    ParagraphNode* createParagraphNode(std::string::iterator &i,
+                                       parseState &currentState);
+    HeadNode* createHeadNode();
+    BodyNode* createBodyNode();
+
 
 private:
     Document *webpage;

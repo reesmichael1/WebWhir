@@ -6,17 +6,14 @@ HTMLHeadElement::HTMLHeadElement()
 {
 }
 
-RenderNode* HTMLHeadElement::returnNode()
+HeadNode* HTMLHeadElement::returnNode()
 {
     headNode = new HeadNode;
-    head = new RenderNode;
-    head = headNode;
 
-    return head;
+    return headNode;
 }
 
 void HTMLHeadElement::deleteHTMLElement()
 {
     delete headNode;
-    delete head;
 }

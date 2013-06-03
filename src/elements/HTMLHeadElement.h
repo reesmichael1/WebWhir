@@ -8,7 +8,7 @@ class HTMLHeadElement : public HTMLElement
 {
 public:
     HTMLHeadElement();
-    virtual RenderNode *returnNode();
+    virtual HeadNode *returnNode();
     virtual void deleteHTMLElement();
 
 private:

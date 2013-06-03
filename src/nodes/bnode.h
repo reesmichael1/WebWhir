@@ -2,7 +2,7 @@
 #define BNODE_H
 
 #include <string>
-#include "nodes/textnode.h"
+#include "nodes/paragraphnode.h"
 
 class BNode : public RenderNode
 {

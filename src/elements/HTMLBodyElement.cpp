@@ -6,13 +6,11 @@ HTMLBodyElement::HTMLBodyElement()
 {
 }
 
-RenderNode* HTMLBodyElement::returnNode()
+BodyNode* HTMLBodyElement::returnNode()
 {
     bodyNode = new BodyNode;
-    body = new RenderNode;
-    body = bodyNode;
 
-    return body;
+    return bodyNode;
 }
 
 void HTMLBodyElement::deleteHTMLElement()

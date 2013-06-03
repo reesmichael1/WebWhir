@@ -8,7 +8,7 @@ class HTMLBodyElement : public HTMLElement
 {
 public:
     HTMLBodyElement();
-    virtual RenderNode *returnNode();
+    virtual BodyNode *returnNode();
     virtual void deleteHTMLElement();
 
 private:
