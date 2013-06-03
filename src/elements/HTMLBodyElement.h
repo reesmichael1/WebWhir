@@ -13,7 +13,6 @@ public:
 
 private:
     BodyNode *bodyNode;
-    RenderNode *body;
 };
 
 #endif // HTMLBODYELEMENT_H

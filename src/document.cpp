@@ -23,7 +23,7 @@ void Document::constructTree(RenderNode *childNode, RenderNode *parentNode)
 {   
     //This has the potential to crash if parentNode is somehow passed as NULL.
     //I will work on this.
-    if (firstNode == NULL && parentNode == NULL)
+    if (firstNode == NULL)
     {
         firstNode = childNode;
     }

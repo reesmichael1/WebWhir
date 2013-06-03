@@ -16,6 +16,9 @@ public:
     ~HTMLReader();
     void paint();
     void prepareDocument(std::string HTMLFilepath);
+    HeadNode* createHeadNode();
+    BodyNode* createBodyNode();
+    RenderNode* createFirstNode();
 
     //These are defined by the W3C HTML5 parser specification.
     enum parseState {
@@ -55,8 +58,7 @@ public:
                            parseState &currentState);
     ParagraphNode* createParagraphNode(std::string::iterator &i,
                                        parseState &currentState);
-    HeadNode* createHeadNode();
-    BodyNode* createBodyNode();
+
 
 
 private:

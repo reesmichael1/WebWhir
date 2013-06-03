@@ -8,12 +8,11 @@ class HTMLParagraphElement : HTMLElement
 {
 public:
     HTMLParagraphElement();
-    virtual RenderNode *returnNode();
+    virtual ParagraphNode *returnNode();
     virtual void deleteHTMLElement();
 
 private:
     ParagraphNode *paragraphNode;
-    RenderNode *paragraph;
 };
 
 #endif // HTMLPELEMENT_H

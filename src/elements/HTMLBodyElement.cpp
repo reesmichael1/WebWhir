@@ -16,5 +16,4 @@ BodyNode* HTMLBodyElement::returnNode()
 void HTMLBodyElement::deleteHTMLElement()
 {
     delete bodyNode;
-    delete body;
 }

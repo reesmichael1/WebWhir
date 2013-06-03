@@ -13,7 +13,6 @@ public:
 
 private:
     HeadNode *headNode;
-    RenderNode *head;
 
 };
 

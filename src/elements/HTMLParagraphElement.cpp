@@ -6,18 +6,15 @@ HTMLParagraphElement::HTMLParagraphElement()
 {
 }
 
-RenderNode* HTMLParagraphElement::returnNode()
+ParagraphNode* HTMLParagraphElement::returnNode()
 {
     paragraphNode = new ParagraphNode;
-    paragraph = new RenderNode;
-    paragraph = paragraphNode;
 
-    return paragraph;
+    return paragraphNode;
 }
 
 void HTMLParagraphElement::deleteHTMLElement()
 {
     delete paragraphNode;
-    delete paragraph;
 }
 

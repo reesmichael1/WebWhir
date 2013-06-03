@@ -80,7 +80,8 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 }
             }
 
-            if (currentNode->getTypeOfNode() == "head")
+            currentNode = createNode(tagNameString, i, currentState);
+            if (currentNode->getTypeOfNode() == "html")
             {
                 currentParentNode = NULL;
             }
@@ -88,7 +89,7 @@ void HTMLReader::parseDocumentText(std::string documentText)
             {
                 currentParentNode = currentNode->getParentNode();
             }
-            currentNode = createNode(tagNameString, i, currentState);
+
             webpage->constructTree(currentNode, currentParentNode);
 
         }
@@ -216,6 +217,10 @@ RenderNode* HTMLReader::createNode(std::string nodeName, std::string::iterator &
                                    parseState &currentState)
 {
     RenderNode *node;
+    if (nodeName == "html")
+    {
+        node = createFirstNode();
+    }
     if (nodeName == "p")
     {
         node = createParagraphNode(i, currentState);
@@ -232,6 +237,15 @@ RenderNode* HTMLReader::createNode(std::string nodeName, std::string::iterator &
     }
 
     return node;
+}
+
+RenderNode* HTMLReader::createFirstNode()
+{
+    RenderNode *firstNode = new RenderNode;
+    firstNode->setParentNode(NULL);
+    firstNode->setTypeOfNode("html");
+
+    return firstNode;
 }
 
 ParagraphNode* HTMLReader::createParagraphNode(std::string::iterator &i,

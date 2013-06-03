@@ -8,8 +8,9 @@ class RenderNode
 {
 public:
     RenderNode();
+    virtual ~RenderNode();
     virtual void paintNode();
-    virtual void setText(std::string textToSet);
+    virtual void setText();
     void setNeedsPainting(bool valueToSet);
     void setTypeOfNode(std::string typeToSet);
     std::string getTypeOfNode();

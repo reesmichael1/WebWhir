@@ -9,6 +9,10 @@ RenderNode::RenderNode()
     childNodes = new std::vector<RenderNode*>;
 }
 
+RenderNode::~RenderNode()
+{
+}
+
 void RenderNode::setTypeOfNode(std::string typeToSet)
 {
     typeOfNode = typeToSet;
@@ -49,7 +53,7 @@ void RenderNode::paintNode()
     std::cout << "Node " << typeOfNode << " has " << childNodes->size() << " children." << std::endl;
 }
 
-void RenderNode::setText(std::string textToSet)
+void RenderNode::setText()
 {
 }
 
