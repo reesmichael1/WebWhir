@@ -16,7 +16,7 @@ public:
     ~HTMLReader();
     void paint();
     void prepareDocument(std::string HTMLFilepath);
-    HeadNode* createHeadNode();
+    HeadNode *createHeadNode();
     BodyNode* createBodyNode();
     RenderNode* createFirstNode();
 

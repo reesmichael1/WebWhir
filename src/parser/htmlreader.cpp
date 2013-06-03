@@ -85,9 +85,9 @@ void HTMLReader::parseDocumentText(std::string documentText)
             {
                 currentParentNode = NULL;
             }
-            else
+            else if (currentNode->getTypeOfNode() == "head")
             {
-                currentParentNode = currentNode->getParentNode();
+                currentParentNode = currentNode;
             }
 
             webpage->constructTree(currentNode, currentParentNode);
@@ -216,7 +216,7 @@ std::string HTMLReader::returnTagName(std::string::iterator &i,
 RenderNode* HTMLReader::createNode(std::string nodeName, std::string::iterator &i,
                                    parseState &currentState)
 {
-    RenderNode *node;
+    RenderNode *node = new RenderNode;
     if (nodeName == "html")
     {
         node = createFirstNode();
@@ -251,6 +251,9 @@ RenderNode* HTMLReader::createFirstNode()
 ParagraphNode* HTMLReader::createParagraphNode(std::string::iterator &i,
                                                parseState &currentState)
 {
+
+    currentParentNode = currentNode;
+
     currentState = text;
     std::string textString;
     while (currentState == text)
@@ -281,12 +284,15 @@ HeadNode* HTMLReader::createHeadNode()
     return head;
 }
 
-BodyNode* HTMLReader::createBodyNode()
+BodyNode *HTMLReader::createBodyNode()
 {
     HTMLBodyElement bodyElement;
     BodyNode *body = new BodyNode;
+
     body = bodyElement.returnNode();
     body->setIsOpen(true);
+
+    currentParentNode = webpage->getFirstNode();
 
     return body;
 }
