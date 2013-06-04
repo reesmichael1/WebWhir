@@ -80,15 +80,13 @@ void HTMLReader::parseDocumentText(std::string documentText)
                 }
             }
 
-            currentNode = createNode(tagNameString, i, currentState);
-            if (currentNode->getTypeOfNode() == "html")
-            {
-                currentParentNode = NULL;
-            }
-            else if (currentNode->getTypeOfNode() == "head")
+            if (currentNode->getIsOpen())
             {
                 currentParentNode = currentNode;
             }
+
+            currentNode = createNode(tagNameString, i, currentState);
+
 
             webpage->constructTree(currentNode, currentParentNode);
 
@@ -204,7 +202,7 @@ std::string HTMLReader::returnTagName(std::string::iterator &i,
             currentState = endTagOpen;
         }
 
-        if (*i == ' ')
+        else if (*i == ' ')
         {
             currentState = endTagName;
         }
@@ -221,19 +219,21 @@ RenderNode* HTMLReader::createNode(std::string nodeName, std::string::iterator &
     {
         node = createFirstNode();
     }
-    if (nodeName == "p")
+    else if (nodeName == "p")
     {
         node = createParagraphNode(i, currentState);
     }
 
-    if (nodeName == "head")
+    else if (nodeName == "head")
     {
         node = createHeadNode();
+        currentParentNode = webpage->getFirstNode();
     }
 
-    if (nodeName == "body")
+    else if (nodeName == "body")
     {
         node = createBodyNode();
+        currentParentNode = webpage->getFirstNode();
     }
 
     return node;
@@ -244,6 +244,7 @@ RenderNode* HTMLReader::createFirstNode()
     RenderNode *firstNode = new RenderNode;
     firstNode->setParentNode(NULL);
     firstNode->setTypeOfNode("html");
+    firstNode->setIsOpen(true);
 
     return firstNode;
 }
@@ -251,8 +252,6 @@ RenderNode* HTMLReader::createFirstNode()
 ParagraphNode* HTMLReader::createParagraphNode(std::string::iterator &i,
                                                parseState &currentState)
 {
-
-    currentParentNode = currentNode;
 
     currentState = text;
     std::string textString;
@@ -292,9 +291,8 @@ BodyNode *HTMLReader::createBodyNode()
     body = bodyElement.returnNode();
     body->setIsOpen(true);
 
-    currentParentNode = webpage->getFirstNode();
-
     return body;
+
 }
 
 bool HTMLReader::parentNodeClosed(RenderNode *node, std::string typeOfNode)
