@@ -223,7 +223,10 @@ RenderNode* HTMLReader::createNode(std::string nodeName, std::string::iterator &
     {
         node = createParagraphNode(i, currentState);
     }
-
+    else if (nodeName == "b")
+    {
+        node = createBNode();
+    }
     else if (nodeName == "head")
     {
         node = createHeadNode();
@@ -273,6 +276,16 @@ ParagraphNode* HTMLReader::createParagraphNode(std::string::iterator &i,
     return paragraphNode;
 }
 
+BNode* HTMLReader::createBNode()
+{
+    HTMLBElement bElement;
+    BNode *bNode = new BNode;
+    bNode = bElement.returnNode();
+    bNode->setIsOpen(true);
+
+    return bNode;
+}
+
 HeadNode* HTMLReader::createHeadNode()
 {
     HTMLHeadElement headElement;
@@ -300,6 +313,7 @@ bool HTMLReader::parentNodeClosed(RenderNode *node, std::string typeOfNode)
     if (node->getTypeOfNode() == typeOfNode)
     {
         node->setIsOpen(false);
+        currentParentNode = currentNode->getParentNode();
         return true;
     }
     else

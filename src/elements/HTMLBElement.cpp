@@ -6,17 +6,14 @@ HTMLBElement::HTMLBElement()
 {
 }
 
-RenderNode* HTMLBElement::returnNode()
+BNode* HTMLBElement::returnNode()
 {
     bNode = new BNode;
-    b = new RenderNode;
-    b = bNode;
 
-    return b;
+    return bNode;
 }
 
 void HTMLBElement::deleteHTMLElement()
 {
     delete bNode;
-    delete b;
 }

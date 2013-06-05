@@ -8,6 +8,7 @@
 #include "nodes/paragraphnode.h"
 #include "nodes/headnode.h"
 #include "nodes/bodynode.h"
+#include "nodes/bnode.h"
 
 class HTMLReader
 {
@@ -19,6 +20,7 @@ public:
     HeadNode *createHeadNode();
     BodyNode* createBodyNode();
     RenderNode* createFirstNode();
+    BNode* createBNode();
 
     //These are defined by the W3C HTML5 parser specification.
     enum parseState {

@@ -8,12 +8,11 @@ class HTMLBElement : HTMLElement
 {
 public:
     HTMLBElement();
-    virtual RenderNode *returnNode();
+    virtual BNode *returnNode();
     virtual void deleteHTMLElement();
 
 private:
     BNode *bNode;
-    RenderNode *b;
 };
 
 #endif // HTMLBELEMENT_H
