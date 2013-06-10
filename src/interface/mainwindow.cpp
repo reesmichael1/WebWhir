@@ -37,8 +37,8 @@ void MainWindow::setFilepath(std::string filepath)
 
 void MainWindow::setMainText(std::string *textToSet)
 {
-    QString string(*textToSet->c_str());
-    mainText->setText(string);
+    //QString string(*textToSet);
+    mainText->setText(QString::fromStdString(*textToSet));
 }
 
 Document* MainWindow::getWebpage()

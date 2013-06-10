@@ -12,8 +12,10 @@ void Painter::setWindowToPaint(MainWindow *window)
 
 void Painter::paint()
 {
-    std::string *webpageString;
+    std::string *webpageString = new std::string("");
     mainWindow->getWebpage()->paintWebpage(webpageString);
 
     mainWindow->setMainText(webpageString);
+
+    delete webpageString;
 }

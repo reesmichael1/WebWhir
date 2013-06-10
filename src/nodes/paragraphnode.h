@@ -11,7 +11,7 @@ public:
     std::string getText();
     void setTextCharacterSize(int size);
     int getTextCharacterSize();
-    //virtual void paintNode();
+    virtual void paintNode(std::string *webpageString);
 
 private:
     std::string text;

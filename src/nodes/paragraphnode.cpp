@@ -29,9 +29,10 @@ int ParagraphNode::getTextCharacterSize()
     return textCharacterSize;
 }
 
-/*
-void TextNode::paintNode()
+
+void ParagraphNode::paintNode(std::string *webpageString)
 {
-    std::cout << text << std::endl << std::endl;
+    std::string temporaryString = text + "\n\n";
+    *webpageString += temporaryString;
 }
-*/
+

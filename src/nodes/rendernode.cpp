@@ -51,17 +51,6 @@ void RenderNode::setNeedsPainting(bool valueToSet)
 
 void RenderNode::paintNode(std::string *webpageString)
 {
-
-    std::string childVectorSize;
-    std::stringstream out;
-    out << childNodes->size();
-    childVectorSize = out.str();
-
-    std::string temporaryString = "Node " + typeOfNode + " has "
-            + childVectorSize + " children.\n";
-
-    *webpageString += temporaryString;
-
 }
 
 void RenderNode::setText()

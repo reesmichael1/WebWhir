@@ -1,3 +1,7 @@
+CONFIG += qt
+QT += gui
+QT += widgets
+
 macx {
     CONFIG -= x86_64
 }

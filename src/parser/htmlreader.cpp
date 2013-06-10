@@ -181,6 +181,7 @@ Document* HTMLReader::prepareDocument(std::string HTMLFilepath)
     catch (std::string error)
     {
         std::cout << error << std::endl;
+        return NULL;
     }
 
 }
