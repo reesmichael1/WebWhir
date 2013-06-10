@@ -1,8 +1,3 @@
-TEMPLATE = app
-CONFIG += console
-CONFIG -= app_bundle
-CONFIG -= qt
-
 macx {
     CONFIG -= x86_64
 }
@@ -19,7 +14,9 @@ SOURCES += main.cpp \
     elements/HTMLBElement.cpp \
     nodes/bnode.cpp \
     nodes/paragraphnode.cpp \
-    elements/HTMLParagraphElement.cpp
+    elements/HTMLParagraphElement.cpp \
+    interface/mainwindow.cpp \
+    painter/painter.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -33,4 +30,6 @@ HEADERS += \
     elements/HTMLBElement.h \
     nodes/bnode.h \
     nodes/paragraphnode.h \
-    elements/HTMLParagraphElement.h
+    elements/HTMLParagraphElement.h \
+    interface/mainwindow.h \
+    painter/painter.h

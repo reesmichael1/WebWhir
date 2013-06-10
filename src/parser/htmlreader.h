@@ -15,8 +15,7 @@ class HTMLReader
 public:
     HTMLReader();
     ~HTMLReader();
-    void paint();
-    void prepareDocument(std::string HTMLFilepath);
+    Document *prepareDocument(std::string HTMLFilepath);
     HeadNode *createHeadNode();
     BodyNode* createBodyNode();
     RenderNode* createFirstNode();
@@ -67,7 +66,7 @@ private:
     Document *webpage;
     RenderNode *currentParentNode;
     RenderNode *currentNode;
-    void parseDocumentText(std::string documentText);
+    Document* parseDocumentText(std::string documentText);
     bool parentNodeClosed(RenderNode *node, std::string typeOfNode);
 };
 

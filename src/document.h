@@ -9,8 +9,8 @@ public:
     Document();
     ~Document();
     void constructTree(RenderNode *childNode, RenderNode *parentNode);
-    void paintWebpage();
-    void paintChildren(RenderNode *parentNode);
+    void paintWebpage(std::string *webpageString);
+    void paintChildren(RenderNode *parentNode, std::string *webpageString);
     RenderNode *getFirstNode();
 
 private:

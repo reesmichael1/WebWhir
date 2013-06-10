@@ -1,28 +1,30 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "parser/htmlreader.h"
+
+#include <QApplication>
+
+#include "interface/mainwindow.h"
 
 int main(int argc, char* argv[])
 {
 
-    std::string HTMLFilepath;
+    QApplication app(argc, argv);
+
+    MainWindow mainWindow;
 
     if (argc > 1)
     {
-        HTMLFilepath = argv[1];
+        mainWindow.setFilepath(argv[1]);
     }
 
     else
     {
-        std::cout << "Please enter the filepath of the HTML Document." << std::endl;
-        std::cin >> HTMLFilepath;
-
+        mainWindow.setFilepath();
     }
 
-    HTMLReader reader;
-    reader.prepareDocument(HTMLFilepath);
-    reader.paint();
+    mainWindow.paintDocument();
+    mainWindow.show();
 
-    return 0;
+    return app.exec();
 }

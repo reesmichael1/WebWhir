@@ -22,12 +22,7 @@ HTMLReader::~HTMLReader()
     delete webpage;
 }
 
-void HTMLReader::paint()
-{
-    webpage->paintWebpage();
-}
-
-void HTMLReader::parseDocumentText(std::string documentText)
+Document *HTMLReader::parseDocumentText(std::string documentText)
 {
 
     webpage = new Document;
@@ -110,7 +105,7 @@ void HTMLReader::parseDocumentText(std::string documentText)
 
             if (tagDataString == "html")
             {
-                return;
+                return webpage;
             }
 
             while (!parentNodeClosed(currentNode, tagDataString))
@@ -146,9 +141,11 @@ void HTMLReader::parseDocumentText(std::string documentText)
             }
         }
     }
+
+    return webpage;
 }
 
-void HTMLReader::prepareDocument(std::string HTMLFilepath)
+Document* HTMLReader::prepareDocument(std::string HTMLFilepath)
 {
     try
     {
@@ -176,7 +173,9 @@ void HTMLReader::prepareDocument(std::string HTMLFilepath)
 
         HTMLDocument.close();
 
-        parseDocumentText(documentText);
+        Document *document = parseDocumentText(documentText);
+
+        return document;
 
     }
     catch (std::string error)

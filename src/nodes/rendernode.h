@@ -2,6 +2,7 @@
 #define RENDERNODE_H
 
 #include <iostream>
+#include <string>
 #include <vector>
 
 class RenderNode
@@ -9,7 +10,7 @@ class RenderNode
 public:
     RenderNode();
     virtual ~RenderNode();
-    virtual void paintNode();
+    virtual void paintNode(std::string *webpageString);
     virtual void setText();
     void setNeedsPainting(bool valueToSet);
     void setTypeOfNode(std::string typeToSet);

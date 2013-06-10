@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 #include "rendernode.h"
 
@@ -48,9 +49,19 @@ void RenderNode::setNeedsPainting(bool valueToSet)
     needsPainting = valueToSet;
 }
 
-void RenderNode::paintNode()
+void RenderNode::paintNode(std::string *webpageString)
 {
-    std::cout << "Node " << typeOfNode << " has " << childNodes->size() << " children." << std::endl;
+
+    std::string childVectorSize;
+    std::stringstream out;
+    out << childNodes->size();
+    childVectorSize = out.str();
+
+    std::string temporaryString = "Node " + typeOfNode + " has "
+            + childVectorSize + " children.\n";
+
+    *webpageString += temporaryString;
+
 }
 
 void RenderNode::setText()
