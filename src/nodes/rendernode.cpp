@@ -53,9 +53,11 @@ void RenderNode::paintNode(std::string *webpageString)
 {
 }
 
-void RenderNode::setText()
+
+void RenderNode::addCharacter(std::string::iterator i)
 {
 }
+
 
 void RenderNode::setIsOpen(bool valueToSet)
 {

@@ -11,7 +11,7 @@ public:
     RenderNode();
     virtual ~RenderNode();
     virtual void paintNode(std::string *webpageString);
-    virtual void setText();
+    virtual void addCharacter(std::string::iterator i);
     void setNeedsPainting(bool valueToSet);
     void setTypeOfNode(std::string typeToSet);
     std::string getTypeOfNode();

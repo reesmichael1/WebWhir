@@ -1,5 +1,3 @@
-CONFIG += qt
-QT += gui
 QT += widgets
 
 macx {

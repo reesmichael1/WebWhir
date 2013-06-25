@@ -37,7 +37,6 @@ void MainWindow::setFilepath(std::string filepath)
 
 void MainWindow::setMainText(std::string *textToSet)
 {
-    //QString string(*textToSet);
     mainText->setText(QString::fromStdString(*textToSet));
 }
 

@@ -9,7 +9,8 @@ class BNode : public RenderNode
 public:
     BNode();
     std::string getText();
-    virtual void setText(std::string textToSet);
+    virtual void addCharacter(std::string::iterator i);
+    virtual void paintNode(std::string *webpageString);
 
 private:
     std::string text;

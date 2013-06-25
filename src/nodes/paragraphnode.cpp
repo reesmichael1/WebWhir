@@ -9,9 +9,9 @@ ParagraphNode::ParagraphNode()
     setTypeOfNode("p");
 }
 
-void ParagraphNode::setText(std::string textToSet)
+void ParagraphNode::addCharacter(std::string::iterator i)
 {
-    text = textToSet;
+    text.append(1, i[0]);
 }
 
 std::string ParagraphNode::getText()

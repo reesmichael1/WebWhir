@@ -21,8 +21,12 @@ RenderNode* Document::getFirstNode()
 
 void Document::constructTree(RenderNode *childNode, RenderNode *parentNode)
 {   
-    //This has the potential to crash if parentNode is somehow passed as NULL.
-    //I will work on this.
+    //This is here to prevent a crash if parentNode is passed as null.
+    //It has not been tested, and the ramifications are unexplored.
+    if (parentNode == NULL)
+    {
+        parentNode = firstNode;
+    }
     if (firstNode == NULL)
     {
         firstNode = childNode;

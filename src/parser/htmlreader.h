@@ -19,7 +19,6 @@ public:
     HeadNode *createHeadNode();
     BodyNode* createBodyNode();
     RenderNode* createFirstNode();
-    BNode* createBNode();
 
     //These are defined by the W3C HTML5 parser specification.
     enum parseState {
@@ -55,10 +54,10 @@ public:
 
     std::string returnTagName(std::string::iterator &i,
                               parseState &currentState);
-    RenderNode* createNode(std::string nodeName, std::string::iterator &i,
+    RenderNode* createNode(std::string nodeName,
                            parseState &currentState);
-    ParagraphNode* createParagraphNode(std::string::iterator &i,
-                                       parseState &currentState);
+    ParagraphNode* createParagraphNode(parseState &currentState);
+    BNode* createBNode(parseState &currentState);
 
 
 
