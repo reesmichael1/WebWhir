@@ -7,9 +7,9 @@ Painter::Painter(MainWindow *window)
     mainWindow = window;
 }
 
-void Painter::addCharacter(const char c)
+void Painter::addCharacter(const char c, QFont::Weight weight)
 {
-    mainWindow->addCharacter(QString(c));
+    mainWindow->addCharacter(QString(c), weight);
 }
 
 void Painter::paintWebpage(Document *webpage)

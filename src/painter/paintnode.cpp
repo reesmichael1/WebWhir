@@ -25,7 +25,7 @@ PaintNode::~PaintNode()
     delete node;
 }
 
-void PaintNode::paint()
+void PaintNode::paint(QFont::Weight weight)
 {
     if (node)
     {
@@ -34,6 +34,6 @@ void PaintNode::paint()
 
     else
     {
-        painter->addCharacter(*character);
+        painter->addCharacter(*character, weight);
     }
 }

@@ -10,6 +10,7 @@ public:
     BNode();
     std::string getText();
     virtual void addCharacter(std::string::iterator i);
+    virtual void paintNode();
 
 private:
     std::string text;

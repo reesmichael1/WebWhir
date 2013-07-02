@@ -8,12 +8,12 @@ class Painter
 {
 public:
     Painter(MainWindow *window);
-    void addCharacter(const char c);
+    //void addCharacter(const char c);
+    void addCharacter(const char c, QFont::Weight weight = QFont::Bold);
     void paintWebpage(Document *webpage);
 
 private:
     MainWindow *mainWindow;
-    QPainter *painter;
 
 };
 

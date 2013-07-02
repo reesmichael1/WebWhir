@@ -8,7 +8,7 @@
 #include "painter/painter.h"
 #include "parser/htmlreader.h"
 
-#define STARTING_X 20
+#define STARTING_X 10
 #define STARTING_Y 20
 
 MainWindow::MainWindow()
@@ -17,13 +17,13 @@ MainWindow::MainWindow()
     reader = new HTMLReader;
     webpage = new Document;
 
-    qPainter = new QPainter(this);
-
     currentX = STARTING_X;
-    currentY = 20;
+    currentY = STARTING_Y;
     totalWidth = 0;
 
     painter = new Painter(this);
+
+    currentWeight = QFont::Normal;
 
     reader->setPainter(painter);
 
@@ -31,6 +31,9 @@ MainWindow::MainWindow()
 
     setMinimumHeight(400);
     setMinimumWidth(600);
+
+    setMaximumHeight(400);
+    setMaximumWidth(600);
 
     setWindowTitle("OpenWeb 0.1 Alpha");
 
@@ -60,28 +63,35 @@ void MainWindow::paintDocument()
     painter->paintWebpage(webpage);
 }
 
-void MainWindow::addCharacter(QString character)
+void MainWindow::addCharacter(QString character, QFont::Weight weight)
 {
     *currentCharacter = character;
-    drawDocument();
-    this->repaint();
 
+    currentWeight = weight;
+
+    this->repaint();
     updateCurrentPosition();
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
-    //QPainter qPainter(this);
 
-    drawDocument();
-
-    updateCurrentPosition();
+    QPainter qPainter(this);
+    drawDocument(&qPainter);
 }
 
-void MainWindow::drawDocument()
+void MainWindow::drawDocument(QPainter *qPainter)
 {
     QFont font = qPainter->font();
+    if (currentWeight == QFont::Bold)
+    {
+        font.setBold(true);
+    }
+    else
+    {
+        font.setBold(false);
+    }
     QFontMetrics fm(font);
     QRect box;
     box.setCoords(currentX, currentY + fm.height(), currentX +
@@ -89,7 +99,6 @@ void MainWindow::drawDocument()
     box.setWidth(fm.width(*currentCharacter));
     box.setHeight(fm.height());
 
-    qPainter->setFont(font);
     qPainter->drawText(box, Qt::AlignCenter, *currentCharacter);
 }
 

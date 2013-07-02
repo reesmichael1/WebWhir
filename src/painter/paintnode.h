@@ -11,7 +11,7 @@ public:
     PaintNode(const char c, Painter *painterToAdd);
     PaintNode(RenderNode *nodeToAdd, Painter *painterToAdd);
     ~PaintNode();
-    void paint();
+    void paint(QFont::Weight weight = QFont::Normal);
 
 private:
     char *character;

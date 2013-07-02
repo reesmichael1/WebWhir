@@ -16,3 +16,13 @@ std::string BNode::getText()
 {
     return text;
 }
+
+void BNode::paintNode()
+{
+    std::vector<PaintNode*>::iterator iterator;
+    for (iterator = paintNodes->begin(); iterator != paintNodes->end();
+         iterator++)
+    {
+        (*iterator)->paint(QFont::Bold);
+    }
+}

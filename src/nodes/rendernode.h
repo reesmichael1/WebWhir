@@ -28,7 +28,7 @@ public:
     void setIsOpen(bool valueToSet);
     bool getIsOpen();
 
-private:
+protected:
     RenderNode *parentNode;
     bool isOpen;
     bool needsPainting;
