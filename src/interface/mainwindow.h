@@ -3,26 +3,39 @@
 
 #include <string>
 
-#include "parser/htmlreader.h"
-#include "document.h"
-
 #include <QMainWindow>
-#include <QTextEdit>
+#include <QPainter>
+#include <QString>
+
+class Painter;
+class HTMLReader;
+class Document;
 
 class MainWindow : public QMainWindow
 {
 public:
     MainWindow();
+    void addCharacter(QString character);
     void paintDocument();
     void setFilepath(std::string filepath);
     void setFilepath();
     void setMainText(std::string *textToSet);
+    void drawDocument();
     Document* getWebpage();
 
+protected:
+    virtual void paintEvent(QPaintEvent *event);
+
 private:
+    void updateCurrentPosition();
     HTMLReader *reader;
     Document *webpage;
-    QTextEdit *mainText;
+    QString *currentCharacter;
+    Painter *painter;
+    QPainter *qPainter;
+    int currentX;
+    int currentY;
+    int totalWidth;
 };
 
 #endif // MAINWINDOW_H

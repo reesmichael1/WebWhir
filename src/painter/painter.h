@@ -2,16 +2,18 @@
 #define PAINTER_H
 
 #include "interface/mainwindow.h"
+#include "document.h"
 
 class Painter
 {
 public:
-    Painter();
-    void setWindowToPaint(MainWindow *window);
-    void paint();
+    Painter(MainWindow *window);
+    void addCharacter(const char c);
+    void paintWebpage(Document *webpage);
 
 private:
     MainWindow *mainWindow;
+    QPainter *painter;
 
 };
 

@@ -1,21 +1,20 @@
 #include "painter.h"
 
-Painter::Painter()
-{
-    mainWindow = new MainWindow;
-}
+#include <QPainter>
 
-void Painter::setWindowToPaint(MainWindow *window)
+Painter::Painter(MainWindow *window)
 {
     mainWindow = window;
 }
 
-void Painter::paint()
+void Painter::addCharacter(const char c)
 {
-    std::string *webpageString = new std::string("");
-    mainWindow->getWebpage()->paintWebpage(webpageString);
-
-    mainWindow->setMainText(webpageString);
-
-    delete webpageString;
+    mainWindow->addCharacter(QString(c));
 }
+
+void Painter::paintWebpage(Document *webpage)
+{
+    webpage->getFirstNode()->paintNode();
+}
+
+

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include "nodes/rendernode.h"
 #include "document.h"
 
 Document::Document()
@@ -35,37 +34,5 @@ void Document::constructTree(RenderNode *childNode, RenderNode *parentNode)
     {
         childNode->setParentNode(parentNode);
         parentNode->addChildNode(childNode);
-    }
-}
-
-void Document::paintChildren(RenderNode *parentNode, std::string *webpageString)
-{
-    std::vector<RenderNode*> *childNodesVector = parentNode->getChildNodes();
-    if (!childNodesVector->empty())
-    {
-        for (std::vector<RenderNode*>::iterator i = childNodesVector->begin(); i != childNodesVector->end(); i++)
-        {
-            (*i)->paintNode(webpageString);
-            paintChildren(*i, webpageString);
-        }
-    }
-}
-
-void Document::paintWebpage(std::string *webpageString)
-{
-    try
-    {
-        if (firstNode == NULL)
-        {
-            throw "Error: Webpage is empty.";
-        }
-
-        firstNode->paintNode(webpageString);
-
-        paintChildren(firstNode, webpageString);
-    }
-    catch (std::string error)
-    {
-        std::cout << error << std::endl;
     }
 }

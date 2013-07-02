@@ -8,9 +8,7 @@
 #include "elements/HTMLBodyElement.h"
 #include "elements/HTMLBElement.h"
 #include "elements/HTMLParagraphElement.h"
-#include "nodes/paragraphnode.h"
-#include "nodes/bnode.h"
-#include "document.h"
+#include "painter/paintnode.h"
 
 HTMLReader::HTMLReader()
 {
@@ -21,6 +19,11 @@ HTMLReader::HTMLReader()
 HTMLReader::~HTMLReader()
 {
     delete webpage;
+}
+
+void HTMLReader::setPainter(Painter *painterToSet)
+{
+    painter = painterToSet;
 }
 
 Document *HTMLReader::parseDocumentText(std::string documentText)
@@ -156,6 +159,13 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
             else
             {
                 currentNode->addCharacter(i);
+
+                std::string characterString;
+                characterString.clear();
+                characterString.push_back(i[0]);
+                const char *characterToAdd = characterString.c_str();
+                PaintNode *character = new PaintNode(*characterToAdd, painter);
+                currentNode->addPaintNode(character);
             }
         }
     }
@@ -256,6 +266,9 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
         node = createBodyNode();
         currentParentNode = webpage->getFirstNode();
     }
+
+    PaintNode *paintNode = new PaintNode(node, painter);
+    currentParentNode->addPaintNode(paintNode);
 
     return node;
 }

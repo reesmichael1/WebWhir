@@ -3,14 +3,15 @@
 
 #include "nodes/rendernode.h"
 
+class RenderNode;
+
 class Document
 {
 public:
     Document();
     ~Document();
     void constructTree(RenderNode *childNode, RenderNode *parentNode);
-    void paintWebpage(std::string *webpageString);
-    void paintChildren(RenderNode *parentNode, std::string *webpageString);
+    void paintWebpage();
     RenderNode *getFirstNode();
 
 private:

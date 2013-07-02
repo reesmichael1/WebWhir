@@ -9,6 +9,7 @@
 #include "nodes/headnode.h"
 #include "nodes/bodynode.h"
 #include "nodes/bnode.h"
+#include "painter/painter.h"
 
 class HTMLReader
 {
@@ -58,6 +59,7 @@ public:
                            parseState &currentState);
     ParagraphNode* createParagraphNode(parseState &currentState);
     BNode* createBNode(parseState &currentState);
+    void setPainter(Painter *painterToSet);
 
 
 
@@ -66,6 +68,7 @@ private:
     RenderNode *currentParentNode;
     RenderNode *currentNode;
     Document* parseDocumentText(std::string documentText);
+    Painter *painter;
     bool parentNodeClosed(RenderNode *node, std::string typeOfNode);
 };
 

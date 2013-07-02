@@ -1,5 +1,5 @@
-#ifndef TEXTNODE_H
-#define TEXTNODE_H
+#ifndef PARAGRAPHNODE_H
+#define PARAGRAPHNODE_H
 
 #include "rendernode.h"
 
@@ -11,7 +11,6 @@ public:
     std::string getText();
     void setTextCharacterSize(int size);
     int getTextCharacterSize();
-    virtual void paintNode(std::string *webpageString);
 
 private:
     std::string text;
