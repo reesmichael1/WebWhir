@@ -13,7 +13,6 @@
 
 MainWindow::MainWindow()
 {
-
     reader = new HTMLReader;
     webpage = new Document;
 
@@ -21,19 +20,16 @@ MainWindow::MainWindow()
     currentY = STARTING_Y;
     totalWidth = 0;
 
-    painter = new Painter(this);
-
     currentWeight = QFont::Normal;
-
-    reader->setPainter(painter);
 
     currentCharacter = new QString;
 
     setMinimumHeight(400);
     setMinimumWidth(600);
 
-    setMaximumHeight(400);
     setMaximumWidth(600);
+
+    positionSet = false;
 
     setWindowTitle("OpenWeb 0.1 Alpha");
 
@@ -60,16 +56,14 @@ Document* MainWindow::getWebpage()
 
 void MainWindow::paintDocument()
 {
-    painter->paintWebpage(webpage);
+    this->update();
 }
 
 void MainWindow::addCharacter(QString character, QFont::Weight weight)
 {
     *currentCharacter = character;
-
     currentWeight = weight;
 
-    this->repaint();
     updateCurrentPosition();
 }
 
@@ -78,44 +72,85 @@ void MainWindow::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
 
     QPainter qPainter(this);
-    drawDocument(&qPainter);
+
+    paintNodesVector = webpage->getFirstNode()->getPaintNodes();
+
+    drawDocument(&qPainter, paintNodesVector);
 }
 
-void MainWindow::drawDocument(QPainter *qPainter)
+void MainWindow::drawDocument(QPainter *qPainter, std::vector<PaintNode*> *paintNodes)
 {
-    QFont font = qPainter->font();
-    if (currentWeight == QFont::Bold)
-    {
-        font.setBold(true);
-    }
-    else
-    {
-        font.setBold(false);
-    }
-    QFontMetrics fm(font);
-    QRect box;
-    box.setCoords(currentX, currentY + fm.height(), currentX +
-                  fm.width(*currentCharacter), currentY + fm.height());
-    box.setWidth(fm.width(*currentCharacter));
-    box.setHeight(fm.height());
+    std::vector<PaintNode*>::iterator i = paintNodes->begin();
 
-    qPainter->drawText(box, Qt::AlignCenter, *currentCharacter);
+    for (; i != paintNodes->end(); i++)
+    {
+        paintCurrentNode(*i, qPainter);
+    }
+}
+
+void MainWindow::paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainter)
+{
+    if (currentPaintNode->getTypeOfNode() == "char")
+    {
+
+        if (positionSet)
+        {
+            updateCurrentPosition();
+        }
+
+        char *character = currentPaintNode->returnCharacter();
+        *currentCharacter = QString(*character);
+
+
+        QFont font = qPainter->font();
+
+        if (currentPaintNode->getWeight() == QFont::Bold)
+        {
+            font.setBold(true);
+        }
+        QFontMetrics fm(font);
+        QRect box(QPoint(currentX, currentY), QSize(fm.width(*character),
+                                                    fm.height()));
+
+        qPainter->setFont(font);
+        qPainter->drawText(box, Qt::AlignCenter, QString(*character));
+
+        updateCurrentPosition();
+    }
+    else if (currentPaintNode->getTypeOfNode() == "node")
+    {
+        std::vector<PaintNode*> *childPaintNodes = currentPaintNode->
+                returnNode()->getPaintNodes();
+        drawDocument(qPainter, childPaintNodes);
+    }
 }
 
 void MainWindow::updateCurrentPosition()
 {
-    QFont font;
-    QFontMetrics fm(font);
 
-    totalWidth += fm.width(*currentCharacter);
-    if (totalWidth >= this->width() - STARTING_X)
+    if (!positionSet)
     {
-        currentX = STARTING_X;
-        currentY += (fm.height() + 2);
-        totalWidth = 0;
+        QFont font;
+        QFontMetrics fm(font);
+
+        totalWidth += fm.width(*currentCharacter);
+        if (totalWidth >= this->width() - 2 * STARTING_X)
+        {
+            currentX = STARTING_X;
+            currentY += (fm.height() + 2);
+            totalWidth = 0;
+        }
+        else
+        {
+            currentX += fm.width(*currentCharacter);
+        }
     }
+
     else
     {
-        currentX += fm.width(*currentCharacter);
+        currentX = STARTING_X;
+        currentY = STARTING_Y;
+        totalWidth = 0;
+        positionSet = false;
     }
 }

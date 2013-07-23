@@ -59,16 +59,12 @@ public:
                            parseState &currentState);
     ParagraphNode* createParagraphNode(parseState &currentState);
     BNode* createBNode(parseState &currentState);
-    void setPainter(Painter *painterToSet);
-
-
 
 private:
     Document *webpage;
     RenderNode *currentParentNode;
     RenderNode *currentNode;
     Document* parseDocumentText(std::string documentText);
-    Painter *painter;
     bool parentNodeClosed(RenderNode *node, std::string typeOfNode);
 };
 

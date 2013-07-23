@@ -14,7 +14,7 @@ class RenderNode
 public:
     RenderNode();
     virtual ~RenderNode();
-    virtual void paintNode();
+    //virtual void paintNode();
     virtual void addCharacter(std::string::iterator i);
     void setNeedsPainting(bool valueToSet);
     void setTypeOfNode(std::string typeToSet);
@@ -34,10 +34,6 @@ protected:
     bool needsPainting;
     std::vector<RenderNode*> *childNodes;
     std::vector<PaintNode*> *paintNodes;
-
-
-    //This strikes me as a really bad idea. I'm doing it now, hopefully temporarily,
-    //to see how it works out.
     std::string typeOfNode;
 
 };

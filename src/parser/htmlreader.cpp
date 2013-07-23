@@ -21,11 +21,6 @@ HTMLReader::~HTMLReader()
     delete webpage;
 }
 
-void HTMLReader::setPainter(Painter *painterToSet)
-{
-    painter = painterToSet;
-}
-
 Document *HTMLReader::parseDocumentText(std::string documentText)
 {
 
@@ -164,7 +159,13 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
                 characterString.clear();
                 characterString.push_back(i[0]);
                 const char *characterToAdd = characterString.c_str();
-                PaintNode *character = new PaintNode(*characterToAdd, painter);
+                PaintNode *character = new PaintNode(*characterToAdd);
+
+                if (currentNode->getTypeOfNode() == "b")
+                {
+                    character->setWeight(QFont::Bold);
+                }
+
                 currentNode->addPaintNode(character);
             }
         }
@@ -267,7 +268,7 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
         currentParentNode = webpage->getFirstNode();
     }
 
-    PaintNode *paintNode = new PaintNode(node, painter);
+    PaintNode *paintNode = new PaintNode(node);
     currentParentNode->addPaintNode(paintNode);
 
     return node;

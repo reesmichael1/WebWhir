@@ -60,8 +60,10 @@ void RenderNode::setNeedsPainting(bool valueToSet)
     needsPainting = valueToSet;
 }
 
+/*
 void RenderNode::paintNode()
 {
+
     std::vector<PaintNode*>::iterator iterator;
     for (iterator = paintNodes->begin(); iterator != paintNodes->end();
          iterator++)
@@ -69,6 +71,7 @@ void RenderNode::paintNode()
         (*iterator)->paint();
     }
 }
+*/
 
 void RenderNode::addCharacter(std::string::iterator i)
 {

@@ -23,6 +23,5 @@ void BNode::paintNode()
     for (iterator = paintNodes->begin(); iterator != paintNodes->end();
          iterator++)
     {
-        (*iterator)->paint(QFont::Bold);
     }
 }

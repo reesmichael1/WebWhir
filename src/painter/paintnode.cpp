@@ -1,22 +1,39 @@
 #include "paintnode.h"
 
-PaintNode::PaintNode(const char c, Painter *painterToAdd)
+PaintNode::PaintNode(const char c)
 {
     character = new char;
     *character = c;
     node = NULL;
 
-    painter = painterToAdd;
+    characterWeight = QFont::Normal;
+
+    typeOfNode = "char";
 }
 
-PaintNode::PaintNode(RenderNode *nodeToAdd, Painter *painterToAdd)
+PaintNode::PaintNode(RenderNode *nodeToAdd)
 {
     node = new RenderNode;
     node = nodeToAdd;
 
     character = NULL;
 
-    painter = painterToAdd;
+    typeOfNode = "node";
+}
+
+char *PaintNode::returnCharacter()
+{
+    return character;
+}
+
+RenderNode* PaintNode::returnNode()
+{
+    return node;
+}
+
+std::string PaintNode::getTypeOfNode()
+{
+    return typeOfNode;
 }
 
 PaintNode::~PaintNode()
@@ -25,15 +42,12 @@ PaintNode::~PaintNode()
     delete node;
 }
 
-void PaintNode::paint(QFont::Weight weight)
+void PaintNode::setWeight(QFont::Weight weight)
 {
-    if (node)
-    {
-        node->paintNode();
-    }
+    characterWeight = weight;
+}
 
-    else
-    {
-        painter->addCharacter(*character, weight);
-    }
+QFont::Weight PaintNode::getWeight()
+{
+    return characterWeight;
 }

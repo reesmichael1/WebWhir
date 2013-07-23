@@ -14,7 +14,5 @@ void Painter::addCharacter(const char c, QFont::Weight weight)
 
 void Painter::paintWebpage(Document *webpage)
 {
-    webpage->getFirstNode()->paintNode();
+    //webpage->getFirstNode()->paintNode();
 }
-
-
