@@ -154,7 +154,7 @@ void MainWindow::updateCurrentPosition()
         QFontMetrics fm(font);
 
         totalWidth += fm.width(*currentCharacter);
-        if (totalWidth >= this->width() - 2 * STARTING_X)
+        if (totalWidth >= this->width() - 3 * STARTING_X)
         {
             currentX = STARTING_X;
             currentY += (fm.height() + 2);
