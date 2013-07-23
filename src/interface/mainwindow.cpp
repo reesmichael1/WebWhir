@@ -10,6 +10,7 @@
 
 #define STARTING_X 10
 #define STARTING_Y 20
+#define LINE_SPACING 30
 
 MainWindow::MainWindow()
 {
@@ -76,9 +77,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
     paintNodesVector = webpage->getFirstNode()->getPaintNodes();
 
     drawDocument(&qPainter, paintNodesVector);
+
+    positionSet = true;
 }
 
-void MainWindow::drawDocument(QPainter *qPainter, std::vector<PaintNode*> *paintNodes)
+void MainWindow::drawDocument(QPainter *qPainter,
+                              std::vector<PaintNode*> *paintNodes)
 {
     std::vector<PaintNode*>::iterator i = paintNodes->begin();
 
@@ -88,7 +92,15 @@ void MainWindow::drawDocument(QPainter *qPainter, std::vector<PaintNode*> *paint
     }
 }
 
-void MainWindow::paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainter)
+void MainWindow::insertLineBreak()
+{
+    currentX = STARTING_X;
+    currentY += LINE_SPACING;
+    totalWidth = 0;
+}
+
+void MainWindow::paintCurrentNode(PaintNode *currentPaintNode,
+                                  QPainter *qPainter)
 {
     if (currentPaintNode->getTypeOfNode() == "char")
     {
@@ -108,6 +120,10 @@ void MainWindow::paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainte
         {
             font.setBold(true);
         }
+        else
+        {
+            font.setBold(false);
+        }
         QFontMetrics fm(font);
         QRect box(QPoint(currentX, currentY), QSize(fm.width(*character),
                                                     fm.height()));
@@ -122,6 +138,10 @@ void MainWindow::paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainte
         std::vector<PaintNode*> *childPaintNodes = currentPaintNode->
                 returnNode()->getPaintNodes();
         drawDocument(qPainter, childPaintNodes);
+        if (currentPaintNode->returnNode()->getTypeOfNode() == "p")
+        {
+            insertLineBreak();
+        }
     }
 }
 

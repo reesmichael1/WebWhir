@@ -24,6 +24,7 @@ public:
     void drawDocument(QPainter *qPainter);
     void drawDocument(QPainter *qPainter, std::vector<PaintNode*> *paintNodes);
     void paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainter);
+    void insertLineBreak();
     Document* getWebpage();
 
 protected:
