@@ -9,7 +9,7 @@
 #include "parser/htmlreader.h"
 
 #define STARTING_X 10
-#define STARTING_Y 30
+#define STARTING_Y 10
 #define LINE_SPACING 30
 
 MainWindow::MainWindow()
