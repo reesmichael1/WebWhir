@@ -9,7 +9,7 @@
 #include "parser/htmlreader.h"
 
 #define STARTING_X 10
-#define STARTING_Y 20
+#define STARTING_Y 30
 #define LINE_SPACING 30
 
 MainWindow::MainWindow()
@@ -28,14 +28,12 @@ MainWindow::MainWindow()
     setMinimumHeight(400);
     setMinimumWidth(600);
 
-    setMaximumWidth(600);
-
     positionSet = false;
 
     createActions();
     createMenus();
 
-    setWindowTitle("OpenWeb 0.1 Alpha");
+    setWindowTitle("WebWhirr 0.1 Beta");
 
 }
 
@@ -46,6 +44,7 @@ void MainWindow::setFilepath()
                                                         tr("Open HTML Document")).toUtf8().constData();
 
     webpage = reader->prepareDocument(filepath);
+
     this->update();
 }
 
