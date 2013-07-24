@@ -216,8 +216,6 @@ pip-log.txt
 <<<<<<< HEAD
 .mr.developer.cfg
 
-*.pro
-
 /Builds
 /Release
 /include
