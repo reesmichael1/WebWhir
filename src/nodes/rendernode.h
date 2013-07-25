@@ -14,8 +14,6 @@ class RenderNode
 public:
     RenderNode();
     virtual ~RenderNode();
-    //virtual void paintNode();
-    virtual void addCharacter(std::string::iterator i);
     void setNeedsPainting(bool valueToSet);
     void setTypeOfNode(std::string typeToSet);
     std::string getTypeOfNode();
