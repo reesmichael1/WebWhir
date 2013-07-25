@@ -68,20 +68,14 @@ void MainWindow::setFilepath()
     //selected in "Open HTML Document" dialog.
     webpage = reader->prepareDocument(filepath);
 
+    //Repaint the window to show the selected document
+    //(necessary to open new documents).
     this->update();
 }
 
 Document* MainWindow::getWebpage()
 {
     return webpage;
-}
-
-void MainWindow::addCharacter(QString character, QFont::Weight weight)
-{
-    *currentCharacter = character;
-    currentWeight = weight;
-
-    updateCurrentPosition();
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)

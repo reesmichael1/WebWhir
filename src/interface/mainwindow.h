@@ -21,7 +21,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
-    void addCharacter(QString character, QFont::Weight weight = QFont::Normal);
     void setFilepath(std::string filepath);
     void setMainText(std::string *textToSet);
     void drawDocument(QPainter *qPainter);
