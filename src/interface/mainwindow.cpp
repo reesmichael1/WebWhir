@@ -72,11 +72,6 @@ Document* MainWindow::getWebpage()
     return webpage;
 }
 
-void MainWindow::paintDocument()
-{
-    this->update();
-}
-
 void MainWindow::addCharacter(QString character, QFont::Weight weight)
 {
     *currentCharacter = character;
