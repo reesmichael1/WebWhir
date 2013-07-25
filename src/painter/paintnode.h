@@ -3,6 +3,10 @@
 
 #include <string>
 
+#include "nodes/rendernode.h"
+
+#include <QFont>
+
 class RenderNode;
 
 class PaintNode
