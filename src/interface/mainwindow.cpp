@@ -112,7 +112,7 @@ void MainWindow::insertLineBreak()
 void MainWindow::paintCurrentNode(PaintNode *currentPaintNode,
                                   QPainter *qPainter)
 {
-    if (currentPaintNode->getTypeOfNode() == "char")
+    if (currentPaintNode->getTypeOfPaintNode() == "char")
     {
 
         if (positionSet)
@@ -143,12 +143,12 @@ void MainWindow::paintCurrentNode(PaintNode *currentPaintNode,
 
         updateCurrentPosition();
     }
-    else if (currentPaintNode->getTypeOfNode() == "node")
+    else if (currentPaintNode->getTypeOfPaintNode() == "node")
     {
         std::vector<PaintNode*> *childPaintNodes = currentPaintNode->
                 returnNode()->getPaintNodes();
         drawDocument(qPainter, childPaintNodes);
-        if (currentPaintNode->returnNode()->getTypeOfNode() == "p")
+        if (currentPaintNode->returnNode()->getTypeOfRenderNode() == "p")
         {
             insertLineBreak();
         }

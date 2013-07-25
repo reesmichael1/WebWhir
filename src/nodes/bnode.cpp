@@ -4,5 +4,5 @@
 BNode::BNode()
 {
     setNeedsPainting(true);
-    setTypeOfNode("b");
+    setTypeOfRenderNode("b");
 }

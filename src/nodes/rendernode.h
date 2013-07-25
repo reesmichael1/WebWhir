@@ -15,14 +15,14 @@ public:
     RenderNode();
     virtual ~RenderNode();
     void setNeedsPainting(bool valueToSet);
-    void setTypeOfNode(std::string typeToSet);
-    std::string getTypeOfNode();
+    void setTypeOfRenderNode(std::string typeToSet);
+    std::string getTypeOfRenderNode();
     void setParentNode(RenderNode *nodeToSet);
     RenderNode* getParentNode();
     void addChildNode(RenderNode *nodeToAdd);
     void addPaintNode(PaintNode *nodeToAdd);
-    std::vector<RenderNode *> *getChildNodes();
-    std::vector<PaintNode *> *getPaintNodes();
+    std::vector<RenderNode*> *getChildNodes();
+    std::vector<PaintNode*> *getPaintNodes();
     void setIsOpen(bool valueToSet);
     bool getIsOpen();
 

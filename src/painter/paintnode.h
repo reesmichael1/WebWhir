@@ -15,7 +15,7 @@ public:
     QFont::Weight getWeight();
     char *returnCharacter();
     RenderNode *returnNode();
-    std::string getTypeOfNode();
+    std::string getTypeOfPaintNode();
 
 private:
     QFont::Weight characterWeight;

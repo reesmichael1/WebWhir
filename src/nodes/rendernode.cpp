@@ -15,12 +15,12 @@ RenderNode::~RenderNode()
 {
 }
 
-void RenderNode::setTypeOfNode(std::string typeToSet)
+void RenderNode::setTypeOfRenderNode(std::string typeToSet)
 {
     typeOfNode = typeToSet;
 }
 
-std::string RenderNode::getTypeOfNode()
+std::string RenderNode::getTypeOfRenderNode()
 {
     return typeOfNode;
 }

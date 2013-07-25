@@ -5,5 +5,5 @@
 ParagraphNode::ParagraphNode()
 {
     setNeedsPainting(true);
-    setTypeOfNode("p");
+    setTypeOfRenderNode("p");
 }

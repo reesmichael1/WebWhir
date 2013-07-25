@@ -181,7 +181,7 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
                 const char *characterToAdd = characterString.c_str();
                 PaintNode *character = new PaintNode(*characterToAdd);
 
-                if (currentNode->getTypeOfNode() == "b")
+                if (currentNode->getTypeOfRenderNode() == "b")
                 {
                     character->setWeight(QFont::Bold);
                 }
@@ -303,7 +303,7 @@ RenderNode* HTMLReader::createFirstNode()
     //for both the head and body nodes.
     RenderNode *firstNode = new RenderNode;
     firstNode->setParentNode(NULL);
-    firstNode->setTypeOfNode("html");
+    firstNode->setTypeOfRenderNode("html");
     firstNode->setIsOpen(true);
 
     return firstNode;
@@ -361,7 +361,7 @@ BodyNode* HTMLReader::createBodyNode()
 
 bool HTMLReader::parentNodeClosed(RenderNode *node, std::string typeOfNode)
 {
-    if (node->getTypeOfNode() == typeOfNode)
+    if (node->getTypeOfRenderNode() == typeOfNode)
     {
         node->setIsOpen(false);
         currentNode = currentNode->getParentNode();
