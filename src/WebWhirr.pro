@@ -4,6 +4,10 @@ macx {
     CONFIG -= x86_64
 }
 
+win32 {
+    RC_FILE = resources/windows/WebWhirr.rc
+}
+
 SOURCES += main.cpp \
     parser/htmlreader.cpp \
     nodes/rendernode.cpp \
