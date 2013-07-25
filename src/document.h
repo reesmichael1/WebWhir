@@ -11,6 +11,7 @@ public:
     Document();
     ~Document();
     void constructTree(RenderNode *childNode, RenderNode *parentNode);
+    void clearTree();
     RenderNode *getFirstNode();
 
 private:

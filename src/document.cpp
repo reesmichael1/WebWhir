@@ -15,7 +15,7 @@ Document::Document()
 
 Document::~Document()
 {
-    delete firstNode;
+    clearTree();
 }
 
 RenderNode* Document::getFirstNode()
@@ -40,4 +40,11 @@ void Document::constructTree(RenderNode *childNode, RenderNode *parentNode)
         childNode->setParentNode(parentNode);
         parentNode->addChildNode(childNode);
     }
+}
+
+void Document::clearTree()
+{
+    delete firstNode;
+    firstNode = new RenderNode;
+    firstNode = NULL;
 }

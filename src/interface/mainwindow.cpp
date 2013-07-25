@@ -60,6 +60,12 @@ void MainWindow::setFilepath(std::string filepath)
 
 void MainWindow::setFilepath()
 {
+    //Delete any old nodes to avoid memory leaks.
+    if (webpage->getFirstNode() != NULL)
+    {
+        webpage->clearTree();
+    }
+
     //QString::toStdString() doesn't convert the filepath properly
     std::string filepath = QFileDialog::getOpenFileName(this,
                                                         tr("Open HTML Document")).toUtf8().constData();
@@ -83,12 +89,16 @@ void MainWindow::paintEvent(QPaintEvent *event)
     //Draw the document (this will be split off into Painter soon).
     Q_UNUSED(event);
 
-    QPainter qPainter(this);
-    paintNodesVector = webpage->getFirstNode()->getPaintNodes();
-    drawDocument(&qPainter, paintNodesVector);
+    if (webpage->getFirstNode() != NULL)
+    {
 
-    //Prevents document from moving around while being redrawn.
-    positionSet = true;
+        QPainter qPainter(this);
+        paintNodesVector = webpage->getFirstNode()->getPaintNodes();
+        drawDocument(&qPainter, paintNodesVector);
+
+        //Prevents document from moving around while being redrawn.
+        positionSet = true;
+    }
 }
 
 void MainWindow::drawDocument(QPainter *qPainter,

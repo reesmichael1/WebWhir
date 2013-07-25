@@ -21,6 +21,8 @@ public:
     RenderNode* getParentNode();
     void addChildNode(RenderNode *nodeToAdd);
     void addPaintNode(PaintNode *nodeToAdd);
+    void deleteChildNodes();
+    void deletePaintNodes();
     std::vector<RenderNode*> *getChildNodes();
     std::vector<PaintNode*> *getPaintNodes();
     void setIsOpen(bool valueToSet);

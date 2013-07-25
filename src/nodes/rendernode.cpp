@@ -13,6 +13,8 @@ RenderNode::RenderNode()
 
 RenderNode::~RenderNode()
 {
+    deleteChildNodes();
+    deletePaintNodes();
 }
 
 void RenderNode::setTypeOfRenderNode(std::string typeToSet)
@@ -43,6 +45,23 @@ void RenderNode::addChildNode(RenderNode *nodeToAdd)
 void RenderNode::addPaintNode(PaintNode *nodeToAdd)
 {
     paintNodes->push_back(nodeToAdd);
+}
+
+void RenderNode::deleteChildNodes()
+{
+    while (!childNodes->empty())
+    {
+        childNodes->pop_back();
+    }
+}
+
+void RenderNode::deletePaintNodes()
+{
+    while (!paintNodes->empty())
+    {
+        delete paintNodes->back();
+        paintNodes->pop_back();
+    }
 }
 
 std::vector<RenderNode*>* RenderNode::getChildNodes()
