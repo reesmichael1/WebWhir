@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "painter/painter.h"
-
 class RenderNode;
 
 class PaintNode
