@@ -28,6 +28,10 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
 
     parseState currentState = initialMode;
 
+    //The parser works by moving through the document text one character
+    //at a time. Various states are defined, and, depending on what the
+    //current state is when a certain character is reached, a different
+    //action is taken for each state/character combination.
     std::string::iterator i = documentText.begin();
     for (; i != documentText.end(); i++)
     {
@@ -60,6 +64,7 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
         }
         else if (currentState == tagName)
         {
+            //Create a new node.
             std::string tagNameString = returnTagName(i, currentState);
 
             if (currentState == endTagName)
@@ -74,6 +79,8 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
                 }
             }
 
+            //Define newly created node as child of current node
+            //if the current node hasn't been closed.
             if (currentNode->getIsOpen())
             {
                 currentParentNode = currentNode;
@@ -81,12 +88,13 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
 
             currentNode = createNode(tagNameString, currentState);
 
-
+            //Add newly created node to tree of nodes.
             webpage->constructTree(currentNode, currentParentNode);
 
         }
         else if (currentState == endTagName)
         {
+            //Close the current node.
             std::string tagDataString;
 
             while (currentState == endTagName)
@@ -104,9 +112,13 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
 
             if (tagDataString == "html")
             {
+                //We've reached the end of the document (assuming the author
+                //actually followed web standards!).
                 return webpage;
             }
 
+            //Move up through the tree a node at a time
+            //until we find the node being closed.
             while (!parentNodeClosed(currentNode, tagDataString))
             {
             }
@@ -125,6 +137,8 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
         }
         else if (currentState == doctypeDeclaration)
         {
+            //Unfortunately, I have to ignore doctypes for now...I simply don't
+            //have the resources to create multiple engines for each doctype.
             while (currentState == doctypeDeclaration)
             {
                 i++;
@@ -136,6 +150,9 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
         }
         else if (currentState == bogusComment)
         {
+            //This assumes comments are properly written
+            //(it does not check to confirm it is not "bogus").
+            //It just glazes over any comments it hits.
             while (currentState == bogusComment)
             {
                 i++;
@@ -153,8 +170,11 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
             }
             else
             {
+                //Add text to the current node.
                 currentNode->addCharacter(i);
 
+                //Create a paint node that is
+                //a child of the current Render Node.
                 std::string characterString;
                 characterString.clear();
                 characterString.push_back(i[0]);
@@ -187,6 +207,7 @@ Document* HTMLReader::prepareDocument(std::string HTMLFilepath)
         std::string documentText;
         std::string temporaryString;
 
+        //Parse entire document into one string.
         while (!HTMLDocument.eof())
         {
             std::getline(HTMLDocument, temporaryString);
@@ -202,6 +223,8 @@ Document* HTMLReader::prepareDocument(std::string HTMLFilepath)
 
         HTMLDocument.close();
 
+        //Create a Document by parsing through
+        //the string created from the HTML file.
         Document *document = parseDocumentText(documentText);
 
         return document;
@@ -276,6 +299,8 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
 
 RenderNode* HTMLReader::createFirstNode()
 {
+    //This node is necessary because it acts as the parent node
+    //for both the head and body nodes.
     RenderNode *firstNode = new RenderNode;
     firstNode->setParentNode(NULL);
     firstNode->setTypeOfNode("html");
@@ -283,6 +308,9 @@ RenderNode* HTMLReader::createFirstNode()
 
     return firstNode;
 }
+
+//Each of the create*node() functions use elements to do so. This doesn't mean
+//anything yet, but will be used once inline attributes are supported.
 
 ParagraphNode* HTMLReader::createParagraphNode(parseState &currentState)
 {
