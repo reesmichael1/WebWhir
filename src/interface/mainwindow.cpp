@@ -80,14 +80,14 @@ Document* MainWindow::getWebpage()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
+    //Draw the document (this will be split off into Painter soon).
     Q_UNUSED(event);
 
     QPainter qPainter(this);
-
     paintNodesVector = webpage->getFirstNode()->getPaintNodes();
-
     drawDocument(&qPainter, paintNodesVector);
 
+    //Prevents document from moving around while being redrawn.
     positionSet = true;
 }
 
@@ -114,7 +114,8 @@ void MainWindow::paintCurrentNode(PaintNode *currentPaintNode,
 {
     if (currentPaintNode->getTypeOfPaintNode() == "char")
     {
-
+        //Draw the text contained within each paragraph node. New lines are
+        //only added after each paragraph node--not any other element.
         if (positionSet)
         {
             updateCurrentPosition();
@@ -122,7 +123,6 @@ void MainWindow::paintCurrentNode(PaintNode *currentPaintNode,
 
         char *character = currentPaintNode->returnCharacter();
         *currentCharacter = QString(*character);
-
 
         QFont font = qPainter->font();
 
@@ -143,8 +143,12 @@ void MainWindow::paintCurrentNode(PaintNode *currentPaintNode,
 
         updateCurrentPosition();
     }
+
     else if (currentPaintNode->getTypeOfPaintNode() == "node")
     {
+        //Call the function again on each of the PaintNode's child paint nodes.
+        //This ensures that all of the child nodes of the overall parent node
+        //are drawn.
         std::vector<PaintNode*> *childPaintNodes = currentPaintNode->
                 returnNode()->getPaintNodes();
         drawDocument(qPainter, childPaintNodes);
@@ -155,6 +159,8 @@ void MainWindow::paintCurrentNode(PaintNode *currentPaintNode,
     }
 }
 
+//This adjusts the location where the next character will be drawn, including
+//changing lines when the total length exceeds the width of the window.
 void MainWindow::updateCurrentPosition()
 {
 
@@ -164,6 +170,8 @@ void MainWindow::updateCurrentPosition()
         QFontMetrics fm(font);
 
         totalWidth += fm.width(*currentCharacter);
+
+        //3 is a totally random number, chosen because it looks good.
         if (totalWidth >= this->width() - 3 * STARTING_X)
         {
             currentX = STARTING_X;
