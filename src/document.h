@@ -11,7 +11,6 @@ public:
     Document();
     ~Document();
     void constructTree(RenderNode *childNode, RenderNode *parentNode);
-    void paintWebpage();
     RenderNode *getFirstNode();
 
 private:
