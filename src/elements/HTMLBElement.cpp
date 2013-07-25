@@ -13,7 +13,3 @@ BNode* HTMLBElement::returnNode()
     return bNode;
 }
 
-void HTMLBElement::deleteHTMLElement()
-{
-    delete bNode;
-}

@@ -12,8 +12,3 @@ BodyNode* HTMLBodyElement::returnNode()
 
     return bodyNode;
 }
-
-void HTMLBodyElement::deleteHTMLElement()
-{
-    delete bodyNode;
-}

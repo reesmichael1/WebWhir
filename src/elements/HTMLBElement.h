@@ -9,7 +9,6 @@ class HTMLBElement : HTMLElement
 public:
     HTMLBElement();
     virtual BNode *returnNode();
-    virtual void deleteHTMLElement();
 
 private:
     BNode *bNode;
