@@ -9,7 +9,7 @@
 #include "parser/htmlreader.h"
 
 #define STARTING_X 10
-#define STARTING_Y 20
+#define STARTING_Y 10
 #define LINE_SPACING 30
 
 MainWindow::MainWindow()
@@ -28,11 +28,12 @@ MainWindow::MainWindow()
     setMinimumHeight(400);
     setMinimumWidth(600);
 
-    setMaximumWidth(600);
-
     positionSet = false;
 
-    setWindowTitle("OpenWeb 0.1 Alpha");
+    createActions();
+    createMenus();
+
+    setWindowTitle("WebWhirr 0.1 Beta");
 
 }
 
@@ -43,6 +44,22 @@ void MainWindow::setFilepath()
                                                         tr("Open HTML Document")).toUtf8().constData();
 
     webpage = reader->prepareDocument(filepath);
+
+    this->update();
+}
+
+void MainWindow::createActions()
+{
+    openAct = new QAction(tr("&Open"), this);
+    openAct->setShortcut(QKeySequence::Open);
+
+    connect(openAct, SIGNAL(triggered()), this, SLOT(setFilepath()));
+}
+
+void MainWindow::createMenus()
+{
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(openAct);
 }
 
 void MainWindow::setFilepath(std::string filepath)
