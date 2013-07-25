@@ -37,17 +37,6 @@ MainWindow::MainWindow()
 
 }
 
-void MainWindow::setFilepath()
-{
-    //QString::toStdString() doesn't convert the filepath properly
-    std::string filepath = QFileDialog::getOpenFileName(this,
-                                                        tr("Open HTML Document")).toUtf8().constData();
-
-    webpage = reader->prepareDocument(filepath);
-
-    this->update();
-}
-
 void MainWindow::createActions()
 {
     openAct = new QAction(tr("&Open"), this);
@@ -64,7 +53,22 @@ void MainWindow::createMenus()
 
 void MainWindow::setFilepath(std::string filepath)
 {
+    //Construct a Document (contains node tree) from parsing document
+    //passed from command line.
     webpage = reader->prepareDocument(filepath);
+}
+
+void MainWindow::setFilepath()
+{
+    //QString::toStdString() doesn't convert the filepath properly
+    std::string filepath = QFileDialog::getOpenFileName(this,
+                                                        tr("Open HTML Document")).toUtf8().constData();
+
+    //Construct a Document (contains node tree) from parsing document
+    //selected in "Open HTML Document" dialog.
+    webpage = reader->prepareDocument(filepath);
+
+    this->update();
 }
 
 Document* MainWindow::getWebpage()
