@@ -24,7 +24,6 @@ private:
     std::string typeOfNode;
     char *character;
     RenderNode *node;
-    Painter *painter;
 };
 
 #endif // PAINTNODE_H
