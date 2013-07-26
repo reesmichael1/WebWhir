@@ -4,12 +4,13 @@
 #include <string>
 
 #include <QMainWindow>
-#include <QPainter>
 #include <QMenuBar>
 #include <QString>
 #include <QAction>
+#include <QLineEdit>
+#include <QScrollArea>
 
-class Painter;
+class PaintArea;
 class HTMLReader;
 class Document;
 class PaintNode;
@@ -21,38 +22,24 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
-    void addCharacter(QString character, QFont::Weight weight = QFont::Normal);
-    void paintDocument();
     void setFilepath(std::string filepath);
-    void setMainText(std::string *textToSet);
-    void drawDocument(QPainter *qPainter);
-    void drawDocument(QPainter *qPainter, std::vector<PaintNode*> *paintNodes);
-    void paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainter);
-    void insertLineBreak();
     void createActions();
     void createMenus();
     Document* getWebpage();
 
 public slots:
-    void setFilepath();
-
-protected:
-    virtual void paintEvent(QPaintEvent *event);
+    bool setFilepath();
 
 private:
-    void updateCurrentPosition();
     HTMLReader *reader;
     Document *webpage;
-    QString *currentCharacter;
-    Painter *painter;
-    QFont::Weight currentWeight;
-    int currentX;
-    int currentY;
-    int totalWidth;
-    std::vector<PaintNode*> *paintNodesVector;
+    PaintArea *paintArea;
     bool positionSet;
     QMenu *fileMenu;
     QAction *openAct;
+    QLineEdit *addressBar;
+    QWidget *centralLayout;
+    QScrollArea *scrollArea;
 };
 
 #endif // MAINWINDOW_H

@@ -3,7 +3,9 @@
 
 #include <string>
 
-#include "painter/painter.h"
+#include "nodes/rendernode.h"
+
+#include <QFont>
 
 class RenderNode;
 
@@ -17,14 +19,13 @@ public:
     QFont::Weight getWeight();
     char *returnCharacter();
     RenderNode *returnNode();
-    std::string getTypeOfNode();
+    std::string getTypeOfPaintNode();
 
 private:
     QFont::Weight characterWeight;
     std::string typeOfNode;
     char *character;
     RenderNode *node;
-    Painter *painter;
 };
 
 #endif // PAINTNODE_H

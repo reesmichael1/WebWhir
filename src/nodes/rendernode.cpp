@@ -13,14 +13,16 @@ RenderNode::RenderNode()
 
 RenderNode::~RenderNode()
 {
+    deleteChildNodes();
+    deletePaintNodes();
 }
 
-void RenderNode::setTypeOfNode(std::string typeToSet)
+void RenderNode::setTypeOfRenderNode(std::string typeToSet)
 {
     typeOfNode = typeToSet;
 }
 
-std::string RenderNode::getTypeOfNode()
+std::string RenderNode::getTypeOfRenderNode()
 {
     return typeOfNode;
 }
@@ -45,6 +47,23 @@ void RenderNode::addPaintNode(PaintNode *nodeToAdd)
     paintNodes->push_back(nodeToAdd);
 }
 
+void RenderNode::deleteChildNodes()
+{
+    while (!childNodes->empty())
+    {
+        childNodes->pop_back();
+    }
+}
+
+void RenderNode::deletePaintNodes()
+{
+    while (!paintNodes->empty())
+    {
+        delete paintNodes->back();
+        paintNodes->pop_back();
+    }
+}
+
 std::vector<RenderNode*>* RenderNode::getChildNodes()
 {
     return childNodes;
@@ -59,24 +78,6 @@ void RenderNode::setNeedsPainting(bool valueToSet)
 {
     needsPainting = valueToSet;
 }
-
-/*
-void RenderNode::paintNode()
-{
-
-    std::vector<PaintNode*>::iterator iterator;
-    for (iterator = paintNodes->begin(); iterator != paintNodes->end();
-         iterator++)
-    {
-        (*iterator)->paint();
-    }
-}
-*/
-
-void RenderNode::addCharacter(std::string::iterator i)
-{
-}
-
 
 void RenderNode::setIsOpen(bool valueToSet)
 {
