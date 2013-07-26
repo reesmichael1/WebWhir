@@ -108,6 +108,9 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
 void PaintArea::updateCurrentPosition()
 {
 
+    //positionSet is only true when the entire text has been drawn.
+    //If it is false, then it is safe to set the character to the spot
+    //after the current character.
     if (!positionSet)
     {
         QFont font;
@@ -128,6 +131,8 @@ void PaintArea::updateCurrentPosition()
         }
     }
 
+    //However, if positionSet is true, then it is time to draw the entire
+    //document again, so we reset the current position to the initial state.
     else
     {
         currentX = STARTING_X;
