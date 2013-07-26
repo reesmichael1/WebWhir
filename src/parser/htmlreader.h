@@ -9,7 +9,6 @@
 #include "nodes/headnode.h"
 #include "nodes/bodynode.h"
 #include "nodes/bnode.h"
-#include "painter/painter.h"
 
 class HTMLReader
 {

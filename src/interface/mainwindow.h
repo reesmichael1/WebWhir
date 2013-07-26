@@ -4,12 +4,11 @@
 #include <string>
 
 #include <QMainWindow>
-#include <QPainter>
 #include <QMenuBar>
 #include <QString>
 #include <QAction>
 
-class Painter;
+class PaintArea;
 class HTMLReader;
 class Document;
 class PaintNode;
@@ -22,11 +21,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
     void setFilepath(std::string filepath);
-    void setMainText(std::string *textToSet);
-    void drawDocument(QPainter *qPainter);
-    void drawDocument(QPainter *qPainter, std::vector<PaintNode*> *paintNodes);
-    void paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainter);
-    void insertLineBreak();
     void createActions();
     void createMenus();
     Document* getWebpage();
@@ -34,20 +28,10 @@ public:
 public slots:
     void setFilepath();
 
-protected:
-    virtual void paintEvent(QPaintEvent *event);
-
 private:
-    void updateCurrentPosition();
     HTMLReader *reader;
     Document *webpage;
-    QString *currentCharacter;
-    Painter *painter;
-    QFont::Weight currentWeight;
-    int currentX;
-    int currentY;
-    int totalWidth;
-    std::vector<PaintNode*> *paintNodesVector;
+    PaintArea *paintArea;
     bool positionSet;
     QMenu *fileMenu;
     QAction *openAct;
