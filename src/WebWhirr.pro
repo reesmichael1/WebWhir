@@ -22,8 +22,8 @@ SOURCES += main.cpp \
     nodes/paragraphnode.cpp \
     elements/HTMLParagraphElement.cpp \
     interface/mainwindow.cpp \
-    painter/painter.cpp \
-    painter/paintnode.cpp
+    painter/paintnode.cpp \
+    painter/paintarea.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -39,5 +39,5 @@ HEADERS += \
     nodes/paragraphnode.h \
     elements/HTMLParagraphElement.h \
     interface/mainwindow.h \
-    painter/painter.h \
-    painter/paintnode.h
+    painter/paintnode.h \
+    painter/paintarea.h

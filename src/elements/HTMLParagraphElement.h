@@ -9,7 +9,6 @@ class HTMLParagraphElement : HTMLElement
 public:
     HTMLParagraphElement();
     virtual ParagraphNode *returnNode();
-    virtual void deleteHTMLElement();
 
 private:
     ParagraphNode *paragraphNode;

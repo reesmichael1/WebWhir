@@ -2,6 +2,11 @@
 #include <string>
 #include "document.h"
 
+//The document class is the representation of the webpage in nodes. When the
+//parser creates render nodes, they are strung together in a kind-of-linked
+//list, and paint nodes are added to the render nodes as children. This
+//list is stored within the document, and is how the webpage is painted.
+
 Document::Document()
 {
     firstNode = new RenderNode;
@@ -10,7 +15,7 @@ Document::Document()
 
 Document::~Document()
 {
-    delete firstNode;
+    clearTree();
 }
 
 RenderNode* Document::getFirstNode()
@@ -35,4 +40,11 @@ void Document::constructTree(RenderNode *childNode, RenderNode *parentNode)
         childNode->setParentNode(parentNode);
         parentNode->addChildNode(childNode);
     }
+}
+
+void Document::clearTree()
+{
+    delete firstNode;
+    firstNode = new RenderNode;
+    firstNode = NULL;
 }

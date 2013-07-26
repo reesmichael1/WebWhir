@@ -3,7 +3,7 @@
 HeadNode::HeadNode()
 {
     setNeedsPainting(true);
-    setTypeOfNode("head");
+    setTypeOfRenderNode("head");
 }
 
 

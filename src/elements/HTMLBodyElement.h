@@ -9,7 +9,6 @@ class HTMLBodyElement : public HTMLElement
 public:
     HTMLBodyElement();
     virtual BodyNode *returnNode();
-    virtual void deleteHTMLElement();
 
 private:
     BodyNode *bodyNode;

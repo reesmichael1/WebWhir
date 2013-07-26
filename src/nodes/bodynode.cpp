@@ -3,6 +3,6 @@
 BodyNode::BodyNode()
 {
     setNeedsPainting(true);
-    setTypeOfNode("body");
+    setTypeOfRenderNode("body");
 }
 

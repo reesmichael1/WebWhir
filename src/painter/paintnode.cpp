@@ -31,7 +31,7 @@ RenderNode* PaintNode::returnNode()
     return node;
 }
 
-std::string PaintNode::getTypeOfNode()
+std::string PaintNode::getTypeOfPaintNode()
 {
     return typeOfNode;
 }

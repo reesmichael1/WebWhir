@@ -1,51 +1,50 @@
 #include <QMainWindow>
 #include <QFileDialog>
-#include <QRect>
 #include <QString>
-#include <QPainter>
-#include <QPen>
-#include "mainwindow.h"
-#include "painter/painter.h"
-#include "parser/htmlreader.h"
+#include <QBoxLayout>
+#include <QLabel>
 
-#define STARTING_X 10
-#define STARTING_Y 10
-#define LINE_SPACING 30
+#include "mainwindow.h"
+#include "parser/htmlreader.h"
+#include "painter/paintarea.h"
 
 MainWindow::MainWindow()
 {
     reader = new HTMLReader;
     webpage = new Document;
 
-    currentX = STARTING_X;
-    currentY = STARTING_Y;
-    totalWidth = 0;
-
-    currentWeight = QFont::Normal;
-
-    currentCharacter = new QString;
-
     setMinimumHeight(400);
     setMinimumWidth(600);
 
     positionSet = false;
+
+    QLabel *addressBarLabel = new QLabel(tr("Current Document:"));
+    addressBar = new QLineEdit;
+    addressBar->setReadOnly(true);
+
+    QHBoxLayout *addressBarLayout = new QHBoxLayout;
+    addressBarLayout->addWidget(addressBarLabel);
+    addressBarLayout->addWidget(addressBar);
+
+    paintArea = new PaintArea(this);
+    scrollArea = new QScrollArea(this);
+    scrollArea->setWidget(paintArea);
+    scrollArea->setWidgetResizable(true);
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addLayout(addressBarLayout);
+    layout->addWidget(scrollArea);
+
+    centralLayout = new QWidget;
+    centralLayout->setLayout(layout);
+
+    setCentralWidget(centralLayout);
 
     createActions();
     createMenus();
 
     setWindowTitle("WebWhirr 0.1 Beta");
 
-}
-
-void MainWindow::setFilepath()
-{
-    //QString::toStdString() doesn't convert the filepath properly
-    std::string filepath = QFileDialog::getOpenFileName(this,
-                                                        tr("Open HTML Document")).toUtf8().constData();
-
-    webpage = reader->prepareDocument(filepath);
-
-    this->update();
 }
 
 void MainWindow::createActions()
@@ -64,130 +63,52 @@ void MainWindow::createMenus()
 
 void MainWindow::setFilepath(std::string filepath)
 {
+    //Construct a Document (contains node tree) from parsing document
+    //passed from command line.
     webpage = reader->prepareDocument(filepath);
+    addressBar->setText(QString::fromStdString(filepath));
+
+    paintArea->setDocument(webpage);
 }
 
-Document* MainWindow::getWebpage()
+bool MainWindow::setFilepath()
 {
-    return webpage;
-}
+    //QString::toStdString() doesn't convert the filepath properly
+    std::string filepath = QFileDialog::getOpenFileName(this,
+                                                        tr("Open HTML Document")).toUtf8().constData();
 
-void MainWindow::paintDocument()
-{
-    this->update();
-}
-
-void MainWindow::addCharacter(QString character, QFont::Weight weight)
-{
-    *currentCharacter = character;
-    currentWeight = weight;
-
-    updateCurrentPosition();
-}
-
-void MainWindow::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-
-    QPainter qPainter(this);
-
-    paintNodesVector = webpage->getFirstNode()->getPaintNodes();
-
-    drawDocument(&qPainter, paintNodesVector);
-
-    positionSet = true;
-}
-
-void MainWindow::drawDocument(QPainter *qPainter,
-                              std::vector<PaintNode*> *paintNodes)
-{
-    std::vector<PaintNode*>::iterator i = paintNodes->begin();
-
-    for (; i != paintNodes->end(); i++)
+    if (filepath.empty())
     {
-        paintCurrentNode(*i, qPainter);
-    }
-}
-
-void MainWindow::insertLineBreak()
-{
-    currentX = STARTING_X;
-    currentY += LINE_SPACING;
-    totalWidth = 0;
-}
-
-void MainWindow::paintCurrentNode(PaintNode *currentPaintNode,
-                                  QPainter *qPainter)
-{
-    if (currentPaintNode->getTypeOfNode() == "char")
-    {
-
-        if (positionSet)
+        if (webpage->getFirstNode() == NULL)
         {
-            updateCurrentPosition();
-        }
-
-        char *character = currentPaintNode->returnCharacter();
-        *currentCharacter = QString(*character);
-
-
-        QFont font = qPainter->font();
-
-        if (currentPaintNode->getWeight() == QFont::Bold)
-        {
-            font.setBold(true);
-        }
-        else
-        {
-            font.setBold(false);
-        }
-        QFontMetrics fm(font);
-        QRect box(QPoint(currentX, currentY), QSize(fm.width(*character),
-                                                    fm.height()));
-
-        qPainter->setFont(font);
-        qPainter->drawText(box, Qt::AlignCenter, QString(*character));
-
-        updateCurrentPosition();
-    }
-    else if (currentPaintNode->getTypeOfNode() == "node")
-    {
-        std::vector<PaintNode*> *childPaintNodes = currentPaintNode->
-                returnNode()->getPaintNodes();
-        drawDocument(qPainter, childPaintNodes);
-        if (currentPaintNode->returnNode()->getTypeOfNode() == "p")
-        {
-            insertLineBreak();
-        }
-    }
-}
-
-void MainWindow::updateCurrentPosition()
-{
-
-    if (!positionSet)
-    {
-        QFont font;
-        QFontMetrics fm(font);
-
-        totalWidth += fm.width(*currentCharacter);
-        if (totalWidth >= this->width() - 3 * STARTING_X)
-        {
-            currentX = STARTING_X;
-            currentY += (fm.height() + 2);
-            totalWidth = 0;
-        }
-        else
-        {
-            currentX += fm.width(*currentCharacter);
+            return false;
         }
     }
 
     else
     {
-        currentX = STARTING_X;
-        currentY = STARTING_Y;
-        totalWidth = 0;
-        positionSet = false;
+        //Delete any old nodes to avoid memory leaks.
+        if (webpage->getFirstNode() != NULL)
+        {
+            webpage->clearTree();
+        }
+
+        addressBar->setText(QString::fromStdString(filepath));
+
+        //Construct a Document (contains node tree) from parsing document
+        //selected in "Open HTML Document" dialog.
+        webpage = reader->prepareDocument(filepath);
+
+        paintArea->setDocument(webpage);
+
+        //Repaint the window to show the selected document
+        //(necessary to open new documents).
+        this->update();
+        return true;
     }
+}
+
+Document* MainWindow::getWebpage()
+{
+    return webpage;
 }

@@ -12,9 +12,3 @@ ParagraphNode* HTMLParagraphElement::returnNode()
 
     return paragraphNode;
 }
-
-void HTMLParagraphElement::deleteHTMLElement()
-{
-    delete paragraphNode;
-}
-

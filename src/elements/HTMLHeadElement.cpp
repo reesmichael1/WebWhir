@@ -12,8 +12,3 @@ HeadNode* HTMLHeadElement::returnNode()
 
     return headNode;
 }
-
-void HTMLHeadElement::deleteHTMLElement()
-{
-    delete headNode;
-}
