@@ -8,6 +8,7 @@
 #include <QString>
 #include <QAction>
 #include <QLineEdit>
+#include <QScrollArea>
 
 class PaintArea;
 class HTMLReader;
@@ -38,6 +39,7 @@ private:
     QAction *openAct;
     QLineEdit *addressBar;
     QWidget *centralLayout;
+    QScrollArea *scrollArea;
 };
 
 #endif // MAINWINDOW_H

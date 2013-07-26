@@ -1,9 +1,9 @@
 #include "paintarea.h"
 
-#define STARTING_X 0
+#define STARTING_X 10
 
 //Padding from the right side of the window
-#define RIGHT_SIDE_X 10
+#define RIGHT_SIDE_X 30
 #define STARTING_Y 10
 #define LINE_SPACING 30
 
@@ -35,6 +35,9 @@ void PaintArea::paintEvent(QPaintEvent *event)
 
         //Prevents document from moving around while being redrawn.
         positionSet = true;
+
+        //This is necessary to show the entire paint area in the scroll area.
+        setMinimumHeight(currentY);
     }
 }
 

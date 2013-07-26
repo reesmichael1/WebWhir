@@ -27,10 +27,13 @@ MainWindow::MainWindow()
     addressBarLayout->addWidget(addressBar);
 
     paintArea = new PaintArea(this);
+    scrollArea = new QScrollArea(this);
+    scrollArea->setWidget(paintArea);
+    scrollArea->setWidgetResizable(true);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addLayout(addressBarLayout);
-    layout->addWidget(paintArea);
+    layout->addWidget(scrollArea);
 
     centralLayout = new QWidget;
     centralLayout->setLayout(layout);
