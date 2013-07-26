@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <QString>
 #include <QBoxLayout>
+#include <QLabel>
 
 #include "mainwindow.h"
 #include "parser/htmlreader.h"
@@ -17,9 +18,24 @@ MainWindow::MainWindow()
 
     positionSet = false;
 
+    QLabel *addressBarLabel = new QLabel(tr("Current Document:"));
+    addressBar = new QLineEdit;
+    addressBar->setReadOnly(true);
+
+    QHBoxLayout *addressBarLayout = new QHBoxLayout;
+    addressBarLayout->addWidget(addressBarLabel);
+    addressBarLayout->addWidget(addressBar);
+
     paintArea = new PaintArea;
 
-    setCentralWidget(paintArea);
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addLayout(addressBarLayout);
+    layout->addWidget(paintArea);
+
+    centralLayout = new QWidget;
+    centralLayout->setLayout(layout);
+
+    setCentralWidget(centralLayout);
 
     createActions();
     createMenus();

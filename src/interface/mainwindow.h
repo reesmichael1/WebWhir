@@ -7,6 +7,7 @@
 #include <QMenuBar>
 #include <QString>
 #include <QAction>
+#include <QLineEdit>
 
 class PaintArea;
 class HTMLReader;
@@ -35,6 +36,8 @@ private:
     bool positionSet;
     QMenu *fileMenu;
     QAction *openAct;
+    QLineEdit *addressBar;
+    QWidget *centralLayout;
 };
 
 #endif // MAINWINDOW_H
