@@ -1,6 +1,9 @@
 #include "paintarea.h"
 
-#define STARTING_X 10
+#define STARTING_X 0
+
+//Padding from the right side of the window
+#define RIGHT_SIDE_X 10
 #define STARTING_Y 10
 #define LINE_SPACING 30
 
@@ -118,8 +121,7 @@ void PaintArea::updateCurrentPosition()
 
         totalWidth += fm.width(*currentCharacter);
 
-        //3 is a totally random number, chosen because it looks good.
-        if (totalWidth >= this->width() - 3 * STARTING_X)
+        if (totalWidth >= this->width() - RIGHT_SIDE_X)
         {
             currentX = STARTING_X;
             currentY += (fm.height() + 2);

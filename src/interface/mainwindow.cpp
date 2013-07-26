@@ -26,7 +26,7 @@ MainWindow::MainWindow()
     addressBarLayout->addWidget(addressBarLabel);
     addressBarLayout->addWidget(addressBar);
 
-    paintArea = new PaintArea;
+    paintArea = new PaintArea(this);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addLayout(addressBarLayout);
