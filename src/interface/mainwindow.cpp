@@ -71,28 +71,41 @@ void MainWindow::setFilepath(std::string filepath)
     paintArea->setDocument(webpage);
 }
 
-void MainWindow::setFilepath()
+bool MainWindow::setFilepath()
 {
-    //Delete any old nodes to avoid memory leaks.
-    if (webpage->getFirstNode() != NULL)
-    {
-        webpage->clearTree();
-    }
-
     //QString::toStdString() doesn't convert the filepath properly
     std::string filepath = QFileDialog::getOpenFileName(this,
                                                         tr("Open HTML Document")).toUtf8().constData();
-    addressBar->setText(QString::fromStdString(filepath));
 
-    //Construct a Document (contains node tree) from parsing document
-    //selected in "Open HTML Document" dialog.
-    webpage = reader->prepareDocument(filepath);
+    if (filepath.empty())
+    {
+        if (webpage->getFirstNode() == NULL)
+        {
+            return false;
+        }
+    }
 
-    paintArea->setDocument(webpage);
+    else
+    {
+        //Delete any old nodes to avoid memory leaks.
+        if (webpage->getFirstNode() != NULL)
+        {
+            webpage->clearTree();
+        }
 
-    //Repaint the window to show the selected document
-    //(necessary to open new documents).
-    this->update();
+        addressBar->setText(QString::fromStdString(filepath));
+
+        //Construct a Document (contains node tree) from parsing document
+        //selected in "Open HTML Document" dialog.
+        webpage = reader->prepareDocument(filepath);
+
+        paintArea->setDocument(webpage);
+
+        //Repaint the window to show the selected document
+        //(necessary to open new documents).
+        this->update();
+        return true;
+    }
 }
 
 Document* MainWindow::getWebpage()

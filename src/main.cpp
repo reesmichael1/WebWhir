@@ -17,16 +17,19 @@ int main(int argc, char* argv[])
     if (argc > 1)
     {
         mainWindow.setFilepath(argv[1]);
+
+        //Display the painted document.
+        mainWindow.show();
     }
 
     //Otherwise, show the "Open HTML Document" dialog.
     else
     {
-        mainWindow.setFilepath();
+        if (mainWindow.setFilepath())
+        {
+            mainWindow.show();
+        }
     }
-
-    //Display the painted document.
-    mainWindow.show();
 
     return app.exec();
 }

@@ -28,7 +28,7 @@ public:
     Document* getWebpage();
 
 public slots:
-    void setFilepath();
+    bool setFilepath();
 
 private:
     HTMLReader *reader;
