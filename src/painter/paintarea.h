@@ -5,6 +5,7 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <QFont>
 
 class PaintNode;
 
@@ -30,8 +31,8 @@ private:
     int totalWidth;
     bool positionSet;
     QString *currentCharacter;
+    QFont currentFont;
     std::vector<PaintNode*> *paintNodesVector;
-    
 };
 
 #endif // PAINTAREA_H

@@ -74,21 +74,21 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
         char *character = currentPaintNode->returnCharacter();
         *currentCharacter = QString(*character);
 
-        QFont font = qPainter->font();
+        currentFont = qPainter->font();
 
         if (currentPaintNode->getWeight() == QFont::Bold)
         {
-            font.setBold(true);
+            currentFont.setBold(true);
         }
         else
         {
-            font.setBold(false);
+            currentFont.setBold(false);
         }
-        QFontMetrics fm(font);
+        QFontMetrics fm(currentFont);
         QRect box(QPoint(currentX, currentY), QSize(fm.width(*character),
                                                     fm.height()));
 
-        qPainter->setFont(font);
+        qPainter->setFont(currentFont);
         qPainter->drawText(box, Qt::AlignCenter, QString(*character));
 
         updateCurrentPosition();
@@ -120,7 +120,7 @@ void PaintArea::updateCurrentPosition()
     if (!positionSet)
     {
         QFont font;
-        QFontMetrics fm(font);
+        QFontMetrics fm(currentFont);
 
         totalWidth += fm.width(*currentCharacter);
 
