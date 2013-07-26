@@ -170,9 +170,6 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
             }
             else
             {
-                //Add text to the current node.
-                //currentNode->addCharacter(i);
-
                 //Create a paint node that is
                 //a child of the current Render Node.
                 std::string characterString;
