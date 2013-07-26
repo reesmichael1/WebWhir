@@ -63,6 +63,9 @@ void MainWindow::setFilepath(std::string filepath)
     //Construct a Document (contains node tree) from parsing document
     //passed from command line.
     webpage = reader->prepareDocument(filepath);
+    addressBar->setText(QString::fromStdString(filepath));
+
+    paintArea->setDocument(webpage);
 }
 
 void MainWindow::setFilepath()
@@ -76,6 +79,7 @@ void MainWindow::setFilepath()
     //QString::toStdString() doesn't convert the filepath properly
     std::string filepath = QFileDialog::getOpenFileName(this,
                                                         tr("Open HTML Document")).toUtf8().constData();
+    addressBar->setText(QString::fromStdString(filepath));
 
     //Construct a Document (contains node tree) from parsing document
     //selected in "Open HTML Document" dialog.
