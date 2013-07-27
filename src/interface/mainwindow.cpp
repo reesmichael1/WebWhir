@@ -3,6 +3,7 @@
 #include <QString>
 #include <QBoxLayout>
 #include <QLabel>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 #include "parser/htmlreader.h"
@@ -76,7 +77,6 @@ bool MainWindow::setFilepath()
     //QString::toStdString() doesn't convert the filepath properly
     std::string filepath = QFileDialog::getOpenFileName(this,
                                                         tr("Open HTML Document")).toUtf8().constData();
-
     if (filepath.empty())
     {
         if (webpage->getFirstNode() == NULL)
@@ -87,24 +87,41 @@ bool MainWindow::setFilepath()
 
     else
     {
-        //Delete any old nodes to avoid memory leaks.
-        if (webpage->getFirstNode() != NULL)
+
+        //This is a fix for the crash on opening a non-HTML document.
+        //It will have to do until I write a check into the encoding,
+        //because for some reason a similar check in the document text
+        //itself always returns true.
+        if (filepath.find("html") != std::string::npos)
         {
-            webpage->clearTree();
+            //Delete any old nodes to avoid memory leaks.
+            if (webpage->getFirstNode() != NULL)
+            {
+                webpage->clearTree();
+            }
+
+            addressBar->setText(QString::fromStdString(filepath));
+
+
+            //Construct a Document (contains node tree) from parsing document
+            //selected in "Open HTML Document" dialog.
+            webpage = reader->prepareDocument(filepath);
+
+            paintArea->setDocument(webpage);
+
+            //Repaint the window to show the selected document
+            //(necessary to open new documents).
+            this->update();
+            return true;
         }
 
-        addressBar->setText(QString::fromStdString(filepath));
-
-        //Construct a Document (contains node tree) from parsing document
-        //selected in "Open HTML Document" dialog.
-        webpage = reader->prepareDocument(filepath);
-
-        paintArea->setDocument(webpage);
-
-        //Repaint the window to show the selected document
-        //(necessary to open new documents).
-        this->update();
-        return true;
+        else
+        {
+            QMessageBox invalidTypeErrorBox;
+            invalidTypeErrorBox.setText("Error: Document type is invalid or not supported.");
+            invalidTypeErrorBox.exec();
+            return false;
+        }
     }
 }
 

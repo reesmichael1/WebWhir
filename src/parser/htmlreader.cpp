@@ -225,7 +225,6 @@ Document* HTMLReader::prepareDocument(std::string HTMLFilepath)
         Document *document = parseDocumentText(documentText);
 
         return document;
-
     }
     catch (std::string error)
     {
