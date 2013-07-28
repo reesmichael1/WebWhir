@@ -31,6 +31,7 @@ public slots:
     bool setFilepath();
 
 private:
+    bool checkFilepath(std::string filepath);
     HTMLReader *reader;
     Document *webpage;
     PaintArea *paintArea;
