@@ -64,14 +64,23 @@ void MainWindow::createMenus()
     fileMenu->addAction(openAct);
 }
 
-void MainWindow::setFilepath(std::string filepath)
+bool MainWindow::setFilepath(std::string filepath)
 {
-    //Construct a Document (contains node tree) from parsing document
-    //passed from command line.
-    webpage = reader->prepareDocument(filepath);
-    addressBar->setText(QString::fromStdString(filepath));
+    if (!checkFilepath(filepath))
+    {
+        return false;
+    }
+    else
+    {
+        //Construct a Document (contains node tree) from parsing document
+        //passed from command line.
+        webpage = reader->prepareDocument(filepath);
+        addressBar->setText(QString::fromStdString(filepath));
 
-    paintArea->setDocument(webpage);
+        paintArea->setDocument(webpage);
+    }
+
+    return true;
 }
 
 bool MainWindow::setFilepath()

@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
-    void setFilepath(std::string filepath);
+    bool setFilepath(std::string filepath);
     void createActions();
     void createMenus();
     Document* getWebpage();

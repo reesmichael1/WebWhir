@@ -16,10 +16,18 @@ int main(int argc, char* argv[])
     //Open the document if passed via the command line.
     if (argc > 1)
     {
-        mainWindow.setFilepath(argv[1]);
 
-        //Display the painted document.
-        mainWindow.show();
+        if (mainWindow.setFilepath(argv[1]))
+        {
+            //Display the painted document.
+            mainWindow.show();
+        }
+        else
+        {
+            std::cout << "Error: Document type is invalid or not supported."
+                      << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     //Otherwise, show the "Open HTML Document" dialog.
