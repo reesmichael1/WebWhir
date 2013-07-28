@@ -28,6 +28,7 @@ private:
     Document *webpage;
     int currentX;
     int currentY;
+    int lineSpacing;
     int totalWidth;
     bool positionSet;
     QString *currentCharacter;

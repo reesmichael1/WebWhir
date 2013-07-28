@@ -5,7 +5,6 @@
 //Padding from the right side of the window
 #define RIGHT_SIDE_X 30
 #define STARTING_Y 10
-#define LINE_SPACING 30
 
 PaintArea::PaintArea(QWidget *parent) :
     QWidget(parent)
@@ -54,8 +53,11 @@ void PaintArea::drawDocument(QPainter *qPainter,
 
 void PaintArea::insertLineBreak()
 {
+    QFont font = currentFont;
+    QFontMetrics fm(font);
+
     currentX = STARTING_X;
-    currentY += LINE_SPACING;
+    currentY += 2 * fm.height();
     totalWidth = 0;
 }
 
