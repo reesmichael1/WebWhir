@@ -11,9 +11,11 @@
 
 MainWindow::MainWindow()
 {
+
     reader = new HTMLReader;
     webpage = new Document;
 
+    //Draw main window for WebWhirr.
     setMinimumHeight(400);
     setMinimumWidth(600);
 
@@ -77,21 +79,17 @@ bool MainWindow::setFilepath()
     //QString::toStdString() doesn't convert the filepath properly
     std::string filepath = QFileDialog::getOpenFileName(this,
                                                         tr("Open HTML Document")).toUtf8().constData();
+    if (filepath.empty())
+    {
+        return false;
+    }
 
     if (!checkFilepath(filepath))
     {
-        if (webpage->getFirstNode() == NULL)
-        {
-            return false;
-        }
-
-        else
-        {
-            QMessageBox invalidTypeErrorBox;
-            invalidTypeErrorBox.setText("Error: Document type is invalid or not supported.");
-            invalidTypeErrorBox.exec();
-            return false;
-        }
+        QMessageBox invalidTypeErrorBox;
+        invalidTypeErrorBox.setText("Error: Document type is invalid or not supported.");
+        invalidTypeErrorBox.exec();
+        return false;
     }
 
     else

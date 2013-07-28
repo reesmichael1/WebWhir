@@ -29,6 +29,10 @@ int main(int argc, char* argv[])
         {
             mainWindow.show();
         }
+        else
+        {
+            return EXIT_FAILURE;
+        }
     }
 
     return app.exec();
