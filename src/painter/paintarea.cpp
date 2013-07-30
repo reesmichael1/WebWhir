@@ -9,6 +9,8 @@
 PaintArea::PaintArea(QWidget *parent) :
     QWidget(parent)
 {
+    currentX = STARTING_X;
+
     webpage = new Document;
     positionSet = false;
 
