@@ -3,18 +3,22 @@
 #define STARTING_X 10
 
 //Padding from the right side of the window
-#define RIGHT_SIDE_X 30
+#define RIGHT_SIDE_PADDING 50
 #define STARTING_Y 10
 
 PaintArea::PaintArea(QWidget *parent) :
     QWidget(parent)
 {
     currentX = STARTING_X;
+    currentY = STARTING_Y;
+    totalWidth = 0;
 
     webpage = new Document;
     positionSet = false;
 
     currentCharacter = new QString;
+
+    nextWordChecked = false;
 }
 
 void PaintArea::setDocument(Document *documentToSet)
@@ -24,7 +28,6 @@ void PaintArea::setDocument(Document *documentToSet)
 
 void PaintArea::paintEvent(QPaintEvent *event)
 {
-    //Draw the document (this will be split off into Painter soon).
     Q_UNUSED(event);
 
     if (webpage->getFirstNode() != NULL)
@@ -43,13 +46,13 @@ void PaintArea::paintEvent(QPaintEvent *event)
 }
 
 void PaintArea::drawDocument(QPainter *qPainter,
-                              std::vector<PaintNode*> *paintNodes)
+                             std::vector<PaintNode*> *paintNodes)
 {
     std::vector<PaintNode*>::iterator i = paintNodes->begin();
 
     for (; i != paintNodes->end(); i++)
     {
-        paintCurrentNode(*i, qPainter);
+        paintCurrentNode(*i, qPainter, paintNodes);
     }
 }
 
@@ -64,7 +67,8 @@ void PaintArea::insertLineBreak()
 }
 
 void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
-                                  QPainter *qPainter)
+                                 QPainter *qPainter,
+                                 std::vector<PaintNode*> *paintNodes)
 {
     if (currentPaintNode->getTypeOfPaintNode() == "char")
     {
@@ -75,7 +79,7 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
             updateCurrentPosition();
         }
 
-        char *character = currentPaintNode->returnCharacter();
+        char *character = currentPaintNode->getCharacter();
         *currentCharacter = QString(*character);
 
         currentFont = qPainter->font();
@@ -88,12 +92,34 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
         {
             currentFont.setBold(false);
         }
+
         QFontMetrics fm(currentFont);
+
+        if (!nextWordChecked)
+        {
+            int currentLineWidth = totalWidth;
+            currentLineWidth += getNextWordWidth(paintNodes, qPainter);
+
+            if (currentLineWidth >= this->width() - RIGHT_SIDE_PADDING)
+            {
+                totalWidth = 0;
+                currentY += fm.height();
+                currentX = STARTING_X;
+            }
+
+            nextWordChecked = true;
+        }
+
         QRect box(QPoint(currentX, currentY), QSize(fm.width(*character),
                                                     fm.height()));
 
         qPainter->setFont(currentFont);
         qPainter->drawText(box, Qt::AlignCenter, QString(*character));
+
+        if (isspace(*character))
+        {
+            nextWordChecked = false;
+        }
 
         updateCurrentPosition();
     }
@@ -123,20 +149,14 @@ void PaintArea::updateCurrentPosition()
     //after the current character.
     if (!positionSet)
     {
-        QFont font;
         QFontMetrics fm(currentFont);
 
         totalWidth += fm.width(*currentCharacter);
+        currentX += fm.width(*currentCharacter);
 
-        if (totalWidth >= this->width() - RIGHT_SIDE_X)
+        if (totalWidth + STARTING_X >= this->width())
         {
-            currentX = STARTING_X;
-            currentY += (fm.height() + 2);
-            totalWidth = 0;
-        }
-        else
-        {
-            currentX += fm.width(*currentCharacter);
+            setMinimumWidth(totalWidth + STARTING_X);
         }
     }
 
@@ -149,4 +169,41 @@ void PaintArea::updateCurrentPosition()
         totalWidth = 0;
         positionSet = false;
     }
+}
+
+int PaintArea::getNextWordWidth(std::vector<PaintNode*> *paintNodes, QPainter *qPainter)
+{
+    int wordWidth = 0;
+    bool wordEndReached = false;
+
+    std::vector<PaintNode*>::iterator currentNode = paintNodes->begin();
+
+    for (; !wordEndReached; currentNode++)
+    {
+        if (currentNode == paintNodes->end())
+        {
+            wordEndReached = true;
+        }
+
+        else if ((*currentNode)->getTypeOfPaintNode() == "char")
+        {
+            if (!isspace(*(*currentNode)->getCharacter()))
+            {
+                QFont font = qPainter->font();
+                QFontMetrics fm(font);
+                wordWidth += fm.width((*currentNode)->getCharacter());
+            }
+            else
+            {
+                wordEndReached = true;
+            }
+        }
+
+        else if ((*currentNode)->getTypeOfPaintNode() == "node")
+        {
+            wordWidth += getNextWordWidth(paintNodes, qPainter);
+        }
+    }
+
+    return wordWidth;
 }

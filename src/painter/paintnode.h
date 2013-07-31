@@ -17,13 +17,13 @@ public:
     ~PaintNode();
     void setWeight(QFont::Weight weight = QFont::Normal);
     QFont::Weight getWeight();
-    char *returnCharacter();
+    char *getCharacter();
     RenderNode *returnNode();
     std::string getTypeOfPaintNode();
 
 private:
     QFont::Weight characterWeight;
-    std::string typeOfNode;
+    std::string *typeOfNode;
     char *character;
     RenderNode *node;
 };

@@ -3,25 +3,27 @@
 PaintNode::PaintNode(const char c)
 {
     character = new char;
+    typeOfNode = new std::string;
     *character = c;
     node = NULL;
 
     characterWeight = QFont::Normal;
 
-    typeOfNode = "char";
+    *typeOfNode = "char";
 }
 
 PaintNode::PaintNode(RenderNode *nodeToAdd)
 {
     node = new RenderNode;
+    typeOfNode = new std::string;
     node = nodeToAdd;
 
     character = NULL;
 
-    typeOfNode = "node";
+    *typeOfNode = "node";
 }
 
-char *PaintNode::returnCharacter()
+char *PaintNode::getCharacter()
 {
     return character;
 }
@@ -33,7 +35,7 @@ RenderNode* PaintNode::returnNode()
 
 std::string PaintNode::getTypeOfPaintNode()
 {
-    return typeOfNode;
+    return *typeOfNode;
 }
 
 PaintNode::~PaintNode()
