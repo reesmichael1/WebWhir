@@ -156,11 +156,6 @@ void PaintArea::updateCurrentPosition()
 
         totalWidth += fm.width(*currentCharacter);
         currentX += fm.width(*currentCharacter);
-
-        if (totalWidth + STARTING_X >= this->width())
-        {
-            setMinimumWidth(totalWidth + STARTING_X);
-        }
     }
 
     //However, if positionSet is true, then it is time to draw the entire
