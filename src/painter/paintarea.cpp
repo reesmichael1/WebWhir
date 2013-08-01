@@ -97,17 +97,20 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
 
         if (!nextWordChecked)
         {
-            int currentLineWidth = totalWidth;
-            currentLineWidth += getNextWordWidth(paintNodes, qPainter);
-
-            if (currentLineWidth >= this->width() - RIGHT_SIDE_PADDING)
+            if (totalWidth >= this->width() - 200)
             {
-                totalWidth = 0;
-                currentY += fm.height();
-                currentX = STARTING_X;
-            }
+                int currentLineWidth = totalWidth;
+                currentLineWidth += getNextWordWidth(paintNodes, qPainter);
 
-            nextWordChecked = true;
+                if (currentLineWidth + STARTING_X >= this->width() - RIGHT_SIDE_PADDING)
+                {
+                    totalWidth = 0;
+                    currentY += fm.height();
+                    currentX = STARTING_X;
+                }
+
+                nextWordChecked = true;
+            }
         }
 
         QRect box(QPoint(currentX, currentY), QSize(fm.width(*character),
