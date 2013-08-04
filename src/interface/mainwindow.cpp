@@ -120,7 +120,6 @@ bool MainWindow::setFilepath()
 
         //Repaint the window to show the selected document
         //(necessary to open new documents).
-        //this->update();
         paintArea->update();
         return true;
 
