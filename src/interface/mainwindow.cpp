@@ -134,7 +134,7 @@ bool MainWindow::checkFilepath(std::string filepath)
     //It will have to do until I write a check into the encoding,
     //because for some reason a similar check in the document text
     //itself always returns true.
-    if (filepath.find(".html") != std::string::npos &&
+    if (filepath.find(".html") != std::string::npos ||
             filepath.find(".htm") != std::string::npos)
     {
         return true;
