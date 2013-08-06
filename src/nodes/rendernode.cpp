@@ -51,6 +51,7 @@ void RenderNode::deleteChildNodes()
 {
     while (!childNodes->empty())
     {
+        delete childNodes->back();
         childNodes->pop_back();
     }
 }

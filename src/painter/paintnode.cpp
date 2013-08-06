@@ -41,7 +41,6 @@ std::string PaintNode::getTypeOfPaintNode()
 PaintNode::~PaintNode()
 {
     delete character;
-    delete node;
 }
 
 void PaintNode::setWeight(QFont::Weight weight)
