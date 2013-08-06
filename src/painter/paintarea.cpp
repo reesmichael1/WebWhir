@@ -188,9 +188,8 @@ int PaintArea::getNextWordWidth(std::vector<PaintNode*> *paintNodes, QPainter *q
         {
             if (!isspace(*(*currentNode)->getCharacter()))
             {
-                QFont font = qPainter->font();
-                QFontMetrics fm(font);
-                wordWidth += fm.width((*currentNode)->getCharacter());
+                QFontMetrics fm(currentFont);
+                wordWidth += fm.width((*currentNode)->getCharacter()[0]);
             }
             else
             {
