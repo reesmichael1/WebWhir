@@ -51,7 +51,7 @@ MainWindow::MainWindow()
     createActions();
     createMenus();
 
-    setWindowTitle("WebWhirr 0.1 Beta");
+    setWindowTitle("WebWhirr 0.1.0 Beta");
 
 }
 
