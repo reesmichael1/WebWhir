@@ -135,7 +135,6 @@ bool MainWindow::repaintDocument()
     //and assigning this to the QLabel documentDisplay. Dimensions
     //are also set to avoid annoying issues with the scrollbars.
     QPixmap paintedDocument;
-    paintArea->update();
 
     //grab() has to be called twice. Otherwise, the pixmap is the wrong
     //size when the document is first displayed and the document has to

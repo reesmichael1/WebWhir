@@ -103,7 +103,7 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
                 int currentLineWidth = totalWidth;
                 currentLineWidth += getNextWordWidth(paintNodes, qPainter);
 
-                if (currentLineWidth + STARTING_X >= this->width() - RIGHT_SIDE_PADDING)
+                if (currentLineWidth >= this->width() - RIGHT_SIDE_PADDING)
                 {
                     totalWidth = 0;
                     currentY += fm.height();
