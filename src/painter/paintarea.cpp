@@ -175,12 +175,10 @@ void PaintArea::updateCurrentPosition()
 int PaintArea::getNextWordWidth(std::vector<PaintNode*> *paintNodes,
                                 QPainter *qPainter,
                                 std::vector<PaintNode*>::iterator
-                                currentLocation)
+                                currentNode)
 {
     int wordWidth = 0;
     bool wordEndReached = false;
-
-    std::vector<PaintNode*>::iterator currentNode = currentLocation;
 
     for (; !wordEndReached; currentNode++)
     {

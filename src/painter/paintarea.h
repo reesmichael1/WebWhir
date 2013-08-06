@@ -29,7 +29,7 @@ protected:
 private:
     int getNextWordWidth(std::vector<PaintNode*> *paintNodes,
                          QPainter *qPainter,
-                         std::vector<PaintNode*>::iterator currentLocation);
+                         std::vector<PaintNode*>::iterator currentNode);
     Document *webpage;
     int currentX;
     int currentY;
