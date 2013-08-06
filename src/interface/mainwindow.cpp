@@ -32,6 +32,9 @@ MainWindow::MainWindow()
     paintArea = new PaintArea;
     scrollArea = new QScrollArea(this);
     documentDisplay = new QLabel(scrollArea);
+
+    documentDisplay->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
     scrollArea->setWidget(documentDisplay);
     scrollArea->setWidgetResizable(true);
 
@@ -128,9 +131,13 @@ bool MainWindow::repaintDocument()
     //Repaint the window to show the selected document
     //(necessary to open new documents).
     paintArea->update();
-    QPixmap paintedDocument(paintArea->size());
-    paintedDocument = paintArea->grab();
+    QPixmap paintedDocument = paintArea->grab();
+    documentDisplay->setMinimumWidth(paintedDocument.width());
+    documentDisplay->setMaximumWidth(paintedDocument.width());
+    documentDisplay->setMaximumHeight(paintArea->height());
     documentDisplay->setPixmap(paintedDocument);
+    scrollArea->setMinimumWidth(documentDisplay->width() + 20);
+    this->setMinimumWidth(scrollArea->width() + 20);
     return true;
 }
 

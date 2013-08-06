@@ -42,6 +42,7 @@ void PaintArea::paintEvent(QPaintEvent *event)
 
         //This is necessary to show the entire paint area in the scroll area.
         setMinimumHeight(currentY);
+        setMaximumHeight(currentY);
     }
 }
 
