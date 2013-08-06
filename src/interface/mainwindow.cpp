@@ -16,8 +16,8 @@ MainWindow::MainWindow()
     webpage = new Document;
 
     //Draw main window for WebWhirr.
-    setMinimumHeight(400);
-    setMinimumWidth(600);
+    setMinimumHeight(480);
+    setMinimumWidth(640);
 
     positionSet = false;
 
@@ -126,18 +126,31 @@ bool MainWindow::setFilepath()
     }
 }
 
+//This entire function is a mess. I will return and work
+//on it more after the 0.1.0 release.
 bool MainWindow::repaintDocument()
 {
     //Paint the current document in paintArea by creating a QPixmap
     //and assigning this to the QLabel documentDisplay. Dimensions
     //are also set to avoid annoying issues with the scrollbars.
-    QPixmap paintedDocument = paintArea->grab();
+    QPixmap paintedDocument;
+    paintArea->update();
+
+    //grab() has to be called twice. Otherwise, the pixmap is the wrong
+    //size when the document is first displayed and the document has to
+    //be opened twice in order to scroll through it properly.
+    paintedDocument = paintArea->grab();
+    paintedDocument.scaled(paintArea->size(), Qt::IgnoreAspectRatio);
+    paintedDocument = paintArea->grab();
+
     documentDisplay->setMinimumWidth(paintedDocument.width());
     documentDisplay->setMaximumWidth(paintedDocument.width());
     documentDisplay->setMaximumHeight(paintArea->height());
+
     documentDisplay->setPixmap(paintedDocument);
     scrollArea->setMinimumWidth(documentDisplay->width() + 20);
     this->setMinimumWidth(scrollArea->width() + 20);
+
     return true;
 }
 
