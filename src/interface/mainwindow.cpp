@@ -128,9 +128,9 @@ bool MainWindow::setFilepath()
 
 bool MainWindow::repaintDocument()
 {
-    //Repaint the window to show the selected document
-    //(necessary to open new documents).
-    paintArea->update();
+    //Paint the current document in paintArea by creating a QPixmap
+    //and assigning this to the QLabel documentDisplay. Dimensions
+    //are also set to avoid annoying issues with the scrollbars.
     QPixmap paintedDocument = paintArea->grab();
     documentDisplay->setMinimumWidth(paintedDocument.width());
     documentDisplay->setMaximumWidth(paintedDocument.width());
