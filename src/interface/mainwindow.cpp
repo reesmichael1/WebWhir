@@ -29,9 +29,10 @@ MainWindow::MainWindow()
     addressBarLayout->addWidget(addressBarLabel);
     addressBarLayout->addWidget(addressBar);
 
-    paintArea = new PaintArea(this);
+    paintArea = new PaintArea;
     scrollArea = new QScrollArea(this);
-    scrollArea->setWidget(paintArea);
+    documentDisplay = new QLabel(scrollArea);
+    scrollArea->setWidget(documentDisplay);
     scrollArea->setWidgetResizable(true);
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -118,13 +119,19 @@ bool MainWindow::setFilepath()
 
         paintArea->setDocument(webpage);
 
-        //Repaint the window to show the selected document
-        //(necessary to open new documents).
-        paintArea->update();
-        return true;
-
-
+        return repaintDocument();
     }
+}
+
+bool MainWindow::repaintDocument()
+{
+    //Repaint the window to show the selected document
+    //(necessary to open new documents).
+    paintArea->update();
+    QPixmap paintedDocument(paintArea->size());
+    paintedDocument = paintArea->grab();
+    documentDisplay->setPixmap(paintedDocument);
+    return true;
 }
 
 bool MainWindow::checkFilepath(std::string filepath)

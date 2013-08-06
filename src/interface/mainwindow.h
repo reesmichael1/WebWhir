@@ -9,6 +9,7 @@
 #include <QAction>
 #include <QLineEdit>
 #include <QScrollArea>
+#include <QLabel>
 
 class PaintArea;
 class HTMLReader;
@@ -31,6 +32,7 @@ public slots:
     bool setFilepath();
 
 private:
+    bool repaintDocument();
     bool checkFilepath(std::string filepath);
     HTMLReader *reader;
     Document *webpage;
@@ -41,6 +43,7 @@ private:
     QLineEdit *addressBar;
     QWidget *centralLayout;
     QScrollArea *scrollArea;
+    QLabel *documentDisplay;
 };
 
 #endif // MAINWINDOW_H
