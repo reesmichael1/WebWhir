@@ -9,15 +9,16 @@
 #include "parser/htmlreader.h"
 #include "painter/paintarea.h"
 
+#define WINDOW_HEIGHT 480
+
 MainWindow::MainWindow()
 {
-
     reader = new HTMLReader;
     webpage = new Document;
 
     //Draw main window for WebWhirr.
-    setMinimumHeight(480);
-    setMinimumWidth(640);
+    setMinimumHeight(WINDOW_HEIGHT);
+    setMaximumHeight(WINDOW_HEIGHT);
 
     positionSet = false;
 
@@ -150,6 +151,7 @@ bool MainWindow::repaintDocument()
     documentDisplay->setPixmap(paintedDocument);
     scrollArea->setMinimumWidth(documentDisplay->width() + 20);
     this->setMinimumWidth(scrollArea->width() + 20);
+    this->setMaximumWidth(scrollArea->width() + 20);
 
     return true;
 }
