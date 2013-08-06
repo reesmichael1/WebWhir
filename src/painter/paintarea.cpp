@@ -3,7 +3,7 @@
 #define STARTING_X 10
 
 //Padding from the right side of the window
-#define RIGHT_SIDE_PADDING 50
+#define RIGHT_SIDE_PADDING 10
 #define STARTING_Y 10
 
 PaintArea::PaintArea(QWidget *parent) :
@@ -53,7 +53,7 @@ void PaintArea::drawDocument(QPainter *qPainter,
 
     for (; i != paintNodes->end(); i++)
     {
-        paintCurrentNode(*i, qPainter, paintNodes);
+        paintCurrentNode(*i, qPainter, paintNodes, i);
     }
 }
 
@@ -69,8 +69,10 @@ void PaintArea::insertLineBreak()
 
 void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
                                  QPainter *qPainter,
-                                 std::vector<PaintNode*> *paintNodes)
-{
+                                 std::vector<PaintNode*> *paintNodes,
+                                 std::vector<PaintNode*>::iterator
+                                 currentLocation)
+{    
     if (currentPaintNode->getTypeOfPaintNode() == "char")
     {
         //Draw the text contained within each paragraph node. New lines are
@@ -96,22 +98,22 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
 
         QFontMetrics fm(currentFont);
 
+        //Wrap text by entire words, not character-by-character.
         if (!nextWordChecked)
         {
-            if (totalWidth >= this->width() - 200)
+            int currentLineWidth = totalWidth;
+            currentLineWidth += getNextWordWidth(paintNodes, qPainter,
+                                                 currentLocation);
+
+            if (currentLineWidth + RIGHT_SIDE_PADDING + STARTING_X
+                    >= this->width())
             {
-                int currentLineWidth = totalWidth;
-                currentLineWidth += getNextWordWidth(paintNodes, qPainter);
-
-                if (currentLineWidth >= this->width() - RIGHT_SIDE_PADDING)
-                {
-                    totalWidth = 0;
-                    currentY += fm.height();
-                    currentX = STARTING_X;
-                }
-
-                nextWordChecked = true;
+                totalWidth = 0;
+                currentY += fm.height();
+                currentX = STARTING_X;
             }
+
+            nextWordChecked = true;
         }
 
         QRect box(QPoint(currentX, currentY), QSize(fm.width(*character),
@@ -170,12 +172,15 @@ void PaintArea::updateCurrentPosition()
     }
 }
 
-int PaintArea::getNextWordWidth(std::vector<PaintNode*> *paintNodes, QPainter *qPainter)
+int PaintArea::getNextWordWidth(std::vector<PaintNode*> *paintNodes,
+                                QPainter *qPainter,
+                                std::vector<PaintNode*>::iterator
+                                currentLocation)
 {
     int wordWidth = 0;
     bool wordEndReached = false;
 
-    std::vector<PaintNode*>::iterator currentNode = paintNodes->begin();
+    std::vector<PaintNode*>::iterator currentNode = currentLocation;
 
     for (; !wordEndReached; currentNode++)
     {
@@ -199,7 +204,7 @@ int PaintArea::getNextWordWidth(std::vector<PaintNode*> *paintNodes, QPainter *q
 
         else if ((*currentNode)->getTypeOfPaintNode() == "node")
         {
-            wordWidth += getNextWordWidth(paintNodes, qPainter);
+            wordWidth += getNextWordWidth(paintNodes, qPainter, currentNode);
         }
     }
 
