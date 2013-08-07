@@ -188,12 +188,12 @@ int PaintArea::getNextWordWidth(std::vector<PaintNode*> *paintNodes,
 
     for (; !wordEndReached; currentNode++)
     {
-        if (currentNode == paintNodes->end())
+        if (currentNode == paintNodes->end() - 1)
         {
             wordEndReached = true;
         }
 
-        else if ((*currentNode)->getTypeOfPaintNode() == "char")
+        if ((*currentNode)->getTypeOfPaintNode() == "char")
         {
             if (!isspace(*(*currentNode)->getCharacter()))
             {
