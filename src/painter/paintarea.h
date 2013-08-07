@@ -13,7 +13,8 @@ class PaintArea : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PaintArea(QWidget *parent = 0);
+    PaintArea(QWidget *parent = 0);
+    ~PaintArea();
     void drawDocument(QPainter *qPainter);
     void drawDocument(QPainter *qPainter, std::vector<PaintNode*> *paintNodes);
     void paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainter,

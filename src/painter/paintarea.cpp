@@ -21,6 +21,12 @@ PaintArea::PaintArea(QWidget *parent) :
     nextWordChecked = false;
 }
 
+PaintArea::~PaintArea()
+{
+    delete webpage;
+    delete currentCharacter;
+}
+
 void PaintArea::setDocument(Document *documentToSet)
 {
     webpage = documentToSet;

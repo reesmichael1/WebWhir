@@ -23,6 +23,14 @@ PaintNode::PaintNode(RenderNode *nodeToAdd)
     *typeOfNode = "node";
 }
 
+PaintNode::~PaintNode()
+{
+    //node is freed during the destruction of the webpage, which
+    //deletes all of the render nodes created during tokenization.
+    delete character;
+    delete typeOfNode;
+}
+
 char *PaintNode::getCharacter()
 {
     return character;
@@ -36,11 +44,6 @@ RenderNode* PaintNode::returnNode()
 std::string PaintNode::getTypeOfPaintNode()
 {
     return *typeOfNode;
-}
-
-PaintNode::~PaintNode()
-{
-    delete character;
 }
 
 void PaintNode::setWeight(QFont::Weight weight)
