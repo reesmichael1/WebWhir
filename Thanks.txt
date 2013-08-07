@@ -4,3 +4,8 @@ Torrey Davis
 Henry Kelley
 Ethan Burgess
 Sarah Petramala
+Kiel Heerding
+
+WebWhirr uses the following libraries:
+
+Qt 5.1
