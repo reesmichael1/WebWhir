@@ -54,8 +54,6 @@ void RenderNode::deleteChildNodes()
         delete childNodes->back();
         childNodes->pop_back();
     }
-
-    delete childNodes;
 }
 
 void RenderNode::deletePaintNodes()
@@ -65,8 +63,6 @@ void RenderNode::deletePaintNodes()
         delete paintNodes->back();
         paintNodes->pop_back();
     }
-
-    delete paintNodes;
 }
 
 std::vector<RenderNode*>* RenderNode::getChildNodes()

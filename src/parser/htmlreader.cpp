@@ -20,8 +20,6 @@ HTMLReader::HTMLReader()
 HTMLReader::~HTMLReader()
 {
     delete webpage;
-    delete currentNode;
-    delete currentParentNode;
 }
 
 Document *HTMLReader::parseDocumentText(std::string documentText)
