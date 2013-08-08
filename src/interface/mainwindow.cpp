@@ -55,6 +55,13 @@ MainWindow::MainWindow()
 
 }
 
+MainWindow::~MainWindow()
+{
+    //Everything else is cleared elsewhere
+    //or handled by Qt's memory management.
+    delete reader;
+}
+
 void MainWindow::createActions()
 {
     openAct = new QAction(tr("&Open"), this);

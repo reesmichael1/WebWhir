@@ -13,12 +13,15 @@
 HTMLReader::HTMLReader()
 {
     currentNode = new RenderNode;
+    currentNode = NULL;
     currentParentNode = new RenderNode;
 }
 
 HTMLReader::~HTMLReader()
 {
     delete webpage;
+    delete currentNode;
+    delete currentParentNode;
 }
 
 Document *HTMLReader::parseDocumentText(std::string documentText)
@@ -81,9 +84,12 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
 
             //Define newly created node as child of current node
             //if the current node hasn't been closed.
-            if (currentNode->getIsOpen())
+            if (currentNode != NULL)
             {
-                currentParentNode = currentNode;
+                if (currentNode->getIsOpen())
+                {
+                    currentParentNode = currentNode;
+                }
             }
 
             currentNode = createNode(tagNameString, currentState);

@@ -23,6 +23,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
+    ~MainWindow();
     bool setFilepath(std::string filepath);
     void createActions();
     void createMenus();
