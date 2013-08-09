@@ -14,6 +14,8 @@ class RenderNode
 public:
     RenderNode();
     virtual ~RenderNode();
+    virtual std::string getSourcePath();
+    virtual std::string getAltText();
     void setNeedsPainting(bool valueToSet);
     void setTypeOfRenderNode(std::string typeToSet);
     std::string getTypeOfRenderNode();

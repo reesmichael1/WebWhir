@@ -9,6 +9,7 @@
 #include "nodes/headnode.h"
 #include "nodes/bodynode.h"
 #include "nodes/bnode.h"
+#include "nodes/imagenode.h"
 
 class HTMLReader
 {
@@ -55,9 +56,11 @@ public:
     std::string returnTagName(std::string::iterator &i,
                               parseState &currentState);
     RenderNode* createNode(std::string nodeName,
-                           parseState &currentState);
+                           parseState &currentState, std::string::iterator &i);
     ParagraphNode* createParagraphNode(parseState &currentState);
     BNode* createBNode(parseState &currentState);
+    ImageNode* createImageNode(parseState &currentState,
+                               std::string::iterator &i);
 
 private:
     Document *webpage;

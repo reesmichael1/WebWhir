@@ -8,6 +8,7 @@
 #include "elements/HTMLBodyElement.h"
 #include "elements/HTMLBElement.h"
 #include "elements/HTMLParagraphElement.h"
+#include "elements/HTMLImgElement.h"
 #include "painter/paintnode.h"
 
 HTMLReader::HTMLReader()
@@ -68,18 +69,6 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
             //Create a new node.
             std::string tagNameString = returnTagName(i, currentState);
 
-            if (currentState == endTagName)
-            {
-                while (currentState == endTagName)
-                {
-                    i++;
-                    if (*i == '>')
-                    {
-                        currentState = endTagOpen;
-                    }
-                }
-            }
-
             //Define newly created node as child of current node
             //if the current node hasn't been closed.
             if (currentNode != NULL)
@@ -90,7 +79,7 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
                 }
             }
 
-            currentNode = createNode(tagNameString, currentState);
+            currentNode = createNode(tagNameString, currentState, i);
 
             //Add newly created node to tree of nodes.
             webpage->constructTree(currentNode, currentParentNode);
@@ -264,7 +253,7 @@ std::string HTMLReader::returnTagName(std::string::iterator &i,
 }
 
 RenderNode* HTMLReader::createNode(std::string nodeName,
-                                   parseState &currentState)
+                                   parseState &currentState, std::string::iterator &i)
 {
     RenderNode *node = new RenderNode;
     if (nodeName == "html")
@@ -278,6 +267,10 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
     else if (nodeName == "b")
     {
         node = createBNode(currentState);
+    }
+    else if (nodeName == "img")
+    {
+        node = createImageNode(currentState, i);
     }
     else if (nodeName == "head")
     {
@@ -338,6 +331,82 @@ BNode* HTMLReader::createBNode(parseState &currentState)
     bNode->setIsOpen(true);
 
     return bNode;
+}
+
+ImageNode* HTMLReader::createImageNode(parseState &currentState,
+                                       std::string::iterator &i)
+{
+    //Read through the tag and collect the necessary information to create
+    //the node.
+    std::string imageAttributes;
+    HTMLImgElement imgElement;
+
+    while (currentState == endTagName)
+    {
+        if (i[0] == '>')
+        {
+            currentState = endTagOpen;
+        }
+
+        else
+        {
+            while (*i != '=')
+            {
+                imageAttributes.push_back(i[0]);
+            }
+
+            if (*i == '=')
+            {
+
+                if (imageAttributes == "src")
+                {
+                    while (*i != '\"')
+                    {
+                        i++;
+                    }
+
+                    std::string sourcePath;
+
+                    while (*i != '\"')
+                    {
+                        sourcePath.push_back(i[0]);
+                        imageAttributes.push_back(i[0]);
+                        i++;
+                    }
+
+                    imgElement.setSourcePath(sourcePath);
+                }
+
+                else if (imageAttributes == "alt")
+                {
+                    while (*i != '\"')
+                    {
+                        i++;
+                    }
+
+                    std::string altText;
+
+                    while (*i != '\"')
+                    {
+                        altText.push_back(i[0]);
+                        imageAttributes.push_back(i[0]);
+                        i++;
+                    }
+
+                    imgElement.setAltText(altText);
+
+                }
+            }
+        }
+
+        i++;
+    }
+
+    ImageNode *image = new ImageNode;
+    image = imgElement.returnNode();
+    image->setIsOpen(true);
+
+    return image;
 }
 
 HeadNode* HTMLReader::createHeadNode()

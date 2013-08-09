@@ -14,13 +14,22 @@ PaintNode::PaintNode(const char c)
 
 PaintNode::PaintNode(RenderNode *nodeToAdd)
 {
-    node = new RenderNode;
-    typeOfNode = new std::string;
-    node = nodeToAdd;
+    if (nodeToAdd->getTypeOfRenderNode() == "img")
+    {
+        sourcePath = nodeToAdd->getSourcePath();
+        *typeOfNode = "image";
+    }
 
-    character = NULL;
+    else
+    {
+        node = new RenderNode;
+        typeOfNode = new std::string;
+        node = nodeToAdd;
 
-    *typeOfNode = "node";
+        character = NULL;
+
+        *typeOfNode = "node";
+    }
 }
 
 PaintNode::~PaintNode()
