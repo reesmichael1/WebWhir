@@ -343,6 +343,7 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
 
     while (currentState == endTagName)
     {
+        imageAttributes = "";
         if (i[0] == '>')
         {
             currentState = endTagOpen;
@@ -350,9 +351,15 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
 
         else
         {
+            while (isspace(*i))
+            {
+                i++;
+            }
+
             while (*i != '=')
             {
                 imageAttributes.push_back(i[0]);
+                i++;
             }
 
             if (*i == '=')
@@ -365,12 +372,13 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
                         i++;
                     }
 
+                    i++;
+
                     std::string sourcePath;
 
                     while (*i != '\"')
                     {
                         sourcePath.push_back(i[0]);
-                        imageAttributes.push_back(i[0]);
                         i++;
                     }
 
@@ -384,12 +392,13 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
                         i++;
                     }
 
+                    i++;
+
                     std::string altText;
 
                     while (*i != '\"')
                     {
                         altText.push_back(i[0]);
-                        imageAttributes.push_back(i[0]);
                         i++;
                     }
 

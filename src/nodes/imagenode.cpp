@@ -4,24 +4,27 @@ ImageNode::ImageNode()
 {
     setNeedsPainting(true);
     setTypeOfRenderNode("image");
+
+    sourcePath = new std::string;
+    altText = new std::string;
 }
 
 std::string ImageNode::getSoucePath()
 {
-    return sourcePath;
+    return *sourcePath;
 }
 
 void ImageNode::setSourcePath(std::string path)
 {
-    sourcePath = path;
+    *sourcePath = path;
 }
 
 std::string ImageNode::getAltText()
 {
-    return altText;
+    return *altText;
 }
 
 void ImageNode::setAltText(std::string text)
 {
-    altText = text;
+    *altText = text;
 }

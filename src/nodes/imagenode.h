@@ -16,8 +16,8 @@ public:
     void setAltText(std::string text);
 
 private:
-    std::string sourcePath;
-    std::string altText;
+    std::string *sourcePath;
+    std::string *altText;
 };
 
 #endif // IMAGENODE_H
