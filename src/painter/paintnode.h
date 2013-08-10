@@ -18,6 +18,8 @@ public:
     void setWeight(QFont::Weight weight = QFont::Normal);
     QFont::Weight getWeight();
     char *getCharacter();
+    std::string getSourcePath();
+    std::string getAltText();
     RenderNode *returnNode();
     std::string getTypeOfPaintNode();
 

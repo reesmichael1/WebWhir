@@ -9,6 +9,12 @@ ImageNode::ImageNode()
     altText = new std::string;
 }
 
+ImageNode::~ImageNode()
+{
+    delete sourcePath;
+    delete altText;
+}
+
 std::string* ImageNode::getSourcePath()
 {
     return sourcePath;

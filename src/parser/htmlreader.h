@@ -56,17 +56,17 @@ public:
     std::string returnTagName(std::string::iterator &i,
                               parseState &currentState);
     RenderNode* createNode(std::string nodeName,
-                           parseState &currentState, std::string::iterator &i);
+                           parseState &currentState, std::string::iterator &i, std::string HTMLFilepath);
     ParagraphNode* createParagraphNode(parseState &currentState);
     BNode* createBNode(parseState &currentState);
     ImageNode *createImageNode(parseState &currentState,
-                               std::string::iterator &i);
+                               std::string::iterator &i, std::string HTMLFilepath);
 
 private:
     Document *webpage;
     RenderNode *currentParentNode;
     RenderNode *currentNode;
-    Document* parseDocumentText(std::string documentText);
+    Document* parseDocumentText(std::string documentText, std::string HTMLFilepath);
     bool parentNodeClosed(RenderNode *node, std::string typeOfNode);
 };
 

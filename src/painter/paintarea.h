@@ -1,6 +1,8 @@
 #ifndef PAINTAREA_H
 #define PAINTAREA_H
 
+#include <string>
+
 #include "document.h"
 
 #include <QWidget>
@@ -21,6 +23,7 @@ public:
                           std::vector<PaintNode*> *paintNodes,
                           std::vector<PaintNode*>::iterator currentLocation);
     void setDocument(Document *documentToSet);
+    void setCurrentHTMLFilepath(std::string filepath);
     void insertLineBreak();
     void updateCurrentPosition();
 
@@ -38,6 +41,7 @@ private:
     int totalWidth;
     bool positionSet;
     bool nextWordChecked;
+    std::string currentHTMLFilepath;
     QString *currentCharacter;
     QFont currentFont;
     std::vector<PaintNode*> *paintNodesVector;

@@ -23,7 +23,7 @@ HTMLReader::~HTMLReader()
     delete webpage;
 }
 
-Document *HTMLReader::parseDocumentText(std::string documentText)
+Document *HTMLReader::parseDocumentText(std::string documentText, std::string HTMLFilepath)
 {
 
     webpage = new Document;
@@ -79,7 +79,7 @@ Document *HTMLReader::parseDocumentText(std::string documentText)
                 }
             }
 
-            currentNode = createNode(tagNameString, currentState, i);
+            currentNode = createNode(tagNameString, currentState, i, HTMLFilepath);
 
             //Add newly created node to tree of nodes.
             webpage->constructTree(currentNode, currentParentNode);
@@ -215,7 +215,7 @@ Document* HTMLReader::prepareDocument(std::string HTMLFilepath)
 
         //Create a Document by parsing through
         //the string created from the HTML file.
-        Document *document = parseDocumentText(documentText);
+        Document *document = parseDocumentText(documentText, HTMLFilepath);
 
         return document;
     }
@@ -253,7 +253,9 @@ std::string HTMLReader::returnTagName(std::string::iterator &i,
 }
 
 RenderNode* HTMLReader::createNode(std::string nodeName,
-                                   parseState &currentState, std::string::iterator &i)
+                                   parseState &currentState,
+                                   std::string::iterator &i,
+                                   std::string HTMLFilepath)
 {
     RenderNode *node = new RenderNode;
     if (nodeName == "html")
@@ -270,7 +272,7 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
     }
     else if (nodeName == "img")
     {
-        node = createImageNode(currentState, i);
+        node = createImageNode(currentState, i, HTMLFilepath);
     }
     else if (nodeName == "head")
     {
@@ -334,7 +336,8 @@ BNode* HTMLReader::createBNode(parseState &currentState)
 }
 
 ImageNode* HTMLReader::createImageNode(parseState &currentState,
-                                       std::string::iterator &i)
+                                       std::string::iterator &i,
+                                       std::string HTMLFilepath)
 {
     //Read through the tag and collect the necessary information to create
     //the node.
@@ -375,6 +378,15 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
                     i++;
 
                     std::string sourcePath;
+                    sourcePath = HTMLFilepath;
+
+                    //Nothing would please me more than to use C++ 11 features
+                    //like back() and pop_back() here. Hopefully, I can make
+                    //this transition in time.
+                    while (sourcePath.at(sourcePath.length() - 1) != '/')
+                    {
+                        sourcePath = sourcePath.substr(0, sourcePath.length() - 1);
+                    }
 
                     while (*i != '\"')
                     {

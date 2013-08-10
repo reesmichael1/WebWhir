@@ -42,6 +42,7 @@ std::string* RenderNode::getSourcePath()
 
 std::string* RenderNode::getAltText()
 {
+    return NULL;
 }
 
 RenderNode* RenderNode::getParentNode()

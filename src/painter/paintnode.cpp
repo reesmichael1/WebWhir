@@ -56,6 +56,16 @@ char *PaintNode::getCharacter()
     return character;
 }
 
+std::string PaintNode::getAltText()
+{
+    return *altText;
+}
+
+std::string PaintNode::getSourcePath()
+{
+    return *sourcePath;
+}
+
 RenderNode* PaintNode::returnNode()
 {
     return node;

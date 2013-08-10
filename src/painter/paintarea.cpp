@@ -34,6 +34,11 @@ void PaintArea::setDocument(Document *documentToSet)
     webpage = documentToSet;
 }
 
+void PaintArea::setCurrentHTMLFilepath(std::string filepath)
+{
+    currentHTMLFilepath = filepath;
+}
+
 void PaintArea::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -141,6 +146,15 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
     else if (currentPaintNode->getTypeOfPaintNode() == "image")
     {
         //Draw the image.
+
+        //std::string currentHTMLFilepath;
+
+
+        QImage image(QString::fromStdString(currentPaintNode->getSourcePath()));
+        qPainter->drawImage(currentX, currentY, image);
+
+        currentX = STARTING_X;
+        currentY += image.height() + 10;
     }
 
 

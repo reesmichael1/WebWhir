@@ -122,6 +122,7 @@ bool MainWindow::setFilepath()
         }
 
         addressBar->setText(QString::fromStdString(filepath));
+        paintArea->setCurrentHTMLFilepath(addressBar->text().toStdString());
 
 
         //Construct a Document (contains node tree) from parsing document
