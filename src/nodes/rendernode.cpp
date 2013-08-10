@@ -33,14 +33,15 @@ void RenderNode::setParentNode(RenderNode *nodeToSet)
 }
 
 
-std::string RenderNode::getSourcePath()
+std::string* RenderNode::getSourcePath()
 {
-    return NULL;
+    std::string *hello = new std::string;
+    *hello = "Hello world.";
+    return hello;
 }
 
-std::string RenderNode::getAltText()
+std::string* RenderNode::getAltText()
 {
-    return NULL;
 }
 
 RenderNode* RenderNode::getParentNode()

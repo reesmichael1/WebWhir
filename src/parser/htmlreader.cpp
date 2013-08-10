@@ -411,9 +411,12 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
         i++;
     }
 
+    //Subtract one to correct the overreach at the end of the while loop.
+    i--;
+
     ImageNode *image = new ImageNode;
     image = imgElement.returnNode();
-    image->setIsOpen(true);
+    image->setIsOpen(false);
 
     return image;
 }

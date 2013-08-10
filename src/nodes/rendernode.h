@@ -14,8 +14,8 @@ class RenderNode
 public:
     RenderNode();
     virtual ~RenderNode();
-    virtual std::string getSourcePath();
-    virtual std::string getAltText();
+    virtual std::string* getSourcePath();
+    virtual std::string* getAltText();
     void setNeedsPainting(bool valueToSet);
     void setTypeOfRenderNode(std::string typeToSet);
     std::string getTypeOfRenderNode();
@@ -37,7 +37,6 @@ protected:
     std::vector<RenderNode*> *childNodes;
     std::vector<PaintNode*> *paintNodes;
     std::string typeOfNode;
-
 };
 
 #endif // RENDERNODE_H

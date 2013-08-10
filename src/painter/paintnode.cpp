@@ -6,6 +6,8 @@ PaintNode::PaintNode(const char c)
     typeOfNode = new std::string;
     *character = c;
     node = NULL;
+    sourcePath = NULL;
+    altText = NULL;
 
     characterWeight = QFont::Normal;
 
@@ -14,19 +16,28 @@ PaintNode::PaintNode(const char c)
 
 PaintNode::PaintNode(RenderNode *nodeToAdd)
 {
-    if (nodeToAdd->getTypeOfRenderNode() == "img")
+    typeOfNode = new std::string;
+
+    if (nodeToAdd->getTypeOfRenderNode() == "image")
     {
+        character = NULL;
+        node = NULL;
+        sourcePath = new std::string;
+        altText = new std::string;
+
         sourcePath = nodeToAdd->getSourcePath();
+        altText = nodeToAdd->getAltText();
         *typeOfNode = "image";
     }
 
     else
     {
         node = new RenderNode;
-        typeOfNode = new std::string;
         node = nodeToAdd;
 
         character = NULL;
+        sourcePath = NULL;
+        altText = NULL;
 
         *typeOfNode = "node";
     }

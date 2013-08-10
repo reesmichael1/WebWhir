@@ -59,7 +59,7 @@ public:
                            parseState &currentState, std::string::iterator &i);
     ParagraphNode* createParagraphNode(parseState &currentState);
     BNode* createBNode(parseState &currentState);
-    ImageNode* createImageNode(parseState &currentState,
+    ImageNode *createImageNode(parseState &currentState,
                                std::string::iterator &i);
 
 private:

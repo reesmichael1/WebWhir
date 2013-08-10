@@ -9,9 +9,9 @@ ImageNode::ImageNode()
     altText = new std::string;
 }
 
-std::string ImageNode::getSoucePath()
+std::string* ImageNode::getSourcePath()
 {
-    return *sourcePath;
+    return sourcePath;
 }
 
 void ImageNode::setSourcePath(std::string path)
@@ -19,9 +19,9 @@ void ImageNode::setSourcePath(std::string path)
     *sourcePath = path;
 }
 
-std::string ImageNode::getAltText()
+std::string* ImageNode::getAltText()
 {
-    return *altText;
+    return altText;
 }
 
 void ImageNode::setAltText(std::string text)

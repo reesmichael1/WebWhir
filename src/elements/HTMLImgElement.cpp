@@ -19,5 +19,7 @@ ImageNode *HTMLImgElement::returnNode()
     node = new ImageNode;
     node->setAltText(altText);
     node->setSourcePath(sourcePath);
+
+    node->setTypeOfRenderNode("image");
     return node;
 }

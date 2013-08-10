@@ -13,7 +13,6 @@ class PaintNode
 {
 public:
     PaintNode(const char c);
-    PaintNode(RenderNode *nodeToAdd, std::string nodeType);
     PaintNode(RenderNode *nodeToAdd);
     ~PaintNode();
     void setWeight(QFont::Weight weight = QFont::Normal);
@@ -27,7 +26,8 @@ private:
     std::string *typeOfNode;
     char *character;
     RenderNode *node;
-    std::string sourcePath;
+    std::string *sourcePath;
+    std::string *altText;
 };
 
 #endif // PAINTNODE_H

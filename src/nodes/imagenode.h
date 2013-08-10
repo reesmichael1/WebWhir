@@ -10,9 +10,9 @@ class ImageNode : public RenderNode
 {
 public:
     ImageNode();
-    virtual std::string getSoucePath();
+    virtual std::string* getSourcePath();
     void setSourcePath(std::string path);
-    virtual std::string getAltText();
+    virtual std::string* getAltText();
     void setAltText(std::string text);
 
 private:

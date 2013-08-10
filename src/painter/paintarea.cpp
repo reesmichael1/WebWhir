@@ -1,5 +1,7 @@
 #include "paintarea.h"
 
+#include <QMessageBox>
+
 #define STARTING_X 10
 
 //Padding from the right side of the window
@@ -136,8 +138,15 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
         updateCurrentPosition();
     }
 
+    else if (currentPaintNode->getTypeOfPaintNode() == "image")
+    {
+        //Draw the image.
+    }
+
+
     else if (currentPaintNode->getTypeOfPaintNode() == "node")
     {
+
         //Call the function again on each of the PaintNode's child paint nodes.
         //This ensures that all of the child nodes of the overall parent node
         //are drawn.
