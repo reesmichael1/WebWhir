@@ -34,11 +34,6 @@ void PaintArea::setDocument(Document *documentToSet)
     webpage = documentToSet;
 }
 
-void PaintArea::setCurrentHTMLFilepath(std::string filepath)
-{
-    currentHTMLFilepath = filepath;
-}
-
 void PaintArea::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
