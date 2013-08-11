@@ -80,7 +80,7 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
                                  std::vector<PaintNode*> *paintNodes,
                                  std::vector<PaintNode*>::iterator
                                  currentLocation)
-{    
+{
     if (currentPaintNode->getTypeOfPaintNode() == "char")
     {
         //Draw the text contained within each paragraph node. New lines are
@@ -141,15 +141,32 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
     else if (currentPaintNode->getTypeOfPaintNode() == "image")
     {
         //Draw the image.
-
-        //std::string currentHTMLFilepath;
-
-
         QImage image(QString::fromStdString(currentPaintNode->getSourcePath()));
+        if (image.width() + totalWidth >= this->width() + RIGHT_SIDE_PADDING)
+        {
+            totalWidth = 0;
+            currentX = 0;
+
+            QFontMetrics fm(currentFont);
+            currentY += fm.height();
+        }
         qPainter->drawImage(currentX, currentY, image);
 
-        currentX = STARTING_X;
+        currentX += image.width() + 10;
+        totalWidth += image.width() + 10;
+        if (currentX >= this->width() - RIGHT_SIDE_PADDING)
+        {
+            currentX = STARTING_X;
+        }
         currentY += image.height() + 10;
+        nextWordChecked = false;
+
+        currentLocation++;
+        if ((*currentLocation)->getTypeOfPaintNode() == "node")
+        {
+            currentX = STARTING_X;
+            totalWidth = 0;
+        }
     }
 
 

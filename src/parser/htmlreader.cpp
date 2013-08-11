@@ -84,6 +84,11 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
             //Add newly created node to tree of nodes.
             webpage->constructTree(currentNode, currentParentNode);
 
+            if (!currentNode->getIsOpen())
+            {
+                currentNode = currentParentNode;
+            }
+
         }
         else if (currentState == endTagName)
         {
@@ -341,6 +346,7 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
 {
     //Read through the tag and collect the necessary information to create
     //the node.
+
     std::string imageAttributes;
     HTMLImgElement imgElement;
 
@@ -425,6 +431,9 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
 
     //Subtract one to correct the overreach at the end of the while loop.
     i--;
+
+    //Reset currentState since <img> isn't explicitly closed.
+    currentState = text;
 
     ImageNode *image = new ImageNode;
     image = imgElement.returnNode();
