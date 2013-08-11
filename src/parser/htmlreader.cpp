@@ -429,11 +429,14 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
         i++;
     }
 
+    //Reset to text if the <img> is inline.
+    if (isalpha(*i) || isspace(*i))
+    {
+        currentState = text;
+    }
+
     //Subtract one to correct the overreach at the end of the while loop.
     i--;
-
-    //Reset currentState since <img> isn't explicitly closed.
-    currentState = text;
 
     ImageNode *image = new ImageNode;
     image = imgElement.returnNode();
