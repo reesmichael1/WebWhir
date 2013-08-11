@@ -17,9 +17,6 @@ MainWindow::MainWindow()
     webpage = new Document;
 
     //Draw main window for WebWhirr.
-    setMinimumHeight(WINDOW_HEIGHT);
-    setMaximumHeight(WINDOW_HEIGHT);
-
     positionSet = false;
 
     QLabel *addressBarLabel = new QLabel(tr("Current Document:"));
