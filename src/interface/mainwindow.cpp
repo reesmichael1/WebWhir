@@ -9,8 +9,6 @@
 #include "parser/htmlreader.h"
 #include "painter/paintarea.h"
 
-#define WINDOW_HEIGHT 480
-
 MainWindow::MainWindow()
 {
     reader = new HTMLReader;
