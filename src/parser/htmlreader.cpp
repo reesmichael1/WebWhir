@@ -9,6 +9,7 @@
 #include "elements/HTMLBElement.h"
 #include "elements/HTMLParagraphElement.h"
 #include "elements/HTMLImgElement.h"
+#include "elements/HTMLHrElement.h"
 #include "painter/paintnode.h"
 
 HTMLReader::HTMLReader()
@@ -279,6 +280,10 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
     {
         node = createImageNode(currentState, i, HTMLFilepath);
     }
+    else if (nodeName == "hr")
+    {
+        node = createHrNode();
+    }
     else if (nodeName == "head")
     {
         node = createHeadNode();
@@ -443,6 +448,15 @@ ImageNode* HTMLReader::createImageNode(parseState &currentState,
     image->setIsOpen(false);
 
     return image;
+}
+
+HorizontalRuleNode* HTMLReader::createHrNode()
+{
+    HTMLHrElement hrElement;
+    HorizontalRuleNode *hrNode = new HorizontalRuleNode;
+    hrNode = hrElement.returnNode();
+
+    return hrNode;
 }
 
 HeadNode* HTMLReader::createHeadNode()
