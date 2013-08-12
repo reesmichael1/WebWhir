@@ -30,6 +30,16 @@ PaintNode::PaintNode(RenderNode *nodeToAdd)
         *typeOfNode = "image";
     }
 
+    else if (nodeToAdd->getTypeOfRenderNode() == "hr")
+    {
+        character = NULL;
+        node = NULL;
+        sourcePath = NULL;
+        altText = NULL;
+
+        *typeOfNode = "hr";
+    }
+
     else
     {
         node = new RenderNode;

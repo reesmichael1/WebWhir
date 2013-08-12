@@ -169,6 +169,21 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
         }
     }
 
+    else if (currentPaintNode->getTypeOfPaintNode() == "hr")
+    {
+        QFontMetrics fm(currentFont);
+        if (currentX != STARTING_X)
+        {
+            currentX = STARTING_X;
+            currentY += fm.height();
+        }
+
+        qPainter->drawLine(QPoint(currentX, currentY), QPoint(this->width() - RIGHT_SIDE_PADDING, currentY));
+
+        currentY += fm.height();
+        totalWidth = 0;
+    }
+
 
     else if (currentPaintNode->getTypeOfPaintNode() == "node")
     {
