@@ -59,7 +59,10 @@ MainWindow::~MainWindow()
 {
     //Everything else is cleared elsewhere
     //or handled by Qt's memory management.
-    delete reader;
+    if (webpage->getFirstNode() != NULL)
+    {
+        delete reader;
+    }
 }
 
 void MainWindow::createActions()
