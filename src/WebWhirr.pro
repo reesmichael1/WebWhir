@@ -27,7 +27,9 @@ SOURCES += main.cpp \
     painter/paintnode.cpp \
     painter/paintarea.cpp \
     elements/HTMLImgElement.cpp \
-    nodes/imagenode.cpp
+    nodes/imagenode.cpp \
+    elements/HTMLHrElement.cpp \
+    nodes/horizontalrulenode.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -46,4 +48,6 @@ HEADERS += \
     painter/paintnode.h \
     painter/paintarea.h \
     elements/HTMLImgElement.h \
-    nodes/imagenode.h
+    nodes/imagenode.h \
+    elements/HTMLHrElement.h \
+    nodes/horizontalrulenode.h
