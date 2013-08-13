@@ -455,6 +455,7 @@ HorizontalRuleNode* HTMLReader::createHrNode()
     HTMLHrElement hrElement;
     HorizontalRuleNode *hrNode = new HorizontalRuleNode;
     hrNode = hrElement.returnNode();
+    hrNode->setIsOpen(false);
 
     return hrNode;
 }
