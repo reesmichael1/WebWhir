@@ -27,6 +27,7 @@ public:
     bool setFilepath(std::string filepath);
     void createActions();
     void createMenus();
+    void setTitle();
     Document* getWebpage();
 
 public slots:

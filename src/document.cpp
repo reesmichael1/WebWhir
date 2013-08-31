@@ -23,6 +23,16 @@ RenderNode* Document::getFirstNode()
     return firstNode;
 }
 
+std::string Document::getDocumentTitle()
+{
+    return documentTitle;
+}
+
+void Document::setDocumentTitle(std::string titleToSet)
+{
+    documentTitle = titleToSet;
+}
+
 void Document::constructTree(RenderNode *childNode, RenderNode *parentNode)
 {   
     //This is here to prevent a crash if parentNode is passed as null.

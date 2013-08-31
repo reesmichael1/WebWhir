@@ -87,6 +87,8 @@ bool MainWindow::setFilepath(std::string filepath)
         webpage = reader->prepareDocument(filepath);
         addressBar->setText(QString::fromStdString(filepath));
 
+        setTitle();
+
         paintArea->setDocument(webpage);
     }
 
@@ -124,10 +126,26 @@ bool MainWindow::setFilepath()
         //Construct a Document (contains node tree) from parsing document
         //selected in "Open HTML Document" dialog.
         webpage = reader->prepareDocument(filepath);
+        setTitle();
 
         paintArea->setDocument(webpage);
 
         return repaintDocument();
+    }
+}
+
+void MainWindow::setTitle()
+{
+    if (webpage->getDocumentTitle() != "")
+    {
+        std::string titleString = "WebWhirr 0.2.0 Alpha -- ";
+        titleString += webpage->getDocumentTitle();
+        this->setWindowTitle(QString::fromStdString(titleString));
+    }
+
+    else
+    {
+        this->setWindowTitle("WebWhirr 0.2.0 Alpha");
     }
 }
 

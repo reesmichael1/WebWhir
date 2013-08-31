@@ -70,24 +70,28 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
             //Create a new node.
             std::string tagNameString = returnTagName(i, currentState);
 
-            //Define newly created node as child of current node
-            //if the current node hasn't been closed.
-            if (currentNode != NULL)
+            if (tagNameString != "title")
             {
-                if (currentNode->getIsOpen())
+
+                //Define newly created node as child of current node
+                //if the current node hasn't been closed.
+                if (currentNode != NULL)
                 {
-                    currentParentNode = currentNode;
+                    if (currentNode->getIsOpen())
+                    {
+                        currentParentNode = currentNode;
+                    }
                 }
-            }
 
-            currentNode = createNode(tagNameString, currentState, i, HTMLFilepath);
+                currentNode = createNode(tagNameString, currentState, i, HTMLFilepath);
 
-            //Add newly created node to tree of nodes.
-            webpage->constructTree(currentNode, currentParentNode);
+                //Add newly created node to tree of nodes.
+                webpage->constructTree(currentNode, currentParentNode);
 
-            if (!currentNode->getIsOpen())
-            {
-                currentNode = currentParentNode;
+                if (!currentNode->getIsOpen())
+                {
+                    currentNode = currentParentNode;
+                }
             }
 
         }
@@ -253,6 +257,36 @@ std::string HTMLReader::returnTagName(std::string::iterator &i,
         {
             currentState = endTagName;
         }
+    }
+
+    if (tagNameString == "title")
+    {
+        std::string titleString;
+
+        while (currentState != tagOpen)
+        {
+            i++;
+            if (*i == '<')
+            {
+                currentState = tagOpen;
+            }
+
+            else
+            {
+                titleString.push_back(*i);
+            }
+        }
+
+        while (currentState == tagOpen)
+        {
+            i++;
+            if (*i == '>')
+            {
+                currentState = endTagOpen;
+            }
+        }
+
+        webpage->setDocumentTitle(titleString);
     }
 
     return tagNameString;
