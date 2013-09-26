@@ -29,7 +29,11 @@ SOURCES += main.cpp \
     elements/HTMLImgElement.cpp \
     nodes/imagenode.cpp \
     elements/HTMLHrElement.cpp \
-    nodes/horizontalrulenode.cpp
+    nodes/horizontalrulenode.cpp \
+    nodes/listnode.cpp \
+    elements/HTMLLiElement.cpp \
+    nodes/ulnode.cpp \
+    elements/HTMLUlElement.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -50,4 +54,8 @@ HEADERS += \
     elements/HTMLImgElement.h \
     nodes/imagenode.h \
     elements/HTMLHrElement.h \
-    nodes/horizontalrulenode.h
+    nodes/horizontalrulenode.h \
+    nodes/listnode.h \
+    elements/HTMLLiElement.h \
+    nodes/ulnode.h \
+    elements/HTMLUlElement.h

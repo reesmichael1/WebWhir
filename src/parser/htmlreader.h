@@ -11,6 +11,8 @@
 #include "nodes/bnode.h"
 #include "nodes/imagenode.h"
 #include "nodes/horizontalrulenode.h"
+#include "nodes/listnode.h"
+#include "nodes/ulnode.h"
 
 class HTMLReader
 {
@@ -63,6 +65,8 @@ public:
     ImageNode *createImageNode(parseState &currentState,
                                std::string::iterator &i, std::string HTMLFilepath);
     HorizontalRuleNode *createHrNode();
+    ListNode *createLiNode();
+    UlNode *createUlNode();
 
 private:
     Document *webpage;

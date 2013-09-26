@@ -10,6 +10,8 @@
 #include "elements/HTMLParagraphElement.h"
 #include "elements/HTMLImgElement.h"
 #include "elements/HTMLHrElement.h"
+#include "elements/HTMLLiElement.h"
+#include "elements/HTMLUlElement.h"
 #include "painter/paintnode.h"
 
 HTMLReader::HTMLReader()
@@ -51,13 +53,9 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
             {
                 currentState = endTagName;
             }
-            else if (*i == '?')
-            {
-                currentState = bogusComment;
-            }
             else if (*i == '!')
             {
-                currentState = doctypeDeclaration;
+                currentState = bogusComment;
             }
             else if (isalpha(*i))
             {
@@ -156,6 +154,11 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
             //This assumes comments are properly written
             //(it does not check to confirm it is not "bogus").
             //It just glazes over any comments it hits.
+            if (*i != '-')
+            {
+                currentState = doctypeDeclaration;
+            }
+
             while (currentState == bogusComment)
             {
                 i++;
@@ -317,6 +320,18 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
     else if (nodeName == "hr")
     {
         node = createHrNode();
+    }
+    else if (nodeName == "li")
+    {
+        node = createLiNode();
+    }
+    else if (nodeName == "ul")
+    {
+        node = createUlNode();
+    }
+    else if (nodeName == "img")
+    {
+        node = createLiNode();
     }
     else if (nodeName == "head")
     {
@@ -492,6 +507,26 @@ HorizontalRuleNode* HTMLReader::createHrNode()
     hrNode->setIsOpen(false);
 
     return hrNode;
+}
+
+ListNode* HTMLReader::createLiNode()
+{
+    HTMLLiElement liElement;
+    ListNode* listNode = new ListNode;
+    listNode = liElement.returnNode();
+    listNode->setIsOpen(true);
+
+    return listNode;
+}
+
+UlNode* HTMLReader::createUlNode()
+{
+    HTMLUlElement ulElement;
+    UlNode *ulNode = new UlNode;
+    ulNode = ulElement.returnNode();
+    ulNode->setIsOpen(true);
+
+    return ulNode;
 }
 
 HeadNode* HTMLReader::createHeadNode()
