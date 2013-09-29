@@ -65,7 +65,7 @@ public:
     ImageNode *createImageNode(parseState &currentState,
                                std::string::iterator &i, std::string HTMLFilepath);
     HorizontalRuleNode *createHrNode();
-    ListNode *createLiNode();
+    ListNode *createLiNode(parseState &currentState);
     UlNode *createUlNode();
 
 private:

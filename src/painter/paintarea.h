@@ -40,6 +40,7 @@ private:
     int totalWidth;
     bool positionSet;
     bool nextWordChecked;
+    bool indentOn;
     QString *currentCharacter;
     QFont currentFont;
     std::vector<PaintNode*> *paintNodesVector;

@@ -6,6 +6,7 @@
 
 //Padding from the right side of the window
 #define RIGHT_SIDE_PADDING 10
+#define LIST_PADDING 50
 #define STARTING_Y 10
 
 PaintArea::PaintArea(QWidget *parent) :
@@ -20,6 +21,7 @@ PaintArea::PaintArea(QWidget *parent) :
 
     currentCharacter = new QString;
 
+    indentOn = false;
     nextWordChecked = false;
 }
 
@@ -70,9 +72,19 @@ void PaintArea::insertLineBreak()
     QFont font = currentFont;
     QFontMetrics fm(font);
 
-    currentX = STARTING_X;
-    currentY += 2 * fm.height();
-    totalWidth = 0;
+    if (!indentOn)
+    {
+        currentX = STARTING_X;
+        currentY += 2 * fm.height();
+        totalWidth = 0;
+    }
+
+    else
+    {
+        currentX = STARTING_X + LIST_PADDING;
+        currentY -= fm.height();
+        totalWidth = 0;
+    }
 }
 
 void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
@@ -178,12 +190,38 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
             currentY += fm.height();
         }
 
-        qPainter->drawLine(QPoint(currentX, currentY), QPoint(this->width() - RIGHT_SIDE_PADDING, currentY));
+        qPainter->drawLine(QPoint(currentX, currentY),
+                           QPoint(this->width() - RIGHT_SIDE_PADDING,
+                                  currentY));
 
         currentY += fm.height();
         totalWidth = 0;
     }
 
+    else if (currentPaintNode->getTypeOfPaintNode() == "ul")
+    {
+        //This is an ugly, hard-coded solution that will be removed as part of the
+        //0.2.0 beta code rewrite and clean up.
+        insertLineBreak();
+        currentY -= 20;
+        drawDocument(qPainter, currentPaintNode->returnNode()->
+                     getPaintNodes());
+    }
+
+    else if (currentPaintNode->getTypeOfPaintNode() == "li")
+    {
+        indentOn = true;
+        insertLineBreak();
+        QPen bulletPoint(Qt::black);
+        bulletPoint.setCapStyle(Qt::RoundCap);
+        bulletPoint.setWidth(5);
+        qPainter->setPen(bulletPoint);
+        qPainter->drawPoint(currentX - 7, currentY + 10);
+        drawDocument(qPainter, currentPaintNode->returnNode()->
+                     getPaintNodes());
+        indentOn = false;
+        insertLineBreak();
+    }
 
     else if (currentPaintNode->getTypeOfPaintNode() == "node")
     {
@@ -206,7 +244,7 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
 void PaintArea::updateCurrentPosition()
 {
 
-    //positionSet is only true when the entire text has been drawn.
+    //positionSet is only true when the entire document has been drawn.
     //If it is false, then it is safe to set the character to the spot
     //after the current character.
     if (!positionSet)

@@ -40,6 +40,30 @@ PaintNode::PaintNode(RenderNode *nodeToAdd)
         *typeOfNode = "hr";
     }
 
+    else if (nodeToAdd->getTypeOfRenderNode() == "ul")
+    {
+        character = NULL;
+        sourcePath = NULL;
+        altText = NULL;
+
+        node = new RenderNode;
+        node = nodeToAdd;
+
+        *typeOfNode = "ul";
+    }
+
+    else if (nodeToAdd->getTypeOfRenderNode() == "li")
+    {
+        character = NULL;
+        sourcePath = NULL;
+        altText = NULL;
+
+        node = new RenderNode;
+        node = nodeToAdd;
+
+        *typeOfNode = "li";
+    }
+
     else
     {
         node = new RenderNode;

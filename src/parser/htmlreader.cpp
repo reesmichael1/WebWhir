@@ -323,15 +323,11 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
     }
     else if (nodeName == "li")
     {
-        node = createLiNode();
+        node = createLiNode(currentState);
     }
     else if (nodeName == "ul")
     {
         node = createUlNode();
-    }
-    else if (nodeName == "img")
-    {
-        node = createLiNode();
     }
     else if (nodeName == "head")
     {
@@ -509,8 +505,10 @@ HorizontalRuleNode* HTMLReader::createHrNode()
     return hrNode;
 }
 
-ListNode* HTMLReader::createLiNode()
+ListNode* HTMLReader::createLiNode(parseState &currentState)
 {
+    currentState = text;
+
     HTMLLiElement liElement;
     ListNode* listNode = new ListNode;
     listNode = liElement.returnNode();
