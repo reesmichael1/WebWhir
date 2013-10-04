@@ -48,7 +48,7 @@ MainWindow::MainWindow()
     createActions();
     createMenus();
 
-    setWindowTitle("WebWhirr 0.2.0 Alpha");
+    setWindowTitle("WebWhirr 0.2.0 Beta");
 
 }
 
@@ -140,14 +140,14 @@ void MainWindow::setTitle()
 {
     if (webpage->getDocumentTitle() != "")
     {
-        std::string titleString = "WebWhirr 0.2.0 Alpha -- ";
+        std::string titleString = "WebWhirr 0.2.0 Beta -- ";
         titleString += webpage->getDocumentTitle();
         this->setWindowTitle(QString::fromStdString(titleString));
     }
 
     else
     {
-        this->setWindowTitle("WebWhirr 0.2.0 Alpha");
+        this->setWindowTitle("WebWhirr 0.2.0 Beta");
     }
 }
 
