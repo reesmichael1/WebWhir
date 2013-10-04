@@ -16,7 +16,9 @@ public:
     PaintNode(RenderNode *nodeToAdd);
     ~PaintNode();
     void setWeight(QFont::Weight weight = QFont::Normal);
+    void setStyle(QFont::Style style = QFont::StyleNormal);
     QFont::Weight getWeight();
+    QFont::Style getStyle();
     char *getCharacter();
     std::string getSourcePath();
     std::string getAltText();
@@ -25,6 +27,7 @@ public:
 
 private:
     QFont::Weight characterWeight;
+    QFont::Style characterStyle;
     std::string *typeOfNode;
     char *character;
     RenderNode *node;

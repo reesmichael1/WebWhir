@@ -12,6 +12,7 @@
 #include "elements/HTMLHrElement.h"
 #include "elements/HTMLLiElement.h"
 #include "elements/HTMLUlElement.h"
+#include "elements/HTMLIElement.h"
 #include "painter/paintnode.h"
 
 HTMLReader::HTMLReader()
@@ -188,6 +189,10 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
                 {
                     character->setWeight(QFont::Bold);
                 }
+                if (currentNode->getTypeOfRenderNode() == "i")
+                {
+                    character->setStyle(QFont::StyleItalic);
+                }
 
                 currentNode->addPaintNode(character);
             }
@@ -313,6 +318,10 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
     {
         node = createBNode(currentState);
     }
+    else if (nodeName == "i")
+    {
+        node = createINode(currentState);
+    }
     else if (nodeName == "img")
     {
         node = createImageNode(currentState, i, HTMLFilepath);
@@ -388,6 +397,18 @@ BNode* HTMLReader::createBNode(parseState &currentState)
     bNode->setIsOpen(true);
 
     return bNode;
+}
+
+INode* HTMLReader::createINode(parseState &currentState)
+{
+    currentState = text;
+
+    HTMLIElement iElement;
+    INode *iNode = new INode;
+    iNode = iElement.returnNode();
+    iNode->setIsOpen(true);
+
+    return iNode;
 }
 
 ImageNode* HTMLReader::createImageNode(parseState &currentState,

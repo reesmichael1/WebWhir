@@ -115,7 +115,17 @@ void PaintNode::setWeight(QFont::Weight weight)
     characterWeight = weight;
 }
 
+void PaintNode::setStyle(QFont::Style style)
+{
+    characterStyle = style;
+}
+
 QFont::Weight PaintNode::getWeight()
 {
     return characterWeight;
+}
+
+QFont::Style PaintNode::getStyle()
+{
+    return characterStyle;
 }

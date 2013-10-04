@@ -33,7 +33,9 @@ SOURCES += main.cpp \
     nodes/listnode.cpp \
     elements/HTMLLiElement.cpp \
     nodes/ulnode.cpp \
-    elements/HTMLUlElement.cpp
+    elements/HTMLUlElement.cpp \
+    nodes/inode.cpp \
+    elements/HTMLIElement.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -58,4 +60,6 @@ HEADERS += \
     nodes/listnode.h \
     elements/HTMLLiElement.h \
     nodes/ulnode.h \
-    elements/HTMLUlElement.h
+    elements/HTMLUlElement.h \
+    nodes/inode.h \
+    elements/HTMLIElement.h

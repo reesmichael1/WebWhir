@@ -116,6 +116,15 @@ void PaintArea::paintCurrentNode(PaintNode *currentPaintNode,
             currentFont.setBold(false);
         }
 
+        if (currentPaintNode->getStyle() == QFont::StyleItalic)
+        {
+            currentFont.setItalic(true);
+        }
+        else
+        {
+            currentFont.setItalic(false);
+        }
+
         QFontMetrics fm(currentFont);
 
         //Wrap text by entire words, not character-by-character.

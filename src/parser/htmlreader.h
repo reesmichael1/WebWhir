@@ -9,6 +9,7 @@
 #include "nodes/headnode.h"
 #include "nodes/bodynode.h"
 #include "nodes/bnode.h"
+#include "nodes/inode.h"
 #include "nodes/imagenode.h"
 #include "nodes/horizontalrulenode.h"
 #include "nodes/listnode.h"
@@ -62,6 +63,7 @@ public:
                            parseState &currentState, std::string::iterator &i, std::string HTMLFilepath);
     ParagraphNode* createParagraphNode(parseState &currentState);
     BNode* createBNode(parseState &currentState);
+    INode* createINode(parseState &currentState);
     ImageNode *createImageNode(parseState &currentState,
                                std::string::iterator &i, std::string HTMLFilepath);
     HorizontalRuleNode *createHrNode();
