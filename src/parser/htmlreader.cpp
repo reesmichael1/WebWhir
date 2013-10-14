@@ -41,14 +41,17 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
     std::string::iterator i = documentText.begin();
     for (; i != documentText.end(); i++)
     {
-        if (currentState == initialMode)
+        switch (currentState)
+        {
+        case initialMode:
         {
             if (*i == '<')
             {
                 currentState = tagOpen;
             }
+            break;
         }
-        else if (currentState == tagOpen)
+        case tagOpen:
         {
             if (*i == '/')
             {
@@ -63,8 +66,10 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
                 i--;
                 currentState = tagName;
             }
+
+            break;
         }
-        else if (currentState == tagName)
+        case tagName:
         {
             //Create a new node.
             std::string tagNameString = returnTagName(i, currentState);
@@ -93,8 +98,9 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
                 }
             }
 
+            break;
         }
-        else if (currentState == endTagName)
+        case endTagName:
         {
             //Close the current node.
             std::string tagDataString;
@@ -129,15 +135,19 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
 
             currentState = text;
 
+            break;
+
         }
-        else if (currentState == endTagOpen)
+        case endTagOpen:
         {
             if (*i == '<')
             {
                 currentState = tagOpen;
             }
+
+            break;
         }
-        else if (currentState == doctypeDeclaration)
+        case doctypeDeclaration:
         {
             //Unfortunately, I have to ignore doctypes for now...I simply don't
             //have the resources to create multiple engines for each doctype.
@@ -149,8 +159,10 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
                     currentState = endTagOpen;
                 }
             }
+
+            break;
         }
-        else if (currentState == bogusComment)
+        case bogusComment:
         {
             //This assumes comments are properly written
             //(it does not check to confirm it is not "bogus").
@@ -168,8 +180,10 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
                     currentState = endTagOpen;
                 }
             }
+
+            break;
         }
-        else if (currentState == text)
+        case text:
         {
             if (*i == '<')
             {
@@ -196,7 +210,10 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
 
                 currentNode->addPaintNode(character);
             }
+
+                 break;
         }
+    }
     }
 
     return webpage;
@@ -306,6 +323,7 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
                                    std::string HTMLFilepath)
 {
     RenderNode *node = new RenderNode;
+
     if (nodeName == "html")
     {
         node = createFirstNode();
