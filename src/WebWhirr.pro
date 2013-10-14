@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     nodes/ulnode.cpp \
     elements/HTMLUlElement.cpp \
     nodes/inode.cpp \
-    elements/HTMLIElement.cpp
+    elements/HTMLIElement.cpp \
+    parser/parser.cpp
 
 HEADERS += \
     parser/htmlreader.h \
