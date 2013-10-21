@@ -62,12 +62,6 @@ RenderNode* HTMLReader::createNode(std::string nodeName,
         currentParentNode = webpage->getFirstNode();
     }
 
-    if (currentParentNode != NULL)
-    {
-        PaintNode *paintNode = new PaintNode(node);
-        currentParentNode->addPaintNode(paintNode);
-    }
-
     return node;
 }
 

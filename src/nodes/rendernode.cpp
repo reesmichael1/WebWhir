@@ -8,23 +8,34 @@ RenderNode::RenderNode()
 {
     needsPainting = true;
     childNodes = new std::vector<RenderNode*>;
-    paintNodes = new std::vector<PaintNode*>;
+
+    typeOfNode = new std::string;
+}
+
+RenderNode::RenderNode(std::string nodeText)
+{
+    needsPainting = true;
+    childNodes = new std::vector<RenderNode*>;
+
+    typeOfNode = new std::string;
+    text = new std::string;
+    setIsOpen(false);
+    *text = nodeText;
 }
 
 RenderNode::~RenderNode()
 {
     deleteChildNodes();
-    deletePaintNodes();
 }
 
 void RenderNode::setTypeOfRenderNode(std::string typeToSet)
 {
-    typeOfNode = typeToSet;
+    *typeOfNode = typeToSet;
 }
 
 std::string RenderNode::getTypeOfRenderNode()
 {
-    return typeOfNode;
+    return *typeOfNode;
 }
 
 void RenderNode::setParentNode(RenderNode *nodeToSet)
@@ -55,11 +66,6 @@ void RenderNode::addChildNode(RenderNode *nodeToAdd)
     childNodes->push_back(nodeToAdd);
 }
 
-void RenderNode::addPaintNode(PaintNode *nodeToAdd)
-{
-    paintNodes->push_back(nodeToAdd);
-}
-
 void RenderNode::deleteChildNodes()
 {
     while (!childNodes->empty())
@@ -69,23 +75,9 @@ void RenderNode::deleteChildNodes()
     }
 }
 
-void RenderNode::deletePaintNodes()
-{
-    while (!paintNodes->empty())
-    {
-        delete paintNodes->back();
-        paintNodes->pop_back();
-    }
-}
-
 std::vector<RenderNode*>* RenderNode::getChildNodes()
 {
     return childNodes;
-}
-
-std::vector<PaintNode*>* RenderNode::getPaintNodes()
-{
-    return paintNodes;
 }
 
 void RenderNode::setNeedsPainting(bool valueToSet)

@@ -5,8 +5,6 @@
 
 #include "nodes/rendernode.h"
 
-class RenderNode;
-
 class Document
 {
 public:

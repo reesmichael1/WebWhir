@@ -13,6 +13,7 @@ class RenderNode
 {
 public:
     RenderNode();
+    RenderNode(std::string nodeText);
     virtual ~RenderNode();
     virtual std::string* getSourcePath();
     virtual std::string* getAltText();
@@ -22,11 +23,8 @@ public:
     void setParentNode(RenderNode *nodeToSet);
     RenderNode* getParentNode();
     void addChildNode(RenderNode *nodeToAdd);
-    void addPaintNode(PaintNode *nodeToAdd);
     void deleteChildNodes();
-    void deletePaintNodes();
     std::vector<RenderNode*> *getChildNodes();
-    std::vector<PaintNode*> *getPaintNodes();
     void setIsOpen(bool valueToSet);
     bool getIsOpen();
 
@@ -35,8 +33,8 @@ protected:
     bool isOpen;
     bool needsPainting;
     std::vector<RenderNode*> *childNodes;
-    std::vector<PaintNode*> *paintNodes;
-    std::string typeOfNode;
+    std::string *typeOfNode;
+    std::string *text;
 };
 
 #endif // RENDERNODE_H

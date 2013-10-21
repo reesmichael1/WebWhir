@@ -4,7 +4,6 @@
 #include <string>
 #include <cctype>
 #include "htmlreader.h"
-#include "painter/paintnode.h"
 
 HTMLReader::HTMLReader()
 {
@@ -182,29 +181,24 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
             }
             else
             {
-                //Create a paint node that is
-                //a child of the current Render Node.
-                std::string characterString;
-                characterString.clear();
-                characterString.push_back(i[0]);
-                const char *characterToAdd = characterString.c_str();
-                PaintNode *character = new PaintNode(*characterToAdd);
+                //Create a RenderNode composed of the text until the state changes, and add
+                //it as a child node of the current node.
+                std::string nodeText;
 
-                if (currentNode->getTypeOfRenderNode() == "b")
+                while (*i != '<')
                 {
-                    character->setWeight(QFont::Bold);
-                }
-                if (currentNode->getTypeOfRenderNode() == "i")
-                {
-                    character->setStyle(QFont::StyleItalic);
+                    nodeText.push_back(*i);
+                    i++;
                 }
 
-                currentNode->addPaintNode(character);
+                i--;
+
+                RenderNode *textNode = new RenderNode(nodeText);
+                currentNode->addChildNode(textNode);
             }
-
-                 break;
         }
-    }
+            break;
+        }
     }
 
     return webpage;

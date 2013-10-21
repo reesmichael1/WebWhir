@@ -101,7 +101,7 @@ bool MainWindow::setFilepath()
 {
     //QString::toStdString() doesn't convert the filepath properly
     std::string filepath = QFileDialog::getOpenFileName(this,
-                                                        tr("Open HTML Document")).toUtf8().constData();
+                       tr("Open HTML Document")).toUtf8().constData();
     if (filepath.empty())
     {
         return false;
@@ -110,7 +110,8 @@ bool MainWindow::setFilepath()
     if (!checkFilepath(filepath))
     {
         QMessageBox invalidTypeErrorBox;
-        invalidTypeErrorBox.setText("Error: Document type is invalid or not supported.");
+        invalidTypeErrorBox.
+                setText("Error: Document type is invalid or not supported.");
         invalidTypeErrorBox.exec();
         return false;
     }
