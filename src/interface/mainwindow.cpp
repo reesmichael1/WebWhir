@@ -29,13 +29,30 @@ MainWindow::MainWindow()
     addressBarLayout->addWidget(addressBarLabel);
     addressBarLayout->addWidget(addressBar);
 
+    /*
     paintArea = new PaintArea;
     scrollArea = new QScrollArea(this);
+
     documentDisplay = new QLabel(scrollArea);
 
     documentDisplay->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
     scrollArea->setWidget(documentDisplay);
+    scrollArea->setWidgetResizable(true);
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addLayout(addressBarLayout);
+    layout->addWidget(scrollArea);
+
+    centralLayout = new QWidget;
+    centralLayout->setLayout(layout);
+
+    setCentralWidget(centralLayout);
+
+    */
+    paintArea = new PaintArea;
+    scrollArea = new QScrollArea(this);
+    scrollArea->setWidget(paintArea);
     scrollArea->setWidgetResizable(true);
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -154,14 +171,13 @@ void MainWindow::setTitle()
     }
 }
 
-//This entire function is a mess. I will return and work
-//on it more after the 0.1.0 release.
 bool MainWindow::repaintDocument()
 {
     std::vector<RenderNode*> renderNodeTree =
             *webpage->getFirstNode()->getChildNodes();
     paintArea->constructPaintNodeTree(renderNodeTree);
 
+    paintArea->update();
     return true;
 }
 

@@ -1,3 +1,5 @@
+#include <QMessageBox>
+
 #include "paintarea.h"
 
 PaintArea::PaintArea()
@@ -13,6 +15,11 @@ void PaintArea::setDocument(Document *documentToSet)
 void PaintArea::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
+
+    if (!paintNodeTree->empty())
+    {
+        paintDocument();
+    }
 }
 
 void PaintArea::constructPaintNodeTree(std::vector<RenderNode*>
@@ -49,4 +56,11 @@ PaintNode* PaintArea::renderNodeToPaintNode(RenderNode *renderNode)
     }
 
     return paintNode;
+}
+
+void PaintArea::paintDocument()
+{
+    QMessageBox msgBox;
+    msgBox.setText("Painting the document.");
+    msgBox.exec();
 }
