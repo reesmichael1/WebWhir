@@ -39,7 +39,6 @@ private:
     HTMLReader *reader;
     Document *webpage;
     PaintArea *paintArea;
-    bool positionSet;
     QMenu *fileMenu;
     QAction *openAct;
     QLineEdit *addressBar;

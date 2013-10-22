@@ -17,10 +17,6 @@ MainWindow::MainWindow()
     webpage = new Document;
 
     //Draw main window for WebWhirr.
-    setMinimumHeight(600);
-
-    positionSet = false;
-
     QLabel *addressBarLabel = new QLabel(tr("Current Document:"));
     addressBar = new QLineEdit;
     addressBar->setReadOnly(true);
@@ -50,7 +46,7 @@ MainWindow::MainWindow()
     setCentralWidget(centralLayout);
 
     */
-    paintArea = new PaintArea;
+    paintArea = new PaintArea(this);
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(paintArea);
     scrollArea->setWidgetResizable(true);

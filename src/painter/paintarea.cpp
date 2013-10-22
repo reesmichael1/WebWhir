@@ -2,9 +2,11 @@
 
 #include "paintarea.h"
 
-PaintArea::PaintArea()
+PaintArea::PaintArea(QWidget *parent) : QWidget(parent)
 {
     paintNodeTree = new std::vector<PaintNode*>;
+
+    paintingComplete = false;
 }
 
 void PaintArea::setDocument(Document *documentToSet)
@@ -60,7 +62,12 @@ PaintNode* PaintArea::renderNodeToPaintNode(RenderNode *renderNode)
 
 void PaintArea::paintDocument()
 {
-    QMessageBox msgBox;
-    msgBox.setText("Painting the document.");
-    msgBox.exec();
+    if (!paintingComplete)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Painting the document.");
+        msgBox.exec();
+
+        paintingComplete = true;
+    }
 }

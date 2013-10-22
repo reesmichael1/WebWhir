@@ -10,7 +10,7 @@ class PaintArea : public QWidget
 {
     Q_OBJECT
 public:
-    PaintArea();
+    PaintArea(QWidget *parent);
     void constructPaintNodeTree(std::vector<RenderNode *> renderNodeTree);
     void setDocument(Document *documentToSet);
     PaintNode* renderNodeToPaintNode(RenderNode *renderNode);
@@ -22,6 +22,7 @@ protected:
 private:
     Document *webpage;
     std::vector<PaintNode*> *paintNodeTree;
+    bool paintingComplete;
 };
 
 #endif // PAINTAREA_H
