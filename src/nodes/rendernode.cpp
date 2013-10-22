@@ -8,6 +8,7 @@ RenderNode::RenderNode()
 {
     needsPainting = true;
     childNodes = new std::vector<RenderNode*>;
+    text = "";
 
     typeOfNode = new std::string;
 }
@@ -18,9 +19,8 @@ RenderNode::RenderNode(std::string nodeText)
     childNodes = new std::vector<RenderNode*>;
 
     typeOfNode = new std::string;
-    text = new std::string;
     setIsOpen(false);
-    *text = nodeText;
+    text = nodeText;
 }
 
 RenderNode::~RenderNode()
@@ -88,6 +88,11 @@ void RenderNode::setNeedsPainting(bool valueToSet)
 void RenderNode::setIsOpen(bool valueToSet)
 {
     isOpen = valueToSet;
+}
+
+std::string RenderNode::getText()
+{
+    return text;
 }
 
 bool RenderNode::getIsOpen()

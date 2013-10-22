@@ -1,34 +1,8 @@
 #include "paintarea.h"
 
-#include <QMessageBox>
-
-#define STARTING_X 10
-
-//Padding from the right side of the window
-#define RIGHT_SIDE_PADDING 10
-#define LIST_PADDING 50
-#define STARTING_Y 10
-
-PaintArea::PaintArea(QWidget *parent) :
-    QWidget(parent)
+PaintArea::PaintArea()
 {
-    currentX = STARTING_X;
-    currentY = STARTING_Y;
-    totalWidth = 0;
-
-    webpage = new Document;
-    positionSet = false;
-
-    currentCharacter = new QString;
-
-    indentOn = false;
-    nextWordChecked = false;
-}
-
-PaintArea::~PaintArea()
-{
-    delete webpage;
-    delete currentCharacter;
+    paintNodeTree = new std::vector<PaintNode*>;
 }
 
 void PaintArea::setDocument(Document *documentToSet)
@@ -39,65 +13,40 @@ void PaintArea::setDocument(Document *documentToSet)
 void PaintArea::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
+}
 
-    if (webpage->getFirstNode() != NULL)
+void PaintArea::constructPaintNodeTree(std::vector<RenderNode*>
+                                       renderNodeTree)
+{
+    //Somehow, this should create a tree of PaintNodes. I haven't decided
+    //what the best way to approach this is yet.
+    std::vector<RenderNode*>::iterator i = renderNodeTree.begin();
+
+    for (; i != renderNodeTree.end(); i++)
     {
-
-        QPainter qPainter(this);
-
-        //Prevents document from moving around while being redrawn.
-        positionSet = true;
-
-        //This is necessary to show the entire paint area in the scroll area.
-        setMinimumHeight(currentY);
-        setMaximumHeight(currentY);
+        paintNodeTree->push_back(renderNodeToPaintNode(*i));
     }
 }
 
-void PaintArea::insertLineBreak()
+PaintNode* PaintArea::renderNodeToPaintNode(RenderNode *renderNode)
 {
-    QFont font = currentFont;
-    QFontMetrics fm(font);
+    PaintNode *paintNode = new PaintNode(renderNode);
 
-    if (!indentOn)
+    std::vector<RenderNode*> *childNodes = renderNode->getChildNodes();
+
+    if (!childNodes->empty())
     {
-        currentX = STARTING_X;
-        currentY += 2 * fm.height();
-        totalWidth = 0;
+        std::vector<RenderNode*>::iterator i = childNodes->begin();
+        std::vector<PaintNode*> childPaintNodes;
+
+        for (; i != childNodes->end(); i++)
+        {
+            childPaintNodes.push_back(renderNodeToPaintNode(*i));
+        }
+
+        paintNode->addChildPaintNodes(childPaintNodes);
+
     }
 
-    else
-    {
-        currentX = STARTING_X + LIST_PADDING;
-        currentY -= fm.height();
-        totalWidth = 0;
-    }
-}
-
-
-//This adjusts the location where the next character will be drawn, including
-//changing lines when the total length exceeds the width of the window.
-void PaintArea::updateCurrentPosition()
-{
-
-    //positionSet is only true when the entire document has been drawn.
-    //If it is false, then it is safe to set the character to the spot
-    //after the current character.
-    if (!positionSet)
-    {
-        QFontMetrics fm(currentFont);
-
-        totalWidth += fm.width(*currentCharacter);
-        currentX += fm.width(*currentCharacter);
-    }
-
-    //However, if positionSet is true, then it is time to draw the entire
-    //document again, so we reset the current position to the initial state.
-    else
-    {
-        currentX = STARTING_X;
-        currentY = STARTING_Y;
-        totalWidth = 0;
-        positionSet = false;
-    }
+    return paintNode;
 }

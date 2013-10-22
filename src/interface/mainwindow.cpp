@@ -9,6 +9,8 @@
 #include "parser/htmlreader.h"
 #include "painter/paintarea.h"
 
+QString versionTitle = "WebWhirr 0.2.0 Beta";
+
 MainWindow::MainWindow()
 {
     reader = new HTMLReader;
@@ -48,7 +50,7 @@ MainWindow::MainWindow()
     createActions();
     createMenus();
 
-    setWindowTitle("WebWhirr 0.2.0 Beta");
+    setWindowTitle(versionTitle);
 
 }
 
@@ -141,14 +143,14 @@ void MainWindow::setTitle()
 {
     if (webpage->getDocumentTitle() != "")
     {
-        std::string titleString = "WebWhirr 0.2.0 Beta -- ";
-        titleString += webpage->getDocumentTitle();
-        this->setWindowTitle(QString::fromStdString(titleString));
+        QString titleString = versionTitle + " -- ";
+        titleString += QString::fromStdString(webpage->getDocumentTitle());
+        this->setWindowTitle(titleString);
     }
 
     else
     {
-        this->setWindowTitle("WebWhirr 0.2.0 Beta");
+        this->setWindowTitle(versionTitle);
     }
 }
 
@@ -156,26 +158,9 @@ void MainWindow::setTitle()
 //on it more after the 0.1.0 release.
 bool MainWindow::repaintDocument()
 {
-    //Paint the current document in paintArea by creating a QPixmap
-    //and assigning this to the QLabel documentDisplay. Dimensions
-    //are also set to avoid annoying issues with the scrollbars.
-    QPixmap paintedDocument;
-
-    //grab() has to be called twice. Otherwise, the pixmap is the wrong
-    //size when the document is first displayed and the document has to
-    //be opened twice in order to scroll through it properly.
-    paintedDocument = paintArea->grab();
-    paintedDocument.scaled(paintArea->size(), Qt::IgnoreAspectRatio);
-    paintedDocument = paintArea->grab();
-
-    documentDisplay->setMinimumWidth(paintedDocument.width());
-    documentDisplay->setMaximumWidth(paintedDocument.width());
-    documentDisplay->setMaximumHeight(paintArea->height());
-
-    documentDisplay->setPixmap(paintedDocument);
-    scrollArea->setMinimumWidth(documentDisplay->width() + 20);
-    this->setMinimumWidth(scrollArea->width() + 20);
-    this->setMaximumWidth(scrollArea->width() + 20);
+    std::vector<RenderNode*> renderNodeTree =
+            *webpage->getFirstNode()->getChildNodes();
+    paintArea->constructPaintNodeTree(renderNodeTree);
 
     return true;
 }

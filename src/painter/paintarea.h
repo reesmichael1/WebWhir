@@ -1,41 +1,26 @@
 #ifndef PAINTAREA_H
 #define PAINTAREA_H
 
-#include <string>
+#include <QWidget>
 
 #include "document.h"
-
-#include <QWidget>
-#include <QPainter>
-#include <QFont>
-
-class PaintNode;
+#include "paintnode.h"
 
 class PaintArea : public QWidget
 {
     Q_OBJECT
 public:
-    PaintArea(QWidget *parent = 0);
-    ~PaintArea();
-    void drawDocument(QPainter *qPainter);
+    PaintArea();
+    void constructPaintNodeTree(std::vector<RenderNode *> renderNodeTree);
     void setDocument(Document *documentToSet);
-    void insertLineBreak();
-    void updateCurrentPosition();
+    PaintNode* renderNodeToPaintNode(RenderNode *renderNode);
 
 protected:
     virtual void paintEvent(QPaintEvent *event);
 
 private:
     Document *webpage;
-    int currentX;
-    int currentY;
-    int lineSpacing;
-    int totalWidth;
-    bool positionSet;
-    bool nextWordChecked;
-    bool indentOn;
-    QString *currentCharacter;
-    QFont currentFont;
+    std::vector<PaintNode*> *paintNodeTree;
 };
 
 #endif // PAINTAREA_H

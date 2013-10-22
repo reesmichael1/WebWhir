@@ -17,7 +17,8 @@ HTMLReader::~HTMLReader()
     delete webpage;
 }
 
-Document *HTMLReader::parseDocumentText(std::string documentText, std::string HTMLFilepath)
+Document *HTMLReader::parseDocumentText(std::string documentText,
+                                        std::string HTMLFilepath)
 {
 
     webpage = new Document;
@@ -77,7 +78,8 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
                     }
                 }
 
-                currentNode = createNode(tagNameString, currentState, i, HTMLFilepath);
+                currentNode = createNode(tagNameString, currentState, i,
+                                         HTMLFilepath);
 
                 //Add newly created node to tree of nodes.
                 webpage->constructTree(currentNode, currentParentNode);
@@ -181,8 +183,8 @@ Document *HTMLReader::parseDocumentText(std::string documentText, std::string HT
             }
             else
             {
-                //Create a RenderNode composed of the text until the state changes, and add
-                //it as a child node of the current node.
+                //Create a RenderNode composed of the text until the state
+                //changes, and add it as a child node of the current node.
                 std::string nodeText;
 
                 while (*i != '<')
