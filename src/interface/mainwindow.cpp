@@ -9,6 +9,9 @@
 #include "parser/htmlreader.h"
 #include "painter/paintarea.h"
 
+#define WINDOW_STARTING_HEIGHT 400
+#define WINDOW_STARTING_WIDTH 600
+
 QString versionTitle = "WebWhirr 0.2.0 Beta";
 
 MainWindow::MainWindow()
@@ -17,6 +20,8 @@ MainWindow::MainWindow()
     webpage = new Document;
 
     //Draw main window for WebWhirr.
+    this->setGeometry(0, 0, WINDOW_STARTING_WIDTH, WINDOW_STARTING_HEIGHT);
+
     QLabel *addressBarLabel = new QLabel(tr("Current Document:"));
     addressBar = new QLineEdit;
     addressBar->setReadOnly(true);
@@ -25,27 +30,6 @@ MainWindow::MainWindow()
     addressBarLayout->addWidget(addressBarLabel);
     addressBarLayout->addWidget(addressBar);
 
-    /*
-    paintArea = new PaintArea;
-    scrollArea = new QScrollArea(this);
-
-    documentDisplay = new QLabel(scrollArea);
-
-    documentDisplay->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-
-    scrollArea->setWidget(documentDisplay);
-    scrollArea->setWidgetResizable(true);
-
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addLayout(addressBarLayout);
-    layout->addWidget(scrollArea);
-
-    centralLayout = new QWidget;
-    centralLayout->setLayout(layout);
-
-    setCentralWidget(centralLayout);
-
-    */
     paintArea = new PaintArea(this);
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(paintArea);
@@ -55,7 +39,7 @@ MainWindow::MainWindow()
     layout->addLayout(addressBarLayout);
     layout->addWidget(scrollArea);
 
-    centralLayout = new QWidget;
+    centralLayout = new QWidget(this);
     centralLayout->setLayout(layout);
 
     setCentralWidget(centralLayout);

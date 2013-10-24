@@ -14,7 +14,7 @@ public:
     void constructPaintNodeTree(std::vector<RenderNode *> renderNodeTree);
     void setDocument(Document *documentToSet);
     PaintNode* renderNodeToPaintNode(RenderNode *renderNode);
-    void paintDocument();
+    void paintDocument(QPainter *qPainter);
 
 protected:
     virtual void paintEvent(QPaintEvent *event);

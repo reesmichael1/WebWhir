@@ -1,4 +1,5 @@
-#include <QMessageBox>
+#include <QPainter>
+#include <QString>
 
 #include "paintarea.h"
 
@@ -20,15 +21,14 @@ void PaintArea::paintEvent(QPaintEvent *event)
 
     if (!paintNodeTree->empty())
     {
-        paintDocument();
+        QPainter qPainter(this);
+        paintDocument(&qPainter);
     }
 }
 
 void PaintArea::constructPaintNodeTree(std::vector<RenderNode*>
                                        renderNodeTree)
 {
-    //Somehow, this should create a tree of PaintNodes. I haven't decided
-    //what the best way to approach this is yet.
     std::vector<RenderNode*>::iterator i = renderNodeTree.begin();
 
     for (; i != renderNodeTree.end(); i++)
@@ -60,14 +60,11 @@ PaintNode* PaintArea::renderNodeToPaintNode(RenderNode *renderNode)
     return paintNode;
 }
 
-void PaintArea::paintDocument()
+void PaintArea::paintDocument(QPainter *qPainter)
 {
-    if (!paintingComplete)
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Painting the document.");
-        msgBox.exec();
-
-        paintingComplete = true;
-    }
+    QString test = "Hello world! I'm just going to type a lot of words here to show how text wrapping works when implemented using Qt's library. It's much more efficient than my hard-coded algorithm!";
+    QRect *boundingRect = new QRect(0, 0, 0, 0);
+    qPainter->drawText(this->geometry(), Qt::TextWordWrap, test, boundingRect);
+    setMinimumHeight(boundingRect->height());
+    delete boundingRect;
 }
