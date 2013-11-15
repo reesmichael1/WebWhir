@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QScrollArea>
 #include <QLabel>
+#include <QResizeEvent>
 
 class PaintArea;
 class HTMLReader;

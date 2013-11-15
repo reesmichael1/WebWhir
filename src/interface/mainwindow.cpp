@@ -100,7 +100,7 @@ bool MainWindow::setFilepath()
 {
     //QString::toStdString() doesn't convert the filepath properly
     std::string filepath = QFileDialog::getOpenFileName(this,
-                       tr("Open HTML Document")).toUtf8().constData();
+                                                        tr("Open HTML Document")).toUtf8().constData();
     if (filepath.empty())
     {
         return false;
