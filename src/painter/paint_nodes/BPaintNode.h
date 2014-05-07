@@ -1,12 +1,16 @@
 #ifndef BPAINTNODE_H
 #define BPAINTNODE_H
 
-#include "paintnode.h"
+#include "../paintarea.h"
+#include "ParagraphPaintNode.h"
 
-class BPaintNode : public PaintNode
+class BPaintNode : public ParagraphPaintNode
 {
 public:
     BPaintNode();
+
+private:
+    std::string text;
 };
 
 #endif // BPAINTNODE_H

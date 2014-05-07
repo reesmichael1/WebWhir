@@ -6,23 +6,25 @@
 #include <string>
 
 #include "nodes/rendernode.h"
+#include "../paintarea.h"
 
 class RenderNode;
+class PaintArea;
 
 class PaintNode {
 public:
     PaintNode();
-    PaintNode(RenderNode *node);
     void addChildPaintNodes(std::vector<PaintNode*>
                             childNodes);
+    void setPaintArea(PaintArea *paintArea);
+    void paint();
 
 private:
     bool bold;
-    //Should I call this dirty or needsPainting?
-    bool dirty;
-    std::string text;
+    bool needsPainting;
     std::vector<PaintNode*> childPaintNodes;
     QSize getDimensions();
+    PaintArea *display;
 };
 
 #endif // PAINTNODE_H

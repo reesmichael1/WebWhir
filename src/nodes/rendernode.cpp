@@ -43,6 +43,12 @@ void RenderNode::setParentNode(RenderNode *nodeToSet)
     parentNode = nodeToSet;
 }
 
+PaintNode* RenderNode::convertToPaintNode()
+{
+    PaintNode *paintNode = new PaintNode;
+
+    return paintNode;
+}
 
 std::string* RenderNode::getSourcePath()
 {

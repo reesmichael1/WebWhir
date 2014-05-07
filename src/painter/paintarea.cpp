@@ -34,31 +34,8 @@ void PaintArea::constructPaintNodeTree(std::vector<RenderNode*>
 
     for (; i != renderNodeTree.end(); i++)
     {
-        paintNodeTree->push_back(renderNodeToPaintNode(*i));
+        paintNodeTree->push_back((*i)->convertToPaintNode());
     }
-}
-
-PaintNode* PaintArea::renderNodeToPaintNode(RenderNode *renderNode)
-{
-    PaintNode *paintNode = new PaintNode(renderNode);
-
-    std::vector<RenderNode*> *childNodes = renderNode->getChildNodes();
-
-    if (!childNodes->empty())
-    {
-        std::vector<RenderNode*>::iterator i = childNodes->begin();
-        std::vector<PaintNode*> childPaintNodes;
-
-        for (; i != childNodes->end(); i++)
-        {
-            childPaintNodes.push_back(renderNodeToPaintNode(*i));
-        }
-
-        paintNode->addChildPaintNodes(childPaintNodes);
-
-    }
-
-    return paintNode;
 }
 
 void PaintArea::paintDocument(QPainter *qPainter)

@@ -1,3 +1,5 @@
+cache()
+
 QT += widgets
 
 macx {
@@ -37,7 +39,8 @@ SOURCES += main.cpp \
     nodes/inode.cpp \
     elements/HTMLIElement.cpp \
     parser/parser.cpp \
-    painter/paint_nodes/BPaintNode.cpp
+    painter/paint_nodes/BPaintNode.cpp \
+    painter/paint_nodes/ParagraphPaintNode.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -65,4 +68,5 @@ HEADERS += \
     elements/HTMLUlElement.h \
     nodes/inode.h \
     elements/HTMLIElement.h \
-    painter/paint_nodes/BPaintNode.h
+    painter/paint_nodes/BPaintNode.h \
+    painter/paint_nodes/ParagraphPaintNode.h

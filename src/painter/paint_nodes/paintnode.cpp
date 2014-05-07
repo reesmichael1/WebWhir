@@ -1,27 +1,9 @@
 #include "paintnode.h"
+#include "ParagraphPaintNode.h"
 
 PaintNode::PaintNode()
 {
-    bold = false;
-    dirty = true;
-    text = "";
-}
-
-PaintNode::PaintNode(RenderNode *node)
-{
-    bold = false;
-    dirty = true;
-    text = "";
-
-    if (node->getTypeOfRenderNode() == "b")
-    {
-        bold = true;
-    }
-
-    if (node->getText() != "")
-    {
-        text = node->getText();
-    }
+    needsPainting = true;
 }
 
 void PaintNode::addChildPaintNodes(std::vector<PaintNode*> childNodes)

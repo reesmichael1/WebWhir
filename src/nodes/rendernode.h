@@ -7,6 +7,8 @@
 
 #include "painter/paint_nodes/paintnode.h"
 
+class PaintNode;
+
 class RenderNode
 {
 public:
@@ -26,6 +28,7 @@ public:
     std::string getText();
     void setIsOpen(bool valueToSet);
     bool getIsOpen();
+    PaintNode* convertToPaintNode();
 
 protected:
     RenderNode *parentNode;

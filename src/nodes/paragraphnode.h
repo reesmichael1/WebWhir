@@ -7,6 +7,7 @@ class ParagraphNode : public RenderNode
 {
 public:
     ParagraphNode();
+    PaintNode* convertToPaintNode();
 
 };
 
