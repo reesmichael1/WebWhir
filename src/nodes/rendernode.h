@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "painter/paintnode.h"
+#include "painter/paint_nodes/paintnode.h"
 
 class RenderNode
 {

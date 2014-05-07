@@ -99,7 +99,7 @@ Document *HTMLReader::parseDocumentText(std::string documentText,
 
             while (currentState == endTagName)
             {
-                if (*i == '>')
+               if (*i == '>')
                 {
                     currentState = endTagOpen;
                 }

@@ -4,7 +4,7 @@
 #include <QWidget>
 
 #include "document.h"
-#include "paintnode.h"
+#include "paint_nodes/paintnode.h"
 
 class PaintArea : public QWidget
 {
@@ -23,6 +23,7 @@ private:
     Document *webpage;
     std::vector<PaintNode*> *paintNodeTree;
     bool paintingComplete;
+    QRect getBoundingRectangle(PaintNode *paintNode);
 };
 
 #endif // PAINTAREA_H

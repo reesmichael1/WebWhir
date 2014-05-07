@@ -6,11 +6,6 @@
 
 PaintArea::PaintArea(QWidget *parent) : QWidget(parent)
 {
-    QPalette background;
-    background.setColor(QPalette::Background, Qt::white);
-    this->setAutoFillBackground(true);
-    this->setPalette(background);
-
     paintNodeTree = new std::vector<PaintNode*>;
 
     paintingComplete = false;
@@ -70,10 +65,15 @@ void PaintArea::paintDocument(QPainter *qPainter)
 {
     QString test = "Hello world! I'm just going to type a lot of words here to show how text wrapping works when "
             "implemented using Qt's library. It's much more efficient than my hard-coded algorithm!";
-    QRect textDimensions;
+    QRect textDimensions(0, 0, 100, 100);
     qPainter->drawText(this->geometry(), Qt::TextWordWrap, test, &textDimensions);
 
     //Right now, this returns the wrong value for the bounding rectangle. As part of the rewrite, I'll
     //need to implement a coordinate system into the painter, so this should be fixed before release.
     this->setMinimumHeight(textDimensions.height());
+}
+
+QRect PaintArea::getBoundingRectangle(PaintNode *paintNode)
+{
+    return QRect(0, 0, 100, 100);
 }
