@@ -16,15 +16,13 @@ public:
     PaintNode();
     void addChildPaintNodes(std::vector<PaintNode*>
                             childNodes);
-    void setPaintArea(PaintArea *paintArea);
-    void paint();
+    virtual void paint(QPainter *qPainter, PaintArea *display);
+    void paintChildNodes(QPainter *qPainter, PaintArea *display);
+    virtual QSize getDimensions();
 
 private:
-    bool bold;
     bool needsPainting;
     std::vector<PaintNode*> childPaintNodes;
-    QSize getDimensions();
-    PaintArea *display;
 };
 
 #endif // PAINTNODE_H

@@ -183,8 +183,6 @@ Document *HTMLReader::parseDocumentText(std::string documentText,
             }
             else
             {
-                //Create a RenderNode composed of the text until the state
-                //changes, and add it as a child node of the current node.
                 std::string nodeText;
 
                 while (*i != '<')
@@ -195,8 +193,7 @@ Document *HTMLReader::parseDocumentText(std::string documentText,
 
                 i--;
 
-                RenderNode *textNode = new RenderNode(nodeText);
-                currentNode->addChildNode(textNode);
+                currentNode->setText(nodeText);
             }
         }
             break;

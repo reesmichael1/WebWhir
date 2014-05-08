@@ -25,10 +25,12 @@ public:
     void addChildNode(RenderNode *nodeToAdd);
     void deleteChildNodes();
     std::vector<RenderNode*> *getChildNodes();
+    void setText(std::string textToSet);
     std::string getText();
     void setIsOpen(bool valueToSet);
     bool getIsOpen();
-    PaintNode* convertToPaintNode();
+    virtual PaintNode* convertToPaintNode();
+    std::vector<PaintNode*> convertChildNodesToPaintNodes();
 
 protected:
     RenderNode *parentNode;

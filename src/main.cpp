@@ -16,7 +16,6 @@ int main(int argc, char* argv[])
     //Open the document if passed via the command line.
     if (argc > 1)
     {
-
         if (mainWindow.setFilepath(argv[1]))
         {
             //Display the painted document.

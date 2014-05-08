@@ -46,8 +46,21 @@ void RenderNode::setParentNode(RenderNode *nodeToSet)
 PaintNode* RenderNode::convertToPaintNode()
 {
     PaintNode *paintNode = new PaintNode;
+    paintNode->addChildPaintNodes(convertChildNodesToPaintNodes());
 
     return paintNode;
+}
+
+std::vector<PaintNode*> RenderNode::convertChildNodesToPaintNodes()
+{
+    std::vector<PaintNode*> childPaintNodes;
+    for (std::vector<RenderNode*>::iterator i = childNodes->begin();
+         i != childNodes->end(); i++)
+    {
+        childPaintNodes.push_back((*i)->convertToPaintNode());
+    }
+
+    return childPaintNodes;
 }
 
 std::string* RenderNode::getSourcePath()
@@ -94,6 +107,11 @@ void RenderNode::setNeedsPainting(bool valueToSet)
 void RenderNode::setIsOpen(bool valueToSet)
 {
     isOpen = valueToSet;
+}
+
+void RenderNode::setText(std::string textToSet)
+{
+    text = textToSet;
 }
 
 std::string RenderNode::getText()

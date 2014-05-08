@@ -12,5 +12,7 @@ PaintNode* ParagraphNode::convertToPaintNode()
     ParagraphPaintNode *paintNode = new ParagraphPaintNode;
     paintNode->setText(getText());
 
+    paintNode->addChildPaintNodes(convertChildNodesToPaintNodes());
+
     return paintNode;
 }
