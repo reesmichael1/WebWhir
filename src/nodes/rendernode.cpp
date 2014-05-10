@@ -8,19 +8,9 @@ RenderNode::RenderNode()
 {
     needsPainting = true;
     childNodes = new std::vector<RenderNode*>;
-    text = "";
+    //text = "";
 
     typeOfNode = new std::string;
-}
-
-RenderNode::RenderNode(std::string nodeText)
-{
-    needsPainting = true;
-    childNodes = new std::vector<RenderNode*>;
-
-    typeOfNode = new std::string;
-    setIsOpen(false);
-    text = nodeText;
 }
 
 RenderNode::~RenderNode()
@@ -109,14 +99,15 @@ void RenderNode::setIsOpen(bool valueToSet)
     isOpen = valueToSet;
 }
 
-void RenderNode::setText(std::string textToSet)
+void RenderNode::addText(std::string textToSet)
 {
-    text = textToSet;
+    return;
 }
 
 std::string RenderNode::getText()
 {
-    return text;
+    //We should never reach this point.
+    return NULL;
 }
 
 bool RenderNode::getIsOpen()

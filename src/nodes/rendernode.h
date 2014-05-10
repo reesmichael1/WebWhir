@@ -25,8 +25,8 @@ public:
     void addChildNode(RenderNode *nodeToAdd);
     void deleteChildNodes();
     std::vector<RenderNode*> *getChildNodes();
-    void setText(std::string textToSet);
-    std::string getText();
+    virtual void addText(std::string textToSet);
+    virtual std::string getText();
     void setIsOpen(bool valueToSet);
     bool getIsOpen();
     virtual PaintNode* convertToPaintNode();
@@ -38,7 +38,6 @@ protected:
     bool needsPainting;
     std::vector<RenderNode*> *childNodes;
     std::string *typeOfNode;
-    std::string text;
 };
 
 #endif // RENDERNODE_H

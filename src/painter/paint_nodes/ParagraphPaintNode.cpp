@@ -19,9 +19,6 @@ std::string ParagraphPaintNode::getText()
 
 void ParagraphPaintNode::paint(QPainter *qPainter, PaintArea *display)
 {
-    QRect textDimensions(0, 0, 100, 100);
-    qPainter->drawText(display->geometry(), Qt::TextWordWrap,
-                       QString::fromStdString(text), &textDimensions);
 
     paintChildNodes(qPainter, display);
 }

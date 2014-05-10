@@ -40,7 +40,9 @@ SOURCES += main.cpp \
     elements/HTMLIElement.cpp \
     parser/parser.cpp \
     painter/paint_nodes/BPaintNode.cpp \
-    painter/paint_nodes/ParagraphPaintNode.cpp
+    painter/paint_nodes/ParagraphPaintNode.cpp \
+    painter/paint_nodes/TextPaintNode.cpp \
+    nodes/textnode.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -69,4 +71,6 @@ HEADERS += \
     nodes/inode.h \
     elements/HTMLIElement.h \
     painter/paint_nodes/BPaintNode.h \
-    painter/paint_nodes/ParagraphPaintNode.h
+    painter/paint_nodes/ParagraphPaintNode.h \
+    painter/paint_nodes/TextPaintNode.h \
+    nodes/textnode.h

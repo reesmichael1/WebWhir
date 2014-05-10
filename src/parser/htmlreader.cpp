@@ -193,7 +193,7 @@ Document *HTMLReader::parseDocumentText(std::string documentText,
 
                 i--;
 
-                currentNode->setText(nodeText);
+                currentNode->addText(nodeText);
             }
         }
             break;

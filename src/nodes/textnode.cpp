@@ -1,15 +1,7 @@
-#include <iostream>
-#include <string>
 #include "textnode.h"
+#include "painter/paint_nodes/TextPaintNode.h"
 
-TextNode::TextNode()
-{
-    textCharacterSize = 12;
-    setNeedsPainting(true);
-    setTypeOfNode("p");
-}
-
-void TextNode::setText(std::string textToSet)
+TextNode::TextNode(std::string textToSet)
 {
     text = textToSet;
 }
@@ -19,17 +11,8 @@ std::string TextNode::getText()
     return text;
 }
 
-void TextNode::setTextCharacterSize(int size)
+PaintNode* TextNode::convertToPaintNode()
 {
-    textCharacterSize = size;
-}
-
-int TextNode::getTextCharacterSize()
-{
-    return textCharacterSize;
-}
-
-void TextNode::paintNode()
-{
-    std::cout << text << std::endl << std::endl;
+    PaintNode *textPaintNode = new TextPaintNode(text);
+    return textPaintNode;
 }
