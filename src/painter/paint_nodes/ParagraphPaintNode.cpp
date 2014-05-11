@@ -17,8 +17,8 @@ std::string ParagraphPaintNode::getText()
     return text;
 }
 
-void ParagraphPaintNode::paint(QPainter *qPainter, PaintArea *display)
+void ParagraphPaintNode::paint(QPainter *qPainter, PaintArea *display,
+                               Layout *layout)
 {
-
-    paintChildNodes(qPainter, display);
+    paintChildNodes(qPainter, display, layout);
 }

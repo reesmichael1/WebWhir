@@ -9,7 +9,7 @@ public:
     ParagraphPaintNode();
     std::string getText();
     void setText(std::string textToSet);
-    virtual void paint(QPainter *qPainter, PaintArea *display);
+    virtual void paint(QPainter *qPainter, PaintArea *display, Layout *layout);
 
 private:
     std::string text;

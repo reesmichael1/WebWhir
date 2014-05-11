@@ -7,7 +7,8 @@ class TextPaintNode : public PaintNode
 {
 public:
     TextPaintNode(std::string textToSet);
-    virtual void paint(QPainter *qPainter, PaintArea *display);
+    virtual void paint(QPainter *qPainter, PaintArea *display, Layout *layout);
+    virtual void calculateDimensions(PaintArea *display);
 
 private:
     std::string text;

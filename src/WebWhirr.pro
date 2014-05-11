@@ -42,7 +42,8 @@ SOURCES += main.cpp \
     painter/paint_nodes/BPaintNode.cpp \
     painter/paint_nodes/ParagraphPaintNode.cpp \
     painter/paint_nodes/TextPaintNode.cpp \
-    nodes/textnode.cpp
+    nodes/textnode.cpp \
+    layout/layout.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -73,4 +74,5 @@ HEADERS += \
     painter/paint_nodes/BPaintNode.h \
     painter/paint_nodes/ParagraphPaintNode.h \
     painter/paint_nodes/TextPaintNode.h \
-    nodes/textnode.h
+    nodes/textnode.h \
+    layout/layout.h
