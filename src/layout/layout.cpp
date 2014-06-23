@@ -15,6 +15,12 @@ void Layout::addPaintNode(PaintNode *nodeToAdd)
     size.setHeight(size.height() + nodeSize.height());
 }
 
+void Layout::reset()
+{
+    origin = QPoint(0, 0);
+    size = QSize(0, 0);
+}
+
 int Layout::getHeight()
 {
     return size.height();

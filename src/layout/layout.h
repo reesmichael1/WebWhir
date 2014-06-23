@@ -11,6 +11,7 @@ public:
     Layout();
     void addPaintNode(PaintNode *nodeToAdd);
     int getHeight();
+    void reset();
 
 private:
     QPoint origin;
