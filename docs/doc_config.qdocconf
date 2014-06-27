@@ -1,0 +1,24 @@
+#include(compat.qdocconf)
+
+project = QDoc Project
+description = Sample QDoc project
+
+headerdirs = ~/Programs/WebWhirr/src/layout/
+sourcedirs = ~/Programs/WebWhirr/src/layout/
+
+sources.fileextensions = "*.cpp"
+headers.fileextensions = "*.h"
+
+HTML.postheader
+    HTML.postpostheader
+    HTML.postheader
+    HTML.footer
+
+    HTML.headerstyles
+    HTML.stylesheets = style.css \
+                       style1.css
+
+    HTML.scripts = script.js
+
+outputformats = HTML
+outputdir = html

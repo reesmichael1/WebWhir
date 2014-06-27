@@ -221,6 +221,7 @@ pip-log.txt
 /Release
 /include
 /lib
+/tests/UnitTests/builds
 =======
 .mr.developer.cfg
 >>>>>>> dc113adead94d1349a54c1047c4dea019f56290f
