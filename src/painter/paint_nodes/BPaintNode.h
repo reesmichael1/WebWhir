@@ -8,9 +8,7 @@ class BPaintNode : public ParagraphPaintNode
 {
 public:
     BPaintNode();
-
-private:
-    std::string text;
+    virtual void paint(QPainter *qPainter, PaintArea *display, Layout *layout);
 };
 
 #endif // BPAINTNODE_H

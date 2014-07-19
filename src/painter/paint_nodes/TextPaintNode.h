@@ -12,6 +12,7 @@ public:
 
 private:
     std::string text;
+    QFont createFontForNode(QPainter *qPainter);
 };
 
 #endif // TEXTPAINTNODE_H

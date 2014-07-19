@@ -3,10 +3,11 @@
 
 #include "nodes/paragraphnode.h"
 
-class BNode : public RenderNode
+class BNode : public ParagraphNode
 {
 public:
     BNode();
+    virtual PaintNode* convertToPaintNode();
 
 };
 

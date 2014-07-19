@@ -50,6 +50,7 @@ void PaintArea::paintDocument(QPainter *qPainter)
     }
 
     this->setMinimumHeight(layout->getHeight());
+    paintingComplete = true;
 }
 
 QRect PaintArea::getBoundingRectangle(PaintNode *paintNode)

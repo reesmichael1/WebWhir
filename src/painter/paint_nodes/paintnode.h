@@ -21,11 +21,17 @@ public:
     virtual void paint(QPainter *qPainter, PaintArea *display, Layout *layout);
     void paintChildNodes(QPainter *qPainter, PaintArea *display, Layout *layout);
     virtual void calculateDimensions(PaintArea *display);
+    std::vector<PaintNode*> getChildPaintNodes();
     QSize getDimensions();
     QPoint getCoordinates();
     void setCoordinates(QPoint coordinatesToSet);
     int getWidth();
     int getHeight();
+    enum paintOption {
+        boldText,
+    };
+    void addPaintOption(paintOption optionToAdd);
+    std::vector<int> getPaintOptions();
 
 protected:
     QSize dimensions;
@@ -34,6 +40,7 @@ protected:
 private:
     bool needsPainting;
     std::vector<PaintNode*> childPaintNodes;
+    std::vector<int> paintOptions;
 };
 
 #endif // PAINTNODE_H

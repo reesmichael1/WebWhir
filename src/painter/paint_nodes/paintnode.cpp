@@ -29,6 +29,11 @@ void PaintNode::addChildPaintNodes(std::vector<PaintNode*> childNodes)
     childPaintNodes = childNodes;
 }
 
+std::vector<PaintNode*> PaintNode::getChildPaintNodes()
+{
+    return childPaintNodes;
+}
+
 void PaintNode::setCoordinates(QPoint coordinatesToSet)
 {
     if (!(coordinates == coordinatesToSet))
@@ -60,4 +65,14 @@ int PaintNode::getWidth()
 int PaintNode::getHeight()
 {
     return dimensions.height();
+}
+
+std::vector<int> PaintNode::getPaintOptions()
+{
+    return paintOptions;
+}
+
+void PaintNode::addPaintOption(paintOption optionToAdd)
+{
+    paintOptions.push_back(optionToAdd);
 }
