@@ -25,3 +25,13 @@ int Layout::getHeight()
 {
     return size.height();
 }
+
+QPoint Layout::getOrigin()
+{
+    return origin;
+}
+
+QSize Layout::getSize()
+{
+    return size;
+}

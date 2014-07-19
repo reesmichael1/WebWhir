@@ -12,6 +12,8 @@ public:
     void addPaintNode(PaintNode *nodeToAdd);
     int getHeight();
     void reset();
+    QPoint getOrigin();
+    QSize getSize();
 
 private:
     QPoint origin;

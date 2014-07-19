@@ -9,7 +9,15 @@ PaintArea::PaintArea(QWidget *parent) : QWidget(parent)
 {
     paintNodeTree = new std::vector<PaintNode*>;
 
+    layout = new Layout;
     paintingComplete = false;
+}
+
+PaintArea::~PaintArea()
+{
+    delete layout;
+    emptyPaintNodeTree();
+    delete paintNodeTree;
 }
 
 void PaintArea::setDocument(Document *documentToSet)
@@ -31,6 +39,7 @@ void PaintArea::paintEvent(QPaintEvent *event)
 void PaintArea::constructPaintNodeTree(std::vector<RenderNode*>
                                        renderNodeTree)
 {
+    emptyPaintNodeTree();
     std::vector<RenderNode*>::iterator i = renderNodeTree.begin();
 
     for (; i != renderNodeTree.end(); i++)
@@ -41,12 +50,10 @@ void PaintArea::constructPaintNodeTree(std::vector<RenderNode*>
 
 void PaintArea::paintDocument(QPainter *qPainter)
 {
-    Layout *layout = new Layout;
-
-    for (std::vector<PaintNode*>::iterator i = paintNodeTree->begin();
-         i != paintNodeTree->end(); i++)
+    resetPaintArea();
+    for (PaintNode* paintNode : *paintNodeTree)
     {
-        (*i)->paint(qPainter, this, layout);
+        paintNode->paint(qPainter, this, layout);
     }
 
     this->setMinimumHeight(layout->getHeight());
@@ -56,4 +63,20 @@ void PaintArea::paintDocument(QPainter *qPainter)
 QRect PaintArea::getBoundingRectangle(PaintNode *paintNode)
 {
     return QRect(0, 0, 100, 100);
+}
+
+void PaintArea::resetPaintArea()
+{
+    QPainter qPainter(this);
+    qPainter.eraseRect(QRect(layout->getOrigin(), layout->getSize()));
+    layout->reset();
+}
+
+void PaintArea::emptyPaintNodeTree()
+{
+    while (!paintNodeTree->empty())
+    {
+        delete paintNodeTree->back();
+        paintNodeTree->pop_back();
+    }
 }
