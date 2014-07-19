@@ -70,6 +70,14 @@ public:
     HorizontalRuleNode *createHrNode();
     ListNode *createLiNode(parseState &currentState);
     UlNode *createUlNode();
+    void initialModeCase(parseState &currentState, std::string::iterator &i);
+    void tagOpenCase(parseState &currentState, std::string::iterator &i);
+    void tagNameCase(parseState &currentState, std::string::iterator &i, std::string HTMLFilepath);
+    Document *endTagNameCase(parseState &currentState, std::string::iterator &i);
+    void endTagOpenCase(parseState &currentState, std::string::iterator &i);
+    void bogusCommentCase(parseState &currentState, std::string::iterator &i);
+    void doctypeDeclarationCase(parseState &currentState, std::string::iterator &i);
+    void textCase(parseState &currentState, std::string::iterator &i);
 
 private:
     Document *webpage;
@@ -77,6 +85,7 @@ private:
     RenderNode *currentNode;
     Document* parseDocumentText(std::string documentText, std::string HTMLFilepath);
     bool parentNodeClosed(RenderNode *node, std::string typeOfNode);
+    std::string getTagString(std::string::iterator &i, parseState &currentState);
 };
 
 #endif // HTMLREADER_H

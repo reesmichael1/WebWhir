@@ -43,7 +43,8 @@ SOURCES += main.cpp \
     painter/paint_nodes/ParagraphPaintNode.cpp \
     painter/paint_nodes/TextPaintNode.cpp \
     nodes/textnode.cpp \
-    layout/layout.cpp
+    layout/layout.cpp \
+    parser/parsestatecases.cpp
 
 HEADERS += \
     parser/htmlreader.h \
