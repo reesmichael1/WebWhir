@@ -23,7 +23,7 @@ MainWindow::MainWindow()
     this->setGeometry(0, 0, WINDOW_STARTING_WIDTH, WINDOW_STARTING_HEIGHT);
 
     QLabel *addressBarLabel = new QLabel(tr("Current Document:"));
-    addressBar = new QLineEdit;
+    addressBar = new QLineEdit(this);
     addressBar->setReadOnly(true);
 
     QHBoxLayout *addressBarLayout = new QHBoxLayout;

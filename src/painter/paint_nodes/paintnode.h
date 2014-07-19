@@ -16,6 +16,8 @@ class Layout;
 class PaintNode {
 public:
     PaintNode();
+    ~PaintNode();
+    void emptyChildPaintNodes();
     void addChildPaintNodes(std::vector<PaintNode*>
                             childNodes);
     virtual void paint(QPainter *qPainter, PaintArea *display, Layout *layout);

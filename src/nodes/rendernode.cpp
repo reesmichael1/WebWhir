@@ -16,6 +16,7 @@ RenderNode::RenderNode()
 RenderNode::~RenderNode()
 {
     deleteChildNodes();
+    delete typeOfNode;
 }
 
 void RenderNode::setTypeOfRenderNode(std::string typeToSet)

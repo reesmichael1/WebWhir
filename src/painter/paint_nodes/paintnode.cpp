@@ -7,6 +7,20 @@ PaintNode::PaintNode()
     coordinates = QPoint(0, 0);
 }
 
+PaintNode::~PaintNode()
+{
+    emptyChildPaintNodes();
+}
+
+void PaintNode::emptyChildPaintNodes()
+{
+    while (!childPaintNodes.empty())
+    {
+        delete childPaintNodes.back();
+        childPaintNodes.pop_back();
+    }
+}
+
 void PaintNode::paint(QPainter *qPainter, PaintArea *display, Layout *layout)
 {
     paintChildNodes(qPainter, display, layout);
