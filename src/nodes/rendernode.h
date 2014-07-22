@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "painter/paintnode.h"
+#include "painter/paint_nodes/paintnode.h"
 
 class PaintNode;
 
@@ -13,6 +13,7 @@ class RenderNode
 {
 public:
     RenderNode();
+    RenderNode(std::string nodeText);
     virtual ~RenderNode();
     virtual std::string* getSourcePath();
     virtual std::string* getAltText();
@@ -22,21 +23,21 @@ public:
     void setParentNode(RenderNode *nodeToSet);
     RenderNode* getParentNode();
     void addChildNode(RenderNode *nodeToAdd);
-    void addPaintNode(PaintNode *nodeToAdd);
     void deleteChildNodes();
-    void deletePaintNodes();
     std::vector<RenderNode*> *getChildNodes();
-    std::vector<PaintNode*> *getPaintNodes();
+    virtual void addText(std::string textToSet);
+    virtual std::string getText();
     void setIsOpen(bool valueToSet);
     bool getIsOpen();
+    virtual PaintNode* convertToPaintNode();
+    std::vector<PaintNode*> convertChildNodesToPaintNodes();
 
 protected:
     RenderNode *parentNode;
     bool isOpen;
     bool needsPainting;
     std::vector<RenderNode*> *childNodes;
-    std::vector<PaintNode*> *paintNodes;
-    std::string typeOfNode;
+    std::string *typeOfNode;
 };
 
 #endif // RENDERNODE_H

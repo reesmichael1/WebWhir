@@ -6,17 +6,12 @@
 class TextNode : public RenderNode
 {
 public:
-    TextNode();
-    virtual void setText(std::string textToSet);
-    std::string getText();
-    void setTextCharacterSize(int size);
-    int getTextCharacterSize();
-    virtual void paintNode();
+    TextNode(std::string textToSet);
+    virtual PaintNode* convertToPaintNode();
+    virtual std::string getText();
 
 private:
     std::string text;
-    int textCharacterSize;
-
 };
 
 #endif // TEXTNODE_H

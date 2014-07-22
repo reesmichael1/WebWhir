@@ -1,3 +1,5 @@
+cache()
+
 QT += widgets
 
 macx {
@@ -24,7 +26,7 @@ SOURCES += main.cpp \
     nodes/paragraphnode.cpp \
     elements/HTMLParagraphElement.cpp \
     interface/mainwindow.cpp \
-    painter/paintnode.cpp \
+    painter/paint_nodes/paintnode.cpp \
     painter/paintarea.cpp \
     elements/HTMLImgElement.cpp \
     nodes/imagenode.cpp \
@@ -35,7 +37,13 @@ SOURCES += main.cpp \
     nodes/ulnode.cpp \
     elements/HTMLUlElement.cpp \
     nodes/inode.cpp \
-    elements/HTMLIElement.cpp
+    elements/HTMLIElement.cpp \
+    parser/parser.cpp \
+    painter/paint_nodes/BPaintNode.cpp \
+    painter/paint_nodes/ParagraphPaintNode.cpp \
+    painter/paint_nodes/TextPaintNode.cpp \
+    nodes/textnode.cpp \
+    layout/layout.cpp
 
 HEADERS += \
     parser/htmlreader.h \
@@ -51,7 +59,7 @@ HEADERS += \
     nodes/paragraphnode.h \
     elements/HTMLParagraphElement.h \
     interface/mainwindow.h \
-    painter/paintnode.h \
+    painter/paint_nodes/paintnode.h \
     painter/paintarea.h \
     elements/HTMLImgElement.h \
     nodes/imagenode.h \
@@ -62,4 +70,9 @@ HEADERS += \
     nodes/ulnode.h \
     elements/HTMLUlElement.h \
     nodes/inode.h \
-    elements/HTMLIElement.h
+    elements/HTMLIElement.h \
+    painter/paint_nodes/BPaintNode.h \
+    painter/paint_nodes/ParagraphPaintNode.h \
+    painter/paint_nodes/TextPaintNode.h \
+    nodes/textnode.h \
+    layout/layout.h

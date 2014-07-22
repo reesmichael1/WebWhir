@@ -8,23 +8,25 @@ RenderNode::RenderNode()
 {
     needsPainting = true;
     childNodes = new std::vector<RenderNode*>;
-    paintNodes = new std::vector<PaintNode*>;
+    //text = "";
+
+    typeOfNode = new std::string;
 }
 
 RenderNode::~RenderNode()
 {
     deleteChildNodes();
-    deletePaintNodes();
+    delete typeOfNode;
 }
 
 void RenderNode::setTypeOfRenderNode(std::string typeToSet)
 {
-    typeOfNode = typeToSet;
+    *typeOfNode = typeToSet;
 }
 
 std::string RenderNode::getTypeOfRenderNode()
 {
-    return typeOfNode;
+    return *typeOfNode;
 }
 
 void RenderNode::setParentNode(RenderNode *nodeToSet)
@@ -32,6 +34,25 @@ void RenderNode::setParentNode(RenderNode *nodeToSet)
     parentNode = nodeToSet;
 }
 
+PaintNode* RenderNode::convertToPaintNode()
+{
+    PaintNode *paintNode = new PaintNode;
+    paintNode->addChildPaintNodes(convertChildNodesToPaintNodes());
+
+    return paintNode;
+}
+
+std::vector<PaintNode*> RenderNode::convertChildNodesToPaintNodes()
+{
+    std::vector<PaintNode*> childPaintNodes;
+    for (std::vector<RenderNode*>::iterator i = childNodes->begin();
+         i != childNodes->end(); i++)
+    {
+        childPaintNodes.push_back((*i)->convertToPaintNode());
+    }
+
+    return childPaintNodes;
+}
 
 std::string* RenderNode::getSourcePath()
 {
@@ -55,11 +76,6 @@ void RenderNode::addChildNode(RenderNode *nodeToAdd)
     childNodes->push_back(nodeToAdd);
 }
 
-void RenderNode::addPaintNode(PaintNode *nodeToAdd)
-{
-    paintNodes->push_back(nodeToAdd);
-}
-
 void RenderNode::deleteChildNodes()
 {
     while (!childNodes->empty())
@@ -69,23 +85,9 @@ void RenderNode::deleteChildNodes()
     }
 }
 
-void RenderNode::deletePaintNodes()
-{
-    while (!paintNodes->empty())
-    {
-        delete paintNodes->back();
-        paintNodes->pop_back();
-    }
-}
-
 std::vector<RenderNode*>* RenderNode::getChildNodes()
 {
     return childNodes;
-}
-
-std::vector<PaintNode*>* RenderNode::getPaintNodes()
-{
-    return paintNodes;
 }
 
 void RenderNode::setNeedsPainting(bool valueToSet)
@@ -96,6 +98,17 @@ void RenderNode::setNeedsPainting(bool valueToSet)
 void RenderNode::setIsOpen(bool valueToSet)
 {
     isOpen = valueToSet;
+}
+
+void RenderNode::addText(std::string textToSet)
+{
+    return;
+}
+
+std::string RenderNode::getText()
+{
+    //We should never reach this point.
+    return NULL;
 }
 
 bool RenderNode::getIsOpen()

@@ -9,38 +9,37 @@
 #include "parser/htmlreader.h"
 #include "painter/paintarea.h"
 
+#define WINDOW_STARTING_HEIGHT 400
+#define WINDOW_STARTING_WIDTH 600
+
+QString versionTitle = "WebWhirr 0.2.0 Beta";
+
 MainWindow::MainWindow()
 {
     reader = new HTMLReader;
     webpage = new Document;
 
     //Draw main window for WebWhirr.
-    setMinimumHeight(600);
-
-    positionSet = false;
+    this->setGeometry(0, 0, WINDOW_STARTING_WIDTH, WINDOW_STARTING_HEIGHT);
 
     QLabel *addressBarLabel = new QLabel(tr("Current Document:"));
-    addressBar = new QLineEdit;
+    addressBar = new QLineEdit(this);
     addressBar->setReadOnly(true);
 
     QHBoxLayout *addressBarLayout = new QHBoxLayout;
     addressBarLayout->addWidget(addressBarLabel);
     addressBarLayout->addWidget(addressBar);
 
-    paintArea = new PaintArea;
+    paintArea = new PaintArea(this);
     scrollArea = new QScrollArea(this);
-    documentDisplay = new QLabel(scrollArea);
-
-    documentDisplay->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-
-    scrollArea->setWidget(documentDisplay);
+    scrollArea->setWidget(paintArea);
     scrollArea->setWidgetResizable(true);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addLayout(addressBarLayout);
     layout->addWidget(scrollArea);
 
-    centralLayout = new QWidget;
+    centralLayout = new QWidget(this);
     centralLayout->setLayout(layout);
 
     setCentralWidget(centralLayout);
@@ -48,7 +47,7 @@ MainWindow::MainWindow()
     createActions();
     createMenus();
 
-    setWindowTitle("WebWhirr 0.2.0 Beta");
+    setWindowTitle(versionTitle);
 
 }
 
@@ -110,7 +109,8 @@ bool MainWindow::setFilepath()
     if (!checkFilepath(filepath))
     {
         QMessageBox invalidTypeErrorBox;
-        invalidTypeErrorBox.setText("Error: Document type is invalid or not supported.");
+        invalidTypeErrorBox.
+                setText("Error: Document type is invalid or not supported.");
         invalidTypeErrorBox.exec();
         return false;
     }
@@ -140,42 +140,24 @@ void MainWindow::setTitle()
 {
     if (webpage->getDocumentTitle() != "")
     {
-        std::string titleString = "WebWhirr 0.2.0 Beta -- ";
-        titleString += webpage->getDocumentTitle();
-        this->setWindowTitle(QString::fromStdString(titleString));
+        QString titleString = versionTitle + " -- ";
+        titleString += QString::fromStdString(webpage->getDocumentTitle());
+        this->setWindowTitle(titleString);
     }
 
     else
     {
-        this->setWindowTitle("WebWhirr 0.2.0 Beta");
+        this->setWindowTitle(versionTitle);
     }
 }
 
-//This entire function is a mess. I will return and work
-//on it more after the 0.1.0 release.
 bool MainWindow::repaintDocument()
 {
-    //Paint the current document in paintArea by creating a QPixmap
-    //and assigning this to the QLabel documentDisplay. Dimensions
-    //are also set to avoid annoying issues with the scrollbars.
-    QPixmap paintedDocument;
+    std::vector<RenderNode*> renderNodeTree =
+            *webpage->getFirstNode()->getChildNodes();
+    paintArea->constructPaintNodeTree(renderNodeTree);
 
-    //grab() has to be called twice. Otherwise, the pixmap is the wrong
-    //size when the document is first displayed and the document has to
-    //be opened twice in order to scroll through it properly.
-    paintedDocument = paintArea->grab();
-    paintedDocument.scaled(paintArea->size(), Qt::IgnoreAspectRatio);
-    paintedDocument = paintArea->grab();
-
-    documentDisplay->setMinimumWidth(paintedDocument.width());
-    documentDisplay->setMaximumWidth(paintedDocument.width());
-    documentDisplay->setMaximumHeight(paintArea->height());
-
-    documentDisplay->setPixmap(paintedDocument);
-    scrollArea->setMinimumWidth(documentDisplay->width() + 20);
-    this->setMinimumWidth(scrollArea->width() + 20);
-    this->setMaximumWidth(scrollArea->width() + 20);
-
+    paintArea->update();
     return true;
 }
 

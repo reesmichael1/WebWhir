@@ -1,49 +1,38 @@
 #ifndef PAINTAREA_H
 #define PAINTAREA_H
 
-#include <string>
+#include <QWidget>
 
 #include "document.h"
+#include "paint_nodes/paintnode.h"
 
-#include <QWidget>
-#include <QPainter>
-#include <QFont>
-
+class RenderNode;
+class Document;
 class PaintNode;
+class Layout;
 
 class PaintArea : public QWidget
 {
     Q_OBJECT
 public:
-    PaintArea(QWidget *parent = 0);
+    PaintArea(QWidget *parent);
     ~PaintArea();
-    void drawDocument(QPainter *qPainter);
-    void drawDocument(QPainter *qPainter, std::vector<PaintNode*> *paintNodes);
-    void paintCurrentNode(PaintNode *currentPaintNode, QPainter *qPainter,
-                          std::vector<PaintNode*> *paintNodes,
-                          std::vector<PaintNode*>::iterator currentLocation);
+    void constructPaintNodeTree(std::vector<RenderNode*> renderNodeTree);
     void setDocument(Document *documentToSet);
-    void insertLineBreak();
-    void updateCurrentPosition();
+    PaintNode* renderNodeToPaintNode(RenderNode *renderNode);
+    void paintDocument(QPainter *qPainter);
 
 protected:
     virtual void paintEvent(QPaintEvent *event);
 
 private:
-    int getNextWordWidth(std::vector<PaintNode*> *paintNodes,
-                         QPainter *qPainter,
-                         std::vector<PaintNode*>::iterator currentNode);
     Document *webpage;
-    int currentX;
-    int currentY;
-    int lineSpacing;
-    int totalWidth;
-    bool positionSet;
-    bool nextWordChecked;
-    bool indentOn;
-    QString *currentCharacter;
-    QFont currentFont;
-    std::vector<PaintNode*> *paintNodesVector;
+    std::vector<PaintNode*> *paintNodeTree;
+    bool paintingComplete;
+    QRect getBoundingRectangle(PaintNode *paintNode);
+    void resetPaintArea();
+    void emptyPaintNodeTree();
+    Layout* layout;
 };
 
 #endif // PAINTAREA_H
