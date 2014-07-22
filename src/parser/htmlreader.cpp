@@ -36,165 +36,49 @@ Document *HTMLReader::parseDocumentText(std::string documentText,
         {
         case initialMode:
         {
-            if (*i == '<')
-            {
-                currentState = tagOpen;
-            }
+            initialModeCase(currentState, i);
             break;
         }
         case tagOpen:
         {
-            if (*i == '/')
-            {
-                currentState = endTagName;
-            }
-            else if (*i == '!')
-            {
-                currentState = bogusComment;
-            }
-            else if (isalpha(*i))
-            {
-                i--;
-                currentState = tagName;
-            }
-
+            tagOpenCase(currentState, i);
             break;
         }
         case tagName:
         {
-            //Create a new node.
-            std::string tagNameString = returnTagName(i, currentState);
-
-            if (tagNameString != "title")
-            {
-
-                //Define newly created node as child of current node
-                //if the current node hasn't been closed.
-                if (currentNode != NULL)
-                {
-                    if (currentNode->getIsOpen())
-                    {
-                        currentParentNode = currentNode;
-                    }
-                }
-
-                currentNode = createNode(tagNameString, currentState, i,
-                                         HTMLFilepath);
-
-                //Add newly created node to tree of nodes.
-                webpage->constructTree(currentNode, currentParentNode);
-
-                if (!currentNode->getIsOpen())
-                {
-                    currentNode = currentParentNode;
-                }
-            }
-
+            tagNameCase(currentState, i, HTMLFilepath);
             break;
         }
         case endTagName:
         {
-            //Close the current node.
-            std::string tagDataString;
-
-            while (currentState == endTagName)
+            // Check if we've hit the </html> tag
+            // If so, return the document to finish parsing
+            Document *potentialNodeTree = endTagNameCase(currentState, i);
+            if (potentialNodeTree)
             {
-               if (*i == '>')
-                {
-                    currentState = endTagOpen;
-                }
-                else
-                {
-                    tagDataString.push_back(*i);
-                    i++;
-                }
+                return potentialNodeTree;
             }
-
-            if (tagDataString == "html")
-            {
-                //We've reached the end of the document (assuming the author
-                //actually followed web standards!).
-                return webpage;
-            }
-
-            //Move up through the tree a node at a time
-            //until we find the node being closed.
-            while (!parentNodeClosed(currentNode, tagDataString))
-            {
-            }
-
-            currentParentNode = currentNode->getParentNode();
-
-            currentState = text;
-
             break;
-
         }
         case endTagOpen:
         {
-            if (*i == '<')
-            {
-                currentState = tagOpen;
-            }
-
+            endTagOpenCase(currentState, i);
             break;
         }
         case doctypeDeclaration:
         {
-            //Unfortunately, I have to ignore doctypes for now...I simply don't
-            //have the resources to create multiple engines for each doctype.
-            while (currentState == doctypeDeclaration)
-            {
-                i++;
-                if (*i == '>')
-                {
-                    currentState = endTagOpen;
-                }
-            }
-
+            doctypeDeclarationCase(currentState, i);
             break;
         }
         case bogusComment:
         {
-            //This assumes comments are properly written
-            //(it does not check to confirm it is not "bogus").
-            //It just glazes over any comments it hits.
-            if (*i != '-')
-            {
-                currentState = doctypeDeclaration;
-            }
-
-            while (currentState == bogusComment)
-            {
-                i++;
-                if (*i == '>')
-                {
-                    currentState = endTagOpen;
-                }
-            }
-
+            bogusCommentCase(currentState, i);
             break;
         }
         case text:
         {
-            if (*i == '<')
-            {
-                currentState = tagOpen;
-            }
-            else
-            {
-                std::string nodeText;
-
-                while (*i != '<')
-                {
-                    nodeText.push_back(*i);
-                    i++;
-                }
-
-                i--;
-
-                currentNode->addText(nodeText);
-            }
+            textCase(currentState, i);
+            break;
         }
             break;
         }
@@ -246,15 +130,14 @@ Document* HTMLReader::prepareDocument(std::string HTMLFilepath)
 
 }
 
-std::string HTMLReader::returnTagName(std::string::iterator &i,
-                                      parseState &currentState)
+std::string HTMLReader::getTagString(std::string::iterator &i,
+                       parseState &currentState)
 {
-    std::string tagNameString;
-
-    while (currentState == tagName)
+    std::string tagString;
+    parseState oldState = currentState;
+    while (currentState == oldState)
     {
-
-        tagNameString.push_back(*i);
+        tagString.push_back(*i);
 
         i++;
         if (*i == '>')
@@ -262,38 +145,33 @@ std::string HTMLReader::returnTagName(std::string::iterator &i,
             currentState = endTagOpen;
         }
 
-        else if (*i == ' ')
+        else if (*i == ' ' && oldState != text)
         {
             currentState = endTagName;
         }
+
+        else if (*i == '<')
+        {
+            currentState = tagOpen;
+        }
     }
+
+    return tagString;
+}
+
+std::string HTMLReader::returnTagName(std::string::iterator &i,
+                                      parseState &currentState)
+{
+
+    std::string tagNameString = getTagString(i, currentState);
 
     if (tagNameString == "title")
     {
-        std::string titleString;
-
-        while (currentState != tagOpen)
-        {
-            i++;
-            if (*i == '<')
-            {
-                currentState = tagOpen;
-            }
-
-            else
-            {
-                titleString.push_back(*i);
-            }
-        }
-
-        while (currentState == tagOpen)
-        {
-            i++;
-            if (*i == '>')
-            {
-                currentState = endTagOpen;
-            }
-        }
+        currentState = text;
+        i++;
+        std::string titleString = getTagString(i, currentState);
+        std::cout << titleString << std::endl;
+        std::string closeTitleTag = getTagString(i, currentState);
 
         webpage->setDocumentTitle(titleString);
     }
