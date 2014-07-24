@@ -171,6 +171,7 @@ std::string HTMLReader::returnTagName(std::string::iterator &i,
         i++;
         std::string titleString = getTagString(i, currentState);
         std::string closeTitleTag = getTagString(i, currentState);
+        Q_UNUSED(closeTitleTag);
 
         webpage->setDocumentTitle(titleString);
     }
