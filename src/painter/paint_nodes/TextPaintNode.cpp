@@ -1,21 +1,22 @@
 #include "TextPaintNode.h"
-#include <QPainter>
+#include "painter/wwPainter/wwpainter.h"
 
 TextPaintNode::TextPaintNode(std::string textToSet)
 {
     text = textToSet;
 }
 
-void TextPaintNode::paint(QPainter *qPainter, PaintArea *display, Layout *layout)
+void TextPaintNode::paint(WWPainter *wwPainter, PaintArea *display, Layout *layout)
 {
     calculateDimensions(display);
     layout->addPaintNode(this);
-    QFont oldFont = qPainter->font();
-    qPainter->setFont(createFontForNode(qPainter));
-    qPainter->drawText(getCoordinates().x(), getCoordinates().y(),
-                       getWidth(), getHeight(), Qt::TextWordWrap,
+    QFont oldFont = wwPainter->font();
+    wwPainter->setFont(createFontForNode(wwPainter));
+    wwPainter->drawInlineText(getCoordinates().x(), getCoordinates().y(),
+                        getWidth(), getHeight(),
+                        //Qt::TextWordWrap,
                        QString::fromStdString(text));
-    qPainter->setFont(oldFont);
+    wwPainter->setFont(oldFont);
 
     //A TextPaintNode should never have child nodes,
     //so there's no need to paint them.
@@ -23,17 +24,17 @@ void TextPaintNode::paint(QPainter *qPainter, PaintArea *display, Layout *layout
 
 void TextPaintNode::calculateDimensions(PaintArea *display)
 {
-    QPainter qPainter(display);
-    qPainter.setFont(createFontForNode(&qPainter));
-    QSize size = qPainter.boundingRect(display->geometry(),
+    WWPainter wwPainter(display);
+    wwPainter.setFont(createFontForNode(&wwPainter));
+    QSize size = wwPainter.boundingRect(display->geometry(),
             QString::fromStdString(text)).size().toSize();
 
     dimensions = size;
 }
 
-QFont TextPaintNode::createFontForNode(QPainter *qPainter)
+QFont TextPaintNode::createFontForNode(WWPainter *wwPainter)
 {
-    QFont currentFont = qPainter->font();
+    QFont currentFont = wwPainter->font();
     if (std::find(this->getPaintOptions().begin(),
                   this->getPaintOptions().end(), boldText) !=
             this->getPaintOptions().end())

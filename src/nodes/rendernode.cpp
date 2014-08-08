@@ -8,7 +8,6 @@ RenderNode::RenderNode()
 {
     needsPainting = true;
     childNodes = new std::vector<RenderNode*>;
-    //text = "";
 
     typeOfNode = new std::string;
 }

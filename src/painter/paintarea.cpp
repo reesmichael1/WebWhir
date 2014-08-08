@@ -1,4 +1,4 @@
-#include <QPainter>
+#include "painter/wwPainter/wwpainter.h"
 #include <QLabel>
 #include <QString>
 
@@ -31,8 +31,8 @@ void PaintArea::paintEvent(QPaintEvent *event)
 
     if (!paintNodeTree->empty())
     {
-        QPainter qPainter(this);
-        paintDocument(&qPainter);
+        WWPainter wwPainter(this);
+        paintDocument(&wwPainter);
     }
 }
 
@@ -48,16 +48,16 @@ void PaintArea::constructPaintNodeTree(std::vector<RenderNode*>
     }
 }
 
-void PaintArea::paintDocument(QPainter *qPainter)
+void PaintArea::paintDocument(WWPainter *wwPainter)
 {
-    resetPaintArea();
-    for (PaintNode* paintNode : *paintNodeTree)
-    {
-        paintNode->paint(qPainter, this, layout);
-    }
+        resetPaintArea();
+        for (PaintNode* paintNode : *paintNodeTree)
+        {
+            paintNode->paint(wwPainter, this, layout);
+        }
 
-    this->setMinimumHeight(layout->getHeight());
-    paintingComplete = true;
+        this->setMinimumHeight(layout->getHeight());
+        paintingComplete = true;
 }
 
 QRect PaintArea::getBoundingRectangle(PaintNode *paintNode)
@@ -67,8 +67,8 @@ QRect PaintArea::getBoundingRectangle(PaintNode *paintNode)
 
 void PaintArea::resetPaintArea()
 {
-    QPainter qPainter(this);
-    qPainter.eraseRect(QRect(layout->getOrigin(), layout->getSize()));
+    WWPainter wwPainter(this);
+    wwPainter.eraseRect(QRect(layout->getOrigin(), layout->getSize()));
     layout->reset();
 }
 

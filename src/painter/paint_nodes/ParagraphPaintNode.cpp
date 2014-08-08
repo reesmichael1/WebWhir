@@ -1,4 +1,4 @@
-#include <QPainter>
+#include "painter/wwPainter/wwpainter.h"
 
 #include "ParagraphPaintNode.h"
 
@@ -17,8 +17,13 @@ std::string ParagraphPaintNode::getText()
     return text;
 }
 
-void ParagraphPaintNode::paint(QPainter *qPainter, PaintArea *display,
+void ParagraphPaintNode::paint(WWPainter *wwPainter, PaintArea *display,
                                Layout *layout)
 {
-    paintChildNodes(qPainter, display, layout);
+    for (std::vector<PaintNode*>::iterator i = getChildPaintNodes().begin() + 1;
+         i != getChildPaintNodes().end(); i++)
+    {
+        (*i)->setIsInline(true);
+    }
+    paintChildNodes(wwPainter, display, layout);
 }

@@ -4,12 +4,16 @@ BPaintNode::BPaintNode()
 {
 }
 
-void BPaintNode::paint(QPainter *qPainter, PaintArea *display,
+void BPaintNode::paint(WWPainter *wwPainter, PaintArea *display,
                                Layout *layout)
 {
     for (PaintNode* childPaintNode : this->getChildPaintNodes())
     {
+        if (isInlineNode())
+        {
+            childPaintNode->setIsInline(true);
+        }
         childPaintNode->addPaintOption(boldText);
     }
-    paintChildNodes(qPainter, display, layout);
+    paintChildNodes(wwPainter, display, layout);
 }

@@ -8,7 +8,7 @@ class BPaintNode : public ParagraphPaintNode
 {
 public:
     BPaintNode();
-    virtual void paint(QPainter *qPainter, PaintArea *display, Layout *layout);
+    virtual void paint(WWPainter *wwPainter, PaintArea *display, Layout *layout);
 };
 
 #endif // BPAINTNODE_H

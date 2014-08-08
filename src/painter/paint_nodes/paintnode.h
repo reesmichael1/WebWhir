@@ -8,6 +8,7 @@
 #include "nodes/rendernode.h"
 #include "../paintarea.h"
 #include "layout/layout.h"
+#include "painter/wwPainter/wwpainter.h"
 
 class RenderNode;
 class PaintArea;
@@ -20,8 +21,8 @@ public:
     void emptyChildPaintNodes();
     void addChildPaintNodes(std::vector<PaintNode*>
                             childNodes);
-    virtual void paint(QPainter *qPainter, PaintArea *display, Layout *layout);
-    void paintChildNodes(QPainter *qPainter, PaintArea *display, Layout *layout);
+    virtual void paint(WWPainter *wwPainter, PaintArea *display, Layout *layout);
+    void paintChildNodes(WWPainter *wwPainter, PaintArea *display, Layout *layout);
     virtual void calculateDimensions(PaintArea *display);
     std::vector<PaintNode*> getChildPaintNodes();
     QSize getDimensions();
@@ -34,15 +35,18 @@ public:
     };
     void addPaintOption(paintOption optionToAdd);
     std::vector<int> getPaintOptions();
+    void setIsInline(bool inlineOrNot);
+    bool isInlineNode();
 
 protected:
     QSize dimensions;
     QPoint coordinates;
-
-private:
-    bool needsPainting;
     std::vector<PaintNode*> childPaintNodes;
     std::vector<int> paintOptions;
+
+private:
+    bool inlineNode;
+    bool needsPainting;
 };
 
 #endif // PAINTNODE_H

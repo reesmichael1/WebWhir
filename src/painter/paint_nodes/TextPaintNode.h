@@ -7,12 +7,12 @@ class TextPaintNode : public PaintNode
 {
 public:
     TextPaintNode(std::string textToSet);
-    virtual void paint(QPainter *qPainter, PaintArea *display, Layout *layout);
+    virtual void paint(WWPainter *wwPainter, PaintArea *display, Layout *layout);
     virtual void calculateDimensions(PaintArea *display);
 
 private:
     std::string text;
-    QFont createFontForNode(QPainter *qPainter);
+    QFont createFontForNode(WWPainter *wwPainter);
 };
 
 #endif // TEXTPAINTNODE_H

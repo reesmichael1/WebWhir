@@ -18,7 +18,9 @@ public:
 private:
     QPoint origin;
     QSize size;
+    int lastX;
     std::vector<PaintNode*> paintNodes;
+    int calculateNewXAfterAddingNode(PaintNode *newNode);
 };
 
 #endif // LAYOUT_H

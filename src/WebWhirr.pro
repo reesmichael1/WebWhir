@@ -42,6 +42,7 @@ SOURCES += main.cpp \
     painter/paint_nodes/BPaintNode.cpp \
     painter/paint_nodes/ParagraphPaintNode.cpp \
     painter/paint_nodes/TextPaintNode.cpp \
+    painter/wwPainter/wwpainter.cpp \
     nodes/textnode.cpp \
     layout/layout.cpp \
     parser/parsestatecases.cpp
@@ -75,5 +76,6 @@ HEADERS += \
     painter/paint_nodes/BPaintNode.h \
     painter/paint_nodes/ParagraphPaintNode.h \
     painter/paint_nodes/TextPaintNode.h \
+    painter/wwPainter/wwpainter.h \
     nodes/textnode.h \
     layout/layout.h

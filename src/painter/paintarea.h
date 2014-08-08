@@ -5,6 +5,7 @@
 
 #include "document.h"
 #include "paint_nodes/paintnode.h"
+#include "wwPainter/wwpainter.h"
 
 class RenderNode;
 class Document;
@@ -20,7 +21,7 @@ public:
     void constructPaintNodeTree(std::vector<RenderNode*> renderNodeTree);
     void setDocument(Document *documentToSet);
     PaintNode* renderNodeToPaintNode(RenderNode *renderNode);
-    void paintDocument(QPainter *qPainter);
+    void paintDocument(WWPainter *wwPainter);
 
 protected:
     virtual void paintEvent(QPaintEvent *event);

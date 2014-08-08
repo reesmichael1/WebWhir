@@ -5,6 +5,7 @@ PaintNode::PaintNode()
     needsPainting = true;
     dimensions = QSize(0, 0);
     coordinates = QPoint(0, 0);
+    inlineNode = false;
 }
 
 PaintNode::~PaintNode()
@@ -21,20 +22,20 @@ void PaintNode::emptyChildPaintNodes()
     }
 }
 
-void PaintNode::paint(QPainter *qPainter, PaintArea *display, Layout *layout)
+void PaintNode::paint(WWPainter *wwPainter, PaintArea *display, Layout *layout)
 {
-    paintChildNodes(qPainter, display, layout);
+    paintChildNodes(wwPainter, display, layout);
     return;
 }
 
-void PaintNode::paintChildNodes(QPainter *qPainter, PaintArea *display,
+void PaintNode::paintChildNodes(WWPainter *wwPainter, PaintArea *display,
                                 Layout *layout)
 {
     for (std::vector<PaintNode*>::iterator i = childPaintNodes.begin();
          i != childPaintNodes.end(); i++)
     {
         (*i)->calculateDimensions(display);
-        (*i)->paint(qPainter, display, layout);
+        (*i)->paint(wwPainter, display, layout);
     }
 }
 
@@ -89,4 +90,14 @@ std::vector<int> PaintNode::getPaintOptions()
 void PaintNode::addPaintOption(paintOption optionToAdd)
 {
     paintOptions.push_back(optionToAdd);
+}
+
+void PaintNode::setIsInline(bool inlineOrNot)
+{
+    inlineNode = inlineOrNot;
+}
+
+bool PaintNode::isInlineNode()
+{
+    return inlineNode;
 }
