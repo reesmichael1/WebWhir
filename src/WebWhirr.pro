@@ -10,6 +10,10 @@ win32 {
     RC_FILE = resources/windows/WebWhirr.rc
 }
 
+unix {
+    QMAKE_CXXFLAGS += -std=c++11
+}
+
 INCLUDEPATH += $$PWD
 
 SOURCES += main.cpp \
@@ -79,3 +83,11 @@ HEADERS += \
     painter/wwPainter/wwpainter.h \
     nodes/textnode.h \
     layout/layout.h
+
+#release : DESTDIR = ../Builds/Release
+#debug : DESTDIR = ../Builds/Debug
+#
+#OBJECTS_DIR = $$DESTDIR/.obj
+#MOC_DIR = $$DESTDIR/.moc
+#RCC_DIR = $$DESTDIR/.qrc
+#UI_DIR = $$DESTDIR/.ui
