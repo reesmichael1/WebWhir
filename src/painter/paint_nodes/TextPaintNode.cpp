@@ -1,3 +1,4 @@
+#include <iostream>
 #include "TextPaintNode.h"
 #include "painter/wwPainter/wwpainter.h"
 
@@ -5,6 +6,7 @@ TextPaintNode::TextPaintNode(std::string textToSet)
 {
     text = textToSet;
     xCoordinateOfEdgeOfLastLine = 0;
+    xCoordinateOfStartOfFirstLine = 100;
     QStringList lineList;
 }
 
@@ -15,12 +17,6 @@ void TextPaintNode::paint(WWPainter *wwPainter, PaintArea *display, Layout *layo
     QFont oldFont = wwPainter->font();
     wwPainter->setFont(createFontForNode(wwPainter));
     drawLines(wwPainter);
-    /*
-    wwPainter->drawInlineText(getCoordinates().x(), getCoordinates().y(),
-                        getWidth(), getHeight(),
-                        //Qt::TextWordWrap,
-                       QString::fromStdString(text));
-                       */
     wwPainter->setFont(oldFont);
 
     //A TextPaintNode should never have child nodes,
@@ -59,8 +55,9 @@ int TextPaintNode::getXCoordinateOfEdgeOfLastLine()
 
 void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter *wwPainter)
 {
+    lineList.clear();
     QStringList wordList = QString::fromStdString(text).split(" ");
-    int currentWidth = 0;
+    int currentWidth = xCoordinateOfStartOfFirstLine;
     int maximumWidth = display->width();
     QString nextLine;
     QFontMetrics fm(createFontForNode(wwPainter));
@@ -71,12 +68,12 @@ void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter *
         if (currentWidth + nextWordBoundingRect.width() > maximumWidth)
         {
             lineList.append(nextLine);
-            nextLine = nextWord;
+            nextLine = nextWord + " ";
             currentWidth = 0;
         }
         else
         {
-            nextLine += nextWord;
+            nextLine += (nextWord + " ");
             currentWidth += nextWordBoundingRect.width();
         }
     }
@@ -84,15 +81,29 @@ void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter *
     {
         lineList.append(nextLine);
     }
+    xCoordinateOfEdgeOfLastLine = currentWidth;
 }
 
 void TextPaintNode::drawLines(WWPainter *wwPainter)
 {
-    int currentY = 0;
-    int lineHeight = 20; // compute this
+    int currentY = coordinates.y();
+    int lineHeight = 15; // compute this
+    int verticalPadding = 5;
     for (int i = 0; i < lineList.length(); i++)
     {
-        wwPainter->drawText(0, currentY, lineList.at(i));
-        currentY += lineHeight;
+        int currentX;
+        if (i == 0)
+        {
+            currentX = xCoordinateOfStartOfFirstLine;
+        }
+        else
+        {
+            currentX = 0;
+        }
+        wwPainter->drawText(currentX, currentY,
+                            wwPainter->device()->width(), lineHeight,
+                            Qt::TextWordWrap,
+                            lineList.at(i));
+        currentY += (lineHeight + verticalPadding);
     }
 }
