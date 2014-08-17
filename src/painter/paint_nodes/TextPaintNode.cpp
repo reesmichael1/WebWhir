@@ -12,12 +12,15 @@ TextPaintNode::TextPaintNode(std::string textToSet)
 
 void TextPaintNode::paint(WWPainter *wwPainter, PaintArea *display, Layout *layout)
 {
-    calculateDimensions(display);
-    layout->addPaintNode(this);
-    QFont oldFont = wwPainter->font();
-    wwPainter->setFont(createFontForNode(wwPainter));
-    drawLines(wwPainter);
-    wwPainter->setFont(oldFont);
+    if (display->visibleRegion().contains(QPoint(0, coordinates.y())))
+    {
+        calculateDimensions(display);
+        layout->addPaintNode(this);
+        QFont oldFont = wwPainter->font();
+        wwPainter->setFont(createFontForNode(wwPainter));
+        drawLines(wwPainter);
+        wwPainter->setFont(oldFont);
+    }
 
     //A TextPaintNode should never have child nodes,
     //so there's no need to paint them.
