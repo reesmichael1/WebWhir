@@ -15,18 +15,10 @@ void Layout::reset()
 void Layout::addPaintNode(PaintNode *nodeToAdd)
 {
     QSize nodeSize = nodeToAdd->getDimensions();
-    if (nodeToAdd->isInlineNode())
-    {
-        lastX = calculateNewXAfterAddingNode(nodeToAdd);
-        origin.setX(origin.x() + lastX);
-    }
-    else
-    {
-        lastX = nodeToAdd->getWidth();
-        origin.setX(0);
-        origin.setY(origin.y() + nodeSize.height());
-    }
     nodeToAdd->setCoordinates(origin);
+    origin.setY(origin.y() + nodeSize.height());
+    nodeToAdd->setXCoordinateOfEdgeOfFirstLine(lastX);
+    lastX = nodeToAdd->getXCoordinateOfEdgeOfLastLine();
 
     size.setHeight(size.height() + nodeSize.height());
 }

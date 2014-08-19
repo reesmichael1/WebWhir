@@ -35,17 +35,18 @@ public:
     };
     void addPaintOption(paintOption optionToAdd);
     std::vector<int> getPaintOptions();
-    void setIsInline(bool inlineOrNot);
-    bool isInlineNode();
+    int getXCoordinateOfEdgeOfLastLine();
+    void setXCoordinateOfEdgeOfFirstLine(int xToSet);
 
 protected:
     QSize dimensions;
     QPoint coordinates;
     std::vector<PaintNode*> childPaintNodes;
     std::vector<int> paintOptions;
+    int xCoordinateOfEdgeOfLastLine;
+    int xCoordinateOfStartOfFirstLine;
 
 private:
-    bool inlineNode;
     bool needsPainting;
 };
 

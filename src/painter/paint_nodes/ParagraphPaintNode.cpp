@@ -20,10 +20,5 @@ std::string ParagraphPaintNode::getText()
 void ParagraphPaintNode::paint(WWPainter *wwPainter, PaintArea *display,
                                Layout *layout)
 {
-    for (std::vector<PaintNode*>::iterator i = getChildPaintNodes().begin() + 1;
-         i != getChildPaintNodes().end(); i++)
-    {
-        (*i)->setIsInline(true);
-    }
     paintChildNodes(wwPainter, display, layout);
 }

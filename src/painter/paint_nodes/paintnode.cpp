@@ -5,7 +5,7 @@ PaintNode::PaintNode()
     needsPainting = true;
     dimensions = QSize(0, 0);
     coordinates = QPoint(0, 0);
-    inlineNode = false;
+    xCoordinateOfEdgeOfLastLine = 0;
 }
 
 PaintNode::~PaintNode()
@@ -92,12 +92,12 @@ void PaintNode::addPaintOption(paintOption optionToAdd)
     paintOptions.push_back(optionToAdd);
 }
 
-void PaintNode::setIsInline(bool inlineOrNot)
+void PaintNode::setXCoordinateOfEdgeOfFirstLine(int xToSet)
 {
-    inlineNode = inlineOrNot;
+    xCoordinateOfStartOfFirstLine = xToSet;
 }
 
-bool PaintNode::isInlineNode()
+int PaintNode::getXCoordinateOfEdgeOfLastLine()
 {
-    return inlineNode;
+    return xCoordinateOfEdgeOfLastLine;
 }

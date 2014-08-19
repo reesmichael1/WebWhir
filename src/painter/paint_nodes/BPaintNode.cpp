@@ -9,10 +9,6 @@ void BPaintNode::paint(WWPainter *wwPainter, PaintArea *display,
 {
     for (PaintNode* childPaintNode : this->getChildPaintNodes())
     {
-        if (isInlineNode())
-        {
-            childPaintNode->setIsInline(true);
-        }
         childPaintNode->addPaintOption(boldText);
     }
     paintChildNodes(wwPainter, display, layout);

@@ -5,22 +5,20 @@
 TextPaintNode::TextPaintNode(std::string textToSet)
 {
     text = textToSet;
-    xCoordinateOfEdgeOfLastLine = 0;
-    xCoordinateOfStartOfFirstLine = 100;
     QStringList lineList;
 }
 
 void TextPaintNode::paint(WWPainter *wwPainter, PaintArea *display, Layout *layout)
 {
-    if (display->visibleRegion().contains(QPoint(0, coordinates.y())))
-    {
-        calculateDimensions(display);
-        layout->addPaintNode(this);
-        QFont oldFont = wwPainter->font();
-        wwPainter->setFont(createFontForNode(wwPainter));
-        drawLines(wwPainter);
-        wwPainter->setFont(oldFont);
-    }
+    QRegion region = display->visibleRegion();
+    std::cout << "visible region is " << region.boundingRect().x() << " " << region.boundingRect().y() << " " <<
+                 region.boundingRect().width() << " " << region.boundingRect().height() << std::endl;
+    calculateDimensions(display);
+    layout->addPaintNode(this);
+    QFont oldFont = wwPainter->font();
+    wwPainter->setFont(createFontForNode(wwPainter));
+    drawLines(wwPainter, display);
+    wwPainter->setFont(oldFont);
 
     //A TextPaintNode should never have child nodes,
     //so there's no need to paint them.
@@ -51,16 +49,11 @@ QFont TextPaintNode::createFontForNode(WWPainter *wwPainter)
     return currentFont;
 }
 
-int TextPaintNode::getXCoordinateOfEdgeOfLastLine()
-{
-    return xCoordinateOfEdgeOfLastLine;
-}
-
 void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter *wwPainter)
 {
     lineList.clear();
     QStringList wordList = QString::fromStdString(text).split(" ");
-    int currentWidth = xCoordinateOfStartOfFirstLine;
+    int currentWidth = getXCoordinateOfEdgeOfLastLine();
     int maximumWidth = display->width();
     QString nextLine;
     QFontMetrics fm(createFontForNode(wwPainter));
@@ -87,26 +80,29 @@ void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter *
     xCoordinateOfEdgeOfLastLine = currentWidth;
 }
 
-void TextPaintNode::drawLines(WWPainter *wwPainter)
+void TextPaintNode::drawLines(WWPainter *wwPainter, PaintArea *display)
 {
-    int currentY = coordinates.y();
-    int lineHeight = 15; // compute this
-    int verticalPadding = 5;
-    for (int i = 0; i < lineList.length(); i++)
+    if (display->visibleRegion().contains(QPoint(coordinates.x(), coordinates.y())))
     {
-        int currentX;
-        if (i == 0)
+        int currentY = coordinates.y();
+        int lineHeight = 20; // compute this
+        int verticalPadding = 5;
+        for (int i = 0; i < lineList.length(); i++)
         {
-            currentX = xCoordinateOfStartOfFirstLine;
+            int currentX;
+            if (i == 0)
+            {
+                currentX = xCoordinateOfStartOfFirstLine;
+            }
+            else
+            {
+                currentX = 0;
+            }
+            wwPainter->drawText(currentX, currentY,
+                    wwPainter->device()->width(), lineHeight,
+                    Qt::TextWordWrap,
+                    lineList.at(i));
+            currentY += (lineHeight + verticalPadding);
         }
-        else
-        {
-            currentX = 0;
-        }
-        wwPainter->drawText(currentX, currentY,
-                            wwPainter->device()->width(), lineHeight,
-                            Qt::TextWordWrap,
-                            lineList.at(i));
-        currentY += (lineHeight + verticalPadding);
     }
 }
