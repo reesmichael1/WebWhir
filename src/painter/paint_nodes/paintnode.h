@@ -21,11 +21,11 @@ public:
     void emptyChildPaintNodes();
     void addChildPaintNodes(std::vector<PaintNode*>
                             childNodes);
-    virtual void paint(WWPainter *wwPainter, PaintArea *display, Layout *layout);
-    void paintChildNodes(WWPainter *wwPainter, PaintArea *display, Layout *layout);
+    virtual void paint(WWPainter &wwPainter, PaintArea *display, Layout *layout);
+    void paintChildNodes(WWPainter &wwPainter, PaintArea *display, Layout *layout);
     virtual void calculateDimensions(PaintArea *display);
     std::vector<PaintNode*> getChildPaintNodes();
-    QSize getDimensions();
+    virtual QSize getDimensions(PaintArea *display);
     QPoint getCoordinates();
     void setCoordinates(QPoint coordinatesToSet);
     int getWidth();
@@ -36,7 +36,13 @@ public:
     void addPaintOption(paintOption optionToAdd);
     std::vector<int> getPaintOptions();
     int getXCoordinateOfEdgeOfLastLine();
-    void setXCoordinateOfEdgeOfFirstLine(int xToSet);
+    void setXCoordinateOfStartOfFirstLine(int xToSet);
+    void setNeedsPainting(bool valueToSet);
+    bool getNeedsPainting();
+    virtual bool regionContainsPaintNode(const QRegion &region);
+    bool getIsInline();
+    void setIsInline(bool inlineOrNot);
+    void resetPaintNode();
 
 protected:
     QSize dimensions;
@@ -45,6 +51,7 @@ protected:
     std::vector<int> paintOptions;
     int xCoordinateOfEdgeOfLastLine;
     int xCoordinateOfStartOfFirstLine;
+    bool isInline;
 
 private:
     bool needsPainting;

@@ -2,23 +2,58 @@
 #include "TextPaintNode.h"
 #include "painter/wwPainter/wwpainter.h"
 
+QHash<QString, int> wordHash;
+
+// This is just here as a prototype of what I'm trying to do with the reflow
+// My long term goal is to subclass QFont and add the same functionality
+void populateCharacterHash(QHash<QString, int> &characterHash)
+{
+    QString alphabet = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    QFont font = QFont();
+    QFontMetrics fm(font);
+    for (int i = 0; i < alphabet.length(); i++)
+    {
+        characterHash.insert(alphabet.at(i), fm.tightBoundingRect(alphabet.at(i)).width());
+    }
+    characterHash.insert(" ", 10);
+}
+
+int getWidthOfString(QHash<QString, int> characterHash, QString string)
+{
+    if (wordHash.contains(string))
+    {
+        return wordHash.value(string);
+    }
+    int width = 0;
+    for (int i = 0; i < string.length(); i++)
+    {
+        width += characterHash.value(string.at(i));
+    }
+
+    wordHash.insert(string, width);
+    return width;
+}
+
 TextPaintNode::TextPaintNode(std::string textToSet)
 {
     text = textToSet;
+    populateCharacterHash(characterHash);
     QStringList lineList;
 }
 
-void TextPaintNode::paint(WWPainter *wwPainter, PaintArea *display, Layout *layout)
+TextPaintNode::~TextPaintNode()
 {
-    QRegion region = display->visibleRegion();
-    std::cout << "visible region is " << region.boundingRect().x() << " " << region.boundingRect().y() << " " <<
-                 region.boundingRect().width() << " " << region.boundingRect().height() << std::endl;
-    calculateDimensions(display);
-    layout->addPaintNode(this);
-    QFont oldFont = wwPainter->font();
-    wwPainter->setFont(createFontForNode(wwPainter));
-    drawLines(wwPainter, display);
-    wwPainter->setFont(oldFont);
+    delete fm;
+}
+
+void TextPaintNode::paint(WWPainter &wwPainter, PaintArea *display, Layout *layout)
+{
+    layout->addPaintNode(this, display);
+    WWPainter newPainter(display);
+    QFont oldFont = newPainter.font();
+    newPainter.setFont(createFontForNode(newPainter));
+    drawLines(&newPainter, display);
+    newPainter.setFont(oldFont);
 
     //A TextPaintNode should never have child nodes,
     //so there's no need to paint them.
@@ -27,18 +62,34 @@ void TextPaintNode::paint(WWPainter *wwPainter, PaintArea *display, Layout *layo
 void TextPaintNode::calculateDimensions(PaintArea *display)
 {
     WWPainter wwPainter(display);
-    wwPainter.setFont(createFontForNode(&wwPainter));
+    wwPainter.setFont(createFontForNode(wwPainter));
     QSize size = wwPainter.boundingRect(display->geometry(),
             QString::fromStdString(text)).size().toSize();
 
-    splitTextIntoLinesForDisplay(display, &wwPainter);
+    splitTextIntoLinesForDisplay(display, wwPainter);
 
     dimensions = size;
 }
 
-QFont TextPaintNode::createFontForNode(WWPainter *wwPainter)
+QFont TextPaintNode::createFontForNode(WWPainter &wwPainter)
 {
-    QFont currentFont = wwPainter->font();
+    QFont currentFont = wwPainter.font();
+    if (std::find(this->getPaintOptions().begin(),
+                  this->getPaintOptions().end(), boldText) !=
+            this->getPaintOptions().end())
+    {
+        currentFont.setBold(true);
+    }
+
+    fm = new QFontMetrics(currentFont);
+
+    return currentFont;
+}
+
+QFont TextPaintNode::createFontForNode()
+{
+    QFont currentFont;
+
     if (std::find(this->getPaintOptions().begin(),
                   this->getPaintOptions().end(), boldText) !=
             this->getPaintOptions().end())
@@ -49,28 +100,27 @@ QFont TextPaintNode::createFontForNode(WWPainter *wwPainter)
     return currentFont;
 }
 
-void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter *wwPainter)
+void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter &wwPainter)
 {
     lineList.clear();
     QStringList wordList = QString::fromStdString(text).split(" ");
-    int currentWidth = getXCoordinateOfEdgeOfLastLine();
+    int currentWidth = xCoordinateOfStartOfFirstLine;
     int maximumWidth = display->width();
     QString nextLine;
-    QFontMetrics fm(createFontForNode(wwPainter));
     for (int i = 0; i < wordList.length(); i++)
     {
-        QString nextWord = wordList.at(i);
-        QRect nextWordBoundingRect = fm.tightBoundingRect(nextWord);
-        if (currentWidth + nextWordBoundingRect.width() > maximumWidth)
+        QString nextWord = (wordList.at(i) + " ");
+        int nextWordWidth = getWidthOfString(characterHash, nextWord);
+        if (currentWidth + nextWordWidth > maximumWidth)
         {
             lineList.append(nextLine);
-            nextLine = nextWord + " ";
+            nextLine = nextWord;
             currentWidth = 0;
         }
         else
         {
-            nextLine += (nextWord + " ");
-            currentWidth += nextWordBoundingRect.width();
+            nextLine += nextWord;
+            currentWidth += nextWordWidth;
         }
     }
     if (!nextLine.isEmpty())
@@ -80,12 +130,18 @@ void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter *
     xCoordinateOfEdgeOfLastLine = currentWidth;
 }
 
+bool TextPaintNode::regionContainsPaintNode(const QRegion &region)
+{
+    return (region.contains(QPoint(coordinates.x(), coordinates.y() + dimensions.height())) ||
+            region.contains(QPoint(coordinates.x(), coordinates.y() - dimensions.height())));
+}
+
 void TextPaintNode::drawLines(WWPainter *wwPainter, PaintArea *display)
 {
-    if (display->visibleRegion().contains(QPoint(coordinates.x(), coordinates.y())))
+    if (this->regionContainsPaintNode(display->visibleRegion()))
     {
         int currentY = coordinates.y();
-        int lineHeight = 20; // compute this
+        int lineHeight = 15; // compute this
         int verticalPadding = 5;
         for (int i = 0; i < lineList.length(); i++)
         {
@@ -98,11 +154,16 @@ void TextPaintNode::drawLines(WWPainter *wwPainter, PaintArea *display)
             {
                 currentX = 0;
             }
-            wwPainter->drawText(currentX, currentY,
-                    wwPainter->device()->width(), lineHeight,
-                    Qt::TextWordWrap,
-                    lineList.at(i));
+
+            wwPainter->drawText(QRect(currentX, currentY, wwPainter->device()->width(), lineHeight),
+                                lineList.at(i));
             currentY += (lineHeight + verticalPadding);
         }
     }
+}
+
+QSize TextPaintNode::getDimensions(PaintArea *display)
+{
+    calculateDimensions(display);
+    return dimensions;
 }

@@ -6,6 +6,7 @@ PaintNode::PaintNode()
     dimensions = QSize(0, 0);
     coordinates = QPoint(0, 0);
     xCoordinateOfEdgeOfLastLine = 0;
+    xCoordinateOfStartOfFirstLine = 0;
 }
 
 PaintNode::~PaintNode()
@@ -22,13 +23,13 @@ void PaintNode::emptyChildPaintNodes()
     }
 }
 
-void PaintNode::paint(WWPainter *wwPainter, PaintArea *display, Layout *layout)
+void PaintNode::paint(WWPainter &wwPainter, PaintArea *display, Layout *layout)
 {
     paintChildNodes(wwPainter, display, layout);
     return;
 }
 
-void PaintNode::paintChildNodes(WWPainter *wwPainter, PaintArea *display,
+void PaintNode::paintChildNodes(WWPainter &wwPainter, PaintArea *display,
                                 Layout *layout)
 {
     for (std::vector<PaintNode*>::iterator i = childPaintNodes.begin();
@@ -65,10 +66,15 @@ QPoint PaintNode::getCoordinates()
 
 void PaintNode::calculateDimensions(PaintArea *display)
 {
+    for (PaintNode* childNode : childPaintNodes)
+    {
+        childNode->calculateDimensions(display);
+    }
 }
 
-QSize PaintNode::getDimensions()
+QSize PaintNode::getDimensions(PaintArea *display)
 {
+    calculateDimensions(display);
     return dimensions;
 }
 
@@ -92,7 +98,7 @@ void PaintNode::addPaintOption(paintOption optionToAdd)
     paintOptions.push_back(optionToAdd);
 }
 
-void PaintNode::setXCoordinateOfEdgeOfFirstLine(int xToSet)
+void PaintNode::setXCoordinateOfStartOfFirstLine(int xToSet)
 {
     xCoordinateOfStartOfFirstLine = xToSet;
 }
@@ -100,4 +106,46 @@ void PaintNode::setXCoordinateOfEdgeOfFirstLine(int xToSet)
 int PaintNode::getXCoordinateOfEdgeOfLastLine()
 {
     return xCoordinateOfEdgeOfLastLine;
+}
+
+void PaintNode::setNeedsPainting(bool valueToSet)
+{
+    needsPainting = valueToSet;
+    for (PaintNode* childPaintNode : childPaintNodes)
+    {
+        childPaintNode->setNeedsPainting(valueToSet);
+    }
+}
+
+bool PaintNode::getNeedsPainting()
+{
+    return needsPainting;
+}
+
+bool PaintNode::regionContainsPaintNode(const QRegion &region)
+{
+    Q_UNUSED(region);
+}
+
+bool PaintNode::getIsInline()
+{
+    return isInline;
+}
+
+void PaintNode::setIsInline(bool inlineOrNot)
+{
+    isInline = inlineOrNot;
+}
+
+void PaintNode::resetPaintNode()
+{
+    xCoordinateOfEdgeOfLastLine = 0;
+    xCoordinateOfStartOfFirstLine = 0;
+    dimensions = QSize(0, 0);
+    coordinates = QPoint(0, 0);
+
+    for (PaintNode *childPaintNode : childPaintNodes)
+    {
+        childPaintNode->resetPaintNode();
+    }
 }

@@ -7,15 +7,21 @@ class TextPaintNode : public PaintNode
 {
 public:
     TextPaintNode(std::string textToSet);
-    virtual void paint(WWPainter *wwPainter, PaintArea *display, Layout *layout);
+    ~TextPaintNode();
+    virtual void paint(WWPainter &wwPainter, PaintArea *display, Layout *layout);
     virtual void calculateDimensions(PaintArea *display);
+    virtual bool regionContainsPaintNode(const QRegion &region);
+    virtual QSize getDimensions(PaintArea *display);
 
 private:
+    QHash<QString, int> characterHash;
     QStringList lineList;
     std::string text;
-    QFont createFontForNode(WWPainter *wwPainter);
-    void splitTextIntoLinesForDisplay(PaintArea *display, WWPainter *wwPainter);
+    QFont createFontForNode(WWPainter &wwPainter);
+    QFont createFontForNode();
+    void splitTextIntoLinesForDisplay(PaintArea *display, WWPainter &wwPainter);
     void drawLines(WWPainter *wwPainter, PaintArea *display);
+    QFontMetrics *fm;
 };
 
 #endif // TEXTPAINTNODE_H

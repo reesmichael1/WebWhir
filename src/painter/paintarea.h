@@ -21,10 +21,11 @@ public:
     void constructPaintNodeTree(std::vector<RenderNode*> renderNodeTree);
     void setDocument(Document *documentToSet);
     PaintNode* renderNodeToPaintNode(RenderNode *renderNode);
-    void paintDocument(WWPainter *wwPainter);
+    void paintDocument(WWPainter &wwPainter);
 
 protected:
     virtual void paintEvent(QPaintEvent *event);
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
     Document *webpage;
@@ -32,6 +33,7 @@ private:
     bool paintingComplete;
     QRect getBoundingRectangle(PaintNode *paintNode);
     void resetPaintArea();
+    void resetPaintNodeTree();
     void emptyPaintNodeTree();
     Layout* layout;
 };

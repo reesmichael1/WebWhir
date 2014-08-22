@@ -32,7 +32,17 @@ void PaintArea::paintEvent(QPaintEvent *event)
     if (!paintNodeTree->empty())
     {
         WWPainter wwPainter(this);
-        paintDocument(&wwPainter);
+        paintDocument(wwPainter);
+    }
+}
+
+void PaintArea::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    resetPaintNodeTree();
+    for (PaintNode* paintNode : *paintNodeTree)
+    {
+        paintNode->calculateDimensions(this);
     }
 }
 
@@ -48,7 +58,7 @@ void PaintArea::constructPaintNodeTree(std::vector<RenderNode*>
     }
 }
 
-void PaintArea::paintDocument(WWPainter *wwPainter)
+void PaintArea::paintDocument(WWPainter &wwPainter)
 {
         resetPaintArea();
         for (PaintNode* paintNode : *paintNodeTree)
@@ -69,6 +79,7 @@ void PaintArea::resetPaintArea()
 {
     WWPainter wwPainter(this);
     wwPainter.eraseRect(QRect(layout->getOrigin(), layout->getSize()));
+    resetPaintNodeTree();
     layout->reset();
 }
 
@@ -78,5 +89,13 @@ void PaintArea::emptyPaintNodeTree()
     {
         delete paintNodeTree->back();
         paintNodeTree->pop_back();
+    }
+}
+
+void PaintArea::resetPaintNodeTree()
+{
+    for (PaintNode* paintNode : *paintNodeTree)
+    {
+        paintNode->resetPaintNode();
     }
 }

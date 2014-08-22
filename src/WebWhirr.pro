@@ -1,6 +1,6 @@
 cache()
 
-QT += widgets
+QT += widgets core
 
 macx {
     CONFIG -= x86_64

@@ -12,15 +12,26 @@ void Layout::reset()
     lastX = 0;
 }
 
-void Layout::addPaintNode(PaintNode *nodeToAdd)
+void Layout::addPaintNode(PaintNode *nodeToAdd, PaintArea *display)
 {
-    QSize nodeSize = nodeToAdd->getDimensions();
+    QSize nodeSize = nodeToAdd->getDimensions(display);
     nodeToAdd->setCoordinates(origin);
-    origin.setY(origin.y() + nodeSize.height());
-    nodeToAdd->setXCoordinateOfEdgeOfFirstLine(lastX);
-    lastX = nodeToAdd->getXCoordinateOfEdgeOfLastLine();
+    if (nodeToAdd->getIsInline())
+    {
+        nodeToAdd->setXCoordinateOfStartOfFirstLine(lastX);
+        lastX += nodeToAdd->getXCoordinateOfEdgeOfLastLine();
+        if (nodeToAdd->getDimensions(display).height() != 15)
+        {
+            origin.setY(origin.y() + nodeSize.height());
+        }
+    }
+    else
+    {
+        origin.setY(origin.y() + nodeSize.height());
+        size.setHeight(size.height() + nodeSize.height());
+        lastX = 0;
+    }
 
-    size.setHeight(size.height() + nodeSize.height());
 }
 
 int Layout::calculateNewXAfterAddingNode(PaintNode *newNode)

@@ -9,7 +9,8 @@ public:
     ParagraphPaintNode();
     std::string getText();
     void setText(std::string textToSet);
-    virtual void paint(WWPainter *wwPainter, PaintArea *display, Layout *layout);
+    virtual void paint(WWPainter &wwPainter, PaintArea *display, Layout *layout);
+    virtual void setIsInline(bool inlineOrNot);
 
 private:
     std::string text;
