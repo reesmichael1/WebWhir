@@ -23,6 +23,7 @@ void Layout::addPaintNode(PaintNode *nodeToAdd, PaintArea *display)
         if (nodeToAdd->getDimensions(display).height() != 15)
         {
             origin.setY(origin.y() + nodeSize.height());
+            size.setHeight(size.height() + nodeSize.height());
         }
     }
     else
@@ -54,4 +55,36 @@ QPoint Layout::getOrigin()
 QSize Layout::getSize()
 {
     return size;
+}
+
+QSize Layout::getSizeOfParentNodeAfterAddingChildNodes(std::vector<PaintNode *>
+                                                       childNodes,
+                                                       PaintArea *display)
+{
+    QSize parentNodeSize = QSize(0, 0);
+    int lastChildNodeX = 0;
+    for (PaintNode* childNode : childNodes)
+    {
+        QSize nodeSize = childNode->getDimensions(display);
+        if (childNode->getIsInline())
+        {
+
+            if (childNode->getIsInline())
+            {
+                lastChildNodeX += nodeSize.width();
+                if (childNode->getDimensions(display).height() != 15)
+                {
+                    origin.setY(origin.y() + nodeSize.height());
+                    size.setHeight(size.height() + nodeSize.height());
+                }
+            }
+            else
+            {
+                origin.setY(origin.y() + nodeSize.height());
+                size.setHeight(size.height() + nodeSize.height());
+                lastX = 0;
+            }
+        }
+    }
+    return QSize(0, 0);
 }

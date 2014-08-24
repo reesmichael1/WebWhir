@@ -11,6 +11,7 @@ public:
     void setText(std::string textToSet);
     virtual void paint(WWPainter &wwPainter, PaintArea *display, Layout *layout);
     virtual void setIsInline(bool inlineOrNot);
+    virtual QSize getDimensions(PaintArea *display);
 
 private:
     std::string text;

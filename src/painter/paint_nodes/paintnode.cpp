@@ -32,11 +32,9 @@ void PaintNode::paint(WWPainter &wwPainter, PaintArea *display, Layout *layout)
 void PaintNode::paintChildNodes(WWPainter &wwPainter, PaintArea *display,
                                 Layout *layout)
 {
-    for (std::vector<PaintNode*>::iterator i = childPaintNodes.begin();
-         i != childPaintNodes.end(); i++)
+    for (PaintNode* childPaintNode : childPaintNodes)
     {
-        (*i)->calculateDimensions(display);
-        (*i)->paint(wwPainter, display, layout);
+        childPaintNode->paint(wwPainter, display, layout);
     }
 }
 

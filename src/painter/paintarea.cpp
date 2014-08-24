@@ -11,6 +11,10 @@ PaintArea::PaintArea(QWidget *parent) : QWidget(parent)
 
     layout = new Layout;
     paintingComplete = false;
+
+    QPalette background;
+    background.setColor(QPalette::Background, Qt::white);
+    this->setPalette(background);
 }
 
 PaintArea::~PaintArea()

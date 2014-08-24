@@ -3,19 +3,20 @@
 #include "painter/wwPainter/wwpainter.h"
 
 QHash<QString, int> wordHash;
+int lineHeight = 15;
 
 // This is just here as a prototype of what I'm trying to do with the reflow
 // My long term goal is to subclass QFont and add the same functionality
 void populateCharacterHash(QHash<QString, int> &characterHash)
 {
-    QString alphabet = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    QString alphabet = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ.,?!\\-/:;\'\"";
     QFont font = QFont();
     QFontMetrics fm(font);
     for (int i = 0; i < alphabet.length(); i++)
     {
-        characterHash.insert(alphabet.at(i), fm.tightBoundingRect(alphabet.at(i)).width());
+        characterHash.insert(alphabet.at(i), fm.width(alphabet.at(i)));
     }
-    characterHash.insert(" ", 10);
+
 }
 
 int getWidthOfString(QHash<QString, int> characterHash, QString string)
@@ -37,8 +38,8 @@ int getWidthOfString(QHash<QString, int> characterHash, QString string)
 TextPaintNode::TextPaintNode(std::string textToSet)
 {
     text = textToSet;
+    isInline = true;
     populateCharacterHash(characterHash);
-    QStringList lineList;
 }
 
 TextPaintNode::~TextPaintNode()
@@ -68,7 +69,8 @@ void TextPaintNode::calculateDimensions(PaintArea *display)
 
     splitTextIntoLinesForDisplay(display, wwPainter);
 
-    dimensions = size;
+    dimensions.setHeight(lineHeight * lineList.size());
+    dimensions.setWidth(size.width());
 }
 
 QFont TextPaintNode::createFontForNode(WWPainter &wwPainter)
@@ -103,7 +105,7 @@ QFont TextPaintNode::createFontForNode()
 void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter &wwPainter)
 {
     lineList.clear();
-    QStringList wordList = QString::fromStdString(text).split(" ");
+    QStringList wordList = QString::fromStdString(text).split(" ", QString::SkipEmptyParts);
     int currentWidth = xCoordinateOfStartOfFirstLine;
     int maximumWidth = display->width();
     QString nextLine;
@@ -138,10 +140,11 @@ bool TextPaintNode::regionContainsPaintNode(const QRegion &region)
 
 void TextPaintNode::drawLines(WWPainter *wwPainter, PaintArea *display)
 {
+    /*
     if (this->regionContainsPaintNode(display->visibleRegion()))
     {
+    */
         int currentY = coordinates.y();
-        int lineHeight = 15; // compute this
         int verticalPadding = 5;
         for (int i = 0; i < lineList.length(); i++)
         {
@@ -159,7 +162,7 @@ void TextPaintNode::drawLines(WWPainter *wwPainter, PaintArea *display)
                                 lineList.at(i));
             currentY += (lineHeight + verticalPadding);
         }
-    }
+    //}
 }
 
 QSize TextPaintNode::getDimensions(PaintArea *display)

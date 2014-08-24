@@ -16,6 +16,9 @@ public:
     void reset();
     QPoint getOrigin();
     QSize getSize();
+    QSize getSizeOfParentNodeAfterAddingChildNodes(std::vector<PaintNode*>
+                                                   childNodes,
+                                                   PaintArea *display);
 
 private:
     QPoint origin;

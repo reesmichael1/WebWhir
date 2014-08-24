@@ -20,6 +20,7 @@ std::string ParagraphPaintNode::getText()
 void ParagraphPaintNode::paint(WWPainter &wwPainter, PaintArea *display,
                                Layout *layout)
 {
+    layout->addPaintNode(this, display);
     for (size_t i = 0; i < childPaintNodes.size(); i++)
     {
         childPaintNodes.at(i)->setIsInline(true);
@@ -34,4 +35,12 @@ void ParagraphPaintNode::setIsInline(bool inlineOrNot)
     {
         childPaintNode->setIsInline(inlineOrNot);
     }
+}
+
+QSize ParagraphPaintNode::getDimensions(PaintArea *display)
+{
+    Q_UNUSED(display);
+
+    // add one line height's worth of padding
+    return QSize(dimensions.width(), dimensions.height() + 15);
 }
