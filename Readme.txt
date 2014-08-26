@@ -9,6 +9,8 @@ WebWhirr 0.2.0 is currently in the beta stage. This means that the current focus
 
 http://github.com/reesmichael1/WebWhirr/issues
 
+Please note that, even though the master branch has not been updated since September of 2013, development is still active! The painter has been completely rewritten, and its performance in the most recent builds is significantly better than that of the old painter. To see the progress that has been made, look at the painterRewrite branch.
+
 Thank you for supporting the efforts of the WebWhirr team.
 
 --Michael A. Rees
