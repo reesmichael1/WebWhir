@@ -10,7 +10,6 @@ public:
     ~TextPaintNode();
     virtual void paint(WWPainter &wwPainter, PaintArea *display, Layout *layout);
     virtual void calculateDimensions(PaintArea *display);
-    virtual bool regionContainsPaintNode(const QRegion &region);
     virtual QSize getDimensions(PaintArea *display);
 
 private:

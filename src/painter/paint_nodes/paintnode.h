@@ -39,7 +39,6 @@ public:
     void setXCoordinateOfStartOfFirstLine(int xToSet);
     void setNeedsPainting(bool valueToSet);
     bool getNeedsPainting();
-    virtual bool regionContainsPaintNode(const QRegion &region);
     bool getIsInline();
     void setIsInline(bool inlineOrNot);
     void resetPaintNode();

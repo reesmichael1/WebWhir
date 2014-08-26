@@ -120,11 +120,6 @@ bool PaintNode::getNeedsPainting()
     return needsPainting;
 }
 
-bool PaintNode::regionContainsPaintNode(const QRegion &region)
-{
-    Q_UNUSED(region);
-}
-
 bool PaintNode::getIsInline()
 {
     return isInline;

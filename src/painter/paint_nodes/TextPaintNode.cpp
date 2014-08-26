@@ -16,7 +16,6 @@ void populateCharacterHash(QHash<QString, int> &characterHash)
     {
         characterHash.insert(alphabet.at(i), fm.width(alphabet.at(i)));
     }
-
 }
 
 int getWidthOfString(QHash<QString, int> characterHash, QString string)
@@ -132,37 +131,35 @@ void TextPaintNode::splitTextIntoLinesForDisplay(PaintArea *display, WWPainter &
     xCoordinateOfEdgeOfLastLine = currentWidth;
 }
 
-bool TextPaintNode::regionContainsPaintNode(const QRegion &region)
+bool regionContainsPaintNode(const QRegion &region, QPoint coordinates, QSize dimensions)
 {
-    return (region.contains(QPoint(coordinates.x(), coordinates.y() + dimensions.height())) ||
-            region.contains(QPoint(coordinates.x(), coordinates.y() - dimensions.height())));
+    return (region.contains(QPoint(coordinates.x(), coordinates.y() + lineHeight * 2)) ||
+            region.contains(QPoint(coordinates.x(), coordinates.y() - lineHeight * 2)));
 }
 
 void TextPaintNode::drawLines(WWPainter *wwPainter, PaintArea *display)
 {
-    /*
-    if (this->regionContainsPaintNode(display->visibleRegion()))
+    int currentY = coordinates.y();
+    int verticalPadding = 5;
+    for (int i = 0; i < lineList.length(); i++)
     {
-    */
-        int currentY = coordinates.y();
-        int verticalPadding = 5;
-        for (int i = 0; i < lineList.length(); i++)
+        int currentX;
+        if (i == 0)
         {
-            int currentX;
-            if (i == 0)
-            {
-                currentX = xCoordinateOfStartOfFirstLine;
-            }
-            else
-            {
-                currentX = 0;
-            }
-
-            wwPainter->drawText(QRect(currentX, currentY, wwPainter->device()->width(), lineHeight),
-                                lineList.at(i));
-            currentY += (lineHeight + verticalPadding);
+            currentX = xCoordinateOfStartOfFirstLine;
         }
-    //}
+        else
+        {
+            currentX = 0;
+        }
+
+        if (regionContainsPaintNode(display->visibleRegion(), QPoint(currentX, currentY), dimensions))
+        {
+            wwPainter->drawText(QRect(currentX, currentY, wwPainter->device()->width(), lineHeight),
+                        lineList.at(i));
+        }
+        currentY += (lineHeight + verticalPadding);
+    }
 }
 
 QSize TextPaintNode::getDimensions(PaintArea *display)
