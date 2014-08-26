@@ -213,13 +213,10 @@ pip-log.txt
 *.mo
 
 #Mr Developer
-<<<<<<< HEAD
 .mr.developer.cfg
 
 /Builds
 /Release
 /include
 /lib
-=======
-.mr.developer.cfg
->>>>>>> dc113adead94d1349a54c1047c4dea019f56290f
+src/*.pro.user*
