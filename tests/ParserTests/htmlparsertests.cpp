@@ -1,4 +1,4 @@
-#include "HTMLParserTests.h"
+#include "htmlparsertests.h"
 
 HTMLParserTests::HTMLParserTests()
 {
