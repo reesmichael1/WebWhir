@@ -6,4 +6,4 @@
 /src/*.pro.user*
 /tests/*.pro.user*
 /tests/builds/
-*.pyc
+*.py*
