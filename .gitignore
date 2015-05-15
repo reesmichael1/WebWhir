@@ -1,8 +1,9 @@
 .DS_Store
-/Builds
+/builds
 /Release
 /include
 /lib
 /src/*.pro.user*
 /tests/*.pro.user*
+/tests/builds/
 *.pyc
