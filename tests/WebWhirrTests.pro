@@ -10,10 +10,13 @@ TEMPLATE = app
 
 SOURCES += tests.cpp \
     ParserTests/htmlparsertests.cpp \
-    ../src/parser/htmlparser.cpp
+    ParserTests/htmltokenizertests.cpp \
+    ../src/parser/htmlparser.cpp \
+    ../src/parser/htmltokenizer.cpp
 
 HEADERS += \
     ParserTests/htmlparsertests.h \
+    ParserTests/htmltokenizertests.h \
 
 INCLUDE += \
     ../src/main.cpp \
