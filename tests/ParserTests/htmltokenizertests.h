@@ -14,6 +14,10 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testTokenization_data();
     void testTokenization();
+    void testEndTags();
+    void testEndTags_data();
+    void testAttributes();
+    void testAttributes_data();
 
 private:
     HTMLTokenizer *htmlTokenizer;
