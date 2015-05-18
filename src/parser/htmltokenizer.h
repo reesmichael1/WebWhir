@@ -2,17 +2,18 @@
 #define HTMLTOKENIZER
 
 #include <string>
+#include "tokens/htmltoken.h"
 
 class HTMLTokenizer {
 public:
-    std::string emitNextToken(std::string htmlString, int startCharacter);
+    HTMLTokenizer();
+    HTMLToken emitNextToken(std::string htmlString, int startCharacter);
 
 private:
     // Ignoring RCDATA and script states for now
     enum class tokenizerState {
         dataState,
         charRefInDataState,
-        charRefInRcDataState,
         rawTextState,
         scriptDataState,
         plainTextState,
@@ -46,6 +47,7 @@ private:
         afterDoctypeNameState,
         // For now, only reading <!doctype html> 
     };
+    tokenizerState currentState;
 };
 
 #endif // HTMLTOKENIZER

@@ -5,9 +5,12 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    parser/htmlparser.cpp
+    parser/htmlparser.cpp \
+    parser/htmltokenizer.cpp \
+    parser/tokens/htmltoken.cpp
 
 HEADERS += \
-    main.h \
-    parser/htmlparser.h
+    parser/htmlparser.h \
+    parser/htmltokenizer.h \
+    parser/tokens/htmltoken.h
 

@@ -1,7 +1,307 @@
 #include "htmltokenizer.h"
 
-std::string HTMLTokenizer::emitNextToken(std::string htmlString, 
+// TODO: Correctly handle parse errors
+
+HTMLTokenizer::HTMLTokenizer()
+{
+    currentState = tokenizerState::dataState;
+}
+
+// TODO: Many more states to handle
+HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString, 
         int startCharacter)
 {
-    return "html";
+    // Start with -1 because of +1 on first run of loop
+    int characterIndex = startCharacter - 1;
+    HTMLToken currentToken;
+    while (true)
+    {
+        characterIndex += 1;
+        if (currentState == tokenizerState::dataState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+
+            if (nextCharacter == '&')
+            {
+                currentState = tokenizerState::charRefInDataState;
+            }
+            if (nextCharacter == '<')
+            {
+                currentState = tokenizerState::tagOpenState;
+            }
+            else
+            {
+                // TODO: Convert uppercase to lowercase
+                currentToken.addCharacterToTokenName(nextCharacter); 
+                //std::string(1, nextCharacter);
+                return currentToken;
+            }
+
+            // NULL: parse error
+            // EOF: Emit end-of-file token
+            continue;
+        }
+        // if (currentState == tokenizerState::charRefInDataState)
+        if (currentState == tokenizerState::tagOpenState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+
+            if (nextCharacter == '!')
+            {
+                currentState = tokenizerState::markupDeclarationOpenState;
+            }
+            else if (nextCharacter == '/')
+            {
+                currentState = tokenizerState::endTagOpenState;
+            }
+            else
+            {
+                currentState = tokenizerState::tagNameState;
+                // TODO: convert uppercase to lowercase if necessary
+                currentToken.addCharacterToTokenName(nextCharacter);
+            }
+            // ?: parse error, go to bogus comment state
+            // Anything else: parse error
+            continue;
+        }
+        if (currentState == tokenizerState::endTagOpenState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+            currentToken.setIsEndTagToken(true);
+
+            if (isalpha(nextCharacter))
+            {
+                // TODO: convert uppercase to lowercase if necessary
+                currentToken.addCharacterToTokenName(nextCharacter);
+                currentState = tokenizerState::tagNameState;
+            }
+            // Anything else: parse error
+            continue;
+        }
+        if (currentState == tokenizerState::tagNameState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+
+            if (isspace(nextCharacter))
+            {
+                currentState = tokenizerState::beforeAttributeNameState;
+            }
+            if (nextCharacter == '>')
+            {
+                currentState = tokenizerState::dataState;
+                return currentToken;
+            }
+            if (isalpha(nextCharacter))
+            {
+                // TODO: convert uppercase to lowercase if necessary
+                currentToken.addCharacterToTokenName(nextCharacter);
+            }
+            // NULL, EOF: parse error
+            continue;
+        }
+        if (currentState == tokenizerState::beforeAttributeNameState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+
+            if (isspace(nextCharacter)) 
+                continue;
+            else if (nextCharacter == '/')
+            {
+                currentState = tokenizerState::selfClosingStartTagState;
+            }
+            else if (nextCharacter == '>')
+            {
+                currentState = tokenizerState::dataState;
+                return currentToken;
+            }
+            else
+            {
+                // TODO: convert uppercase to lowercase if necessary
+                currentToken.addCharacterToCurrentAttributeName(
+                        nextCharacter);
+                currentState = tokenizerState::attributeNameState;
+            }
+            // anything else: parse error (EOF treated differently)
+            continue;
+        }
+        if (currentState == tokenizerState::attributeNameState)
+        {
+            // TODO: Check for duplicate attribute names
+            char nextCharacter = htmlString[characterIndex];
+            if (isspace(nextCharacter))
+            {
+                currentState = tokenizerState::afterAttributeNameState;
+            }
+            else if (nextCharacter == '/')
+            {
+                currentState = tokenizerState::selfClosingStartTagState;
+            }
+            else if (nextCharacter == '=')
+            {
+                currentState = tokenizerState::beforeAttributeValueState;
+            }
+            else if (nextCharacter == '>')
+            {
+                currentState = tokenizerState::dataState;
+                return currentToken;
+            }
+            else 
+            {
+                // TODO: Convert uppercase to lowercase if necessary
+                currentToken.
+                    addCharacterToCurrentAttributeName(nextCharacter);
+            }
+            continue;
+            // Anything else: parse error
+        }
+        if (currentState == tokenizerState::afterAttributeNameState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+            if (isspace(nextCharacter)) continue;
+
+            if (nextCharacter == '\"')
+            {
+                currentState = 
+                    tokenizerState::attributeValueDoubleQuotedState;
+            }
+            else if (nextCharacter == '&')
+            {
+                currentState = tokenizerState::attributeValueUnquotedState;
+            }
+            else if (nextCharacter == '\'')
+            {
+                currentState = 
+                    tokenizerState::attributeValueSingleQuotedState;
+            }
+            // Various parse errors
+            else
+            {
+                currentToken.
+                    addCharacterToCurrentAttributeValue(nextCharacter);
+                currentState = tokenizerState::attributeValueUnquotedState;
+            }
+        }
+        if (currentState == tokenizerState::beforeAttributeValueState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+
+            if (isspace(nextCharacter)) continue;
+
+            else if (nextCharacter == '\"')
+            {
+                currentState = 
+                    tokenizerState::attributeValueDoubleQuotedState;
+            }
+            else if (nextCharacter == '&')
+            {
+                currentState = tokenizerState::attributeValueUnquotedState;
+            }
+            else if (nextCharacter == '\'')
+            {
+                currentState = 
+                    tokenizerState::attributeValueSingleQuotedState;
+            }
+            else 
+            {
+                currentToken.
+                    addCharacterToCurrentAttributeValue(nextCharacter);
+                currentState = tokenizerState::attributeValueUnquotedState;
+            }
+            continue;
+        }
+        if (currentState == 
+                tokenizerState::attributeValueDoubleQuotedState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+
+            if (nextCharacter == '\"')
+            {
+                currentState = 
+                    tokenizerState::afterAttributeValueQuotedState;
+            }
+            else if (nextCharacter == '&')
+            {
+                // Allowed character: "
+                currentState = tokenizerState::charRefInAttributeValueState;
+            }
+            // NULL, EOF: Parse error
+            else
+            {
+                currentToken.
+                    addCharacterToCurrentAttributeValue(nextCharacter);
+            }
+            continue;
+        }
+        if (currentState == 
+                tokenizerState::attributeValueSingleQuotedState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+
+            if (nextCharacter == '\'')
+            {
+                currentState = 
+                    tokenizerState::afterAttributeValueQuotedState;
+            }
+            else if (nextCharacter == '&')
+            {
+                // Extra allowed character: '
+                currentState = 
+                    tokenizerState::charRefInAttributeValueState;
+            }
+            // NULL, EOF: Parse error
+            else
+            {
+                currentToken.
+                    addCharacterToCurrentAttributeValue(nextCharacter);
+            }
+            continue;
+        }
+        if (currentState == tokenizerState::attributeValueUnquotedState)
+        {
+            char nextCharacter = htmlString[characterIndex];
+
+            if (isspace(nextCharacter))
+            {
+                currentState = tokenizerState::beforeAttributeNameState;
+            }
+            else if (nextCharacter == '&')
+            {
+                // Extra allowed character: &
+                currentState = tokenizerState::charRefInAttributeValueState;
+            }
+            else if (nextCharacter == '>')
+            {
+                currentState = tokenizerState::dataState;
+                return currentToken;
+            }
+            // Lots of characters: parse error
+            else
+            {
+                currentToken.
+                    addCharacterToCurrentAttributeValue(nextCharacter);
+            }
+        }
+        if (currentState == 
+                tokenizerState::afterAttributeValueQuotedState)
+        {
+            currentToken.finalizeCurrentAttribute();
+            char nextCharacter = htmlString[characterIndex];
+
+            if (isspace(nextCharacter))
+            {
+                currentState = tokenizerState::beforeAttributeNameState;
+            }
+            if (nextCharacter == '/')
+            {
+                currentState = tokenizerState::selfClosingStartTagState;
+            }
+            if (nextCharacter == '>')
+            {
+                currentState = tokenizerState::dataState;
+                return currentToken;
+            }
+            // anything else: parse error
+            continue;
+        }
+    }
 }
