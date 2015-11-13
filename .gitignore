@@ -6,5 +6,7 @@
 /src/*.pro.user*
 /tests/*.pro.user*
 /tests/builds/
+/docs/html/
+/docs/latex/
 *.py*
 *.swp
