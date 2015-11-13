@@ -56,6 +56,8 @@ void HTMLTokenizerTests::testEndTags_data()
         << "Both opening and closing tags are present";
     QTest::newRow("manyTags") << "<html><head><title></title></head></html>"
         << 19 << true << "Several opening and closing tags are nested";
+    QTest::newRow("capitals") << "<html><head><tItlE></TiTle></heAd></html>"
+        << 19 << true << "Nested tags have random capitals.";
 }
 
 void HTMLTokenizerTests::testEndTags()

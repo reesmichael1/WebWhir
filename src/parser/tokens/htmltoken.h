@@ -1,3 +1,10 @@
+/*! \class HTMLToken
+ * \brief A class that implements the output of the HTMLTokenizer.
+ * 
+ * An HTMLToken is created by HTMLTokenizer as the HTMLParser parses the
+ * input HTML. Tokens contain information about various HTML tags, such as
+ * attributes or tag names. 
+ */
 #ifndef HTMLTOKEN_H 
 #define HTMLTOKEN_H
 

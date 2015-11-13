@@ -1,3 +1,10 @@
+/*! \class HTMLTokenizer
+ * \brief Create HTMLTokens as the input HTML is parsed.
+ *
+ * HTMLTokens are objects that store information about particular HTML tags
+ * as the tags in the input are read. The tokenizer creates these tokens
+ * as the HTMLParser goes through the HTML input.
+ */
 #ifndef HTMLTOKENIZER
 #define HTMLTOKENIZER
 

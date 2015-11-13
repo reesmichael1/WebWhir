@@ -1,13 +1,32 @@
+/*! \file
+ * \brief Create HTMLTokens. 
+ */
 #include "htmltokenizer.h"
 
-// TODO: Correctly handle parse errors
+/// \todo Correctly handle parse errors
 
+/*! 
+ *
+ * \brief Construct the HTMLTokenizer class.
+ *
+ * Initialize the HTMLTokenizer. As defined in the W3C parser specification,
+ * the tokenizer state is initially set to the data state.
+ */
 HTMLTokenizer::HTMLTokenizer()
 {
     currentState = tokenizerState::dataState;
 }
 
-// TODO: Many more states to handle
+/*!
+ * \brief Emit the HTMLToken in \a htmlString starting at \a startCharacter.
+ *
+ * Emit the HTMLToken that corresponds to the HTML tag beginning at
+ * \a startCharacter in \a htmlString. 
+ *
+ * \return HTMLToken
+ */
+
+/// \todo Many more states to handle
 HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString, 
         int startCharacter)
 {
