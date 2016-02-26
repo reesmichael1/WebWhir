@@ -48,13 +48,10 @@ HTMLParser::~HTMLParser()
  * this involves verifying that the HTML has a root element and a doctype,
  * and that no non-space characters occur outside of an HTML element.
  *
- * This function returns a boolean: true if \a htmlString is valid HTML and
- * false otherwise.
- *
  * See http://dev.w3.org/html5/spec-preview/syntax.html#syntax for more 
  * details. 
  *
- * \return bool
+ * \return bool: true if \a htmlString is valid HTML and false otherwise.
  */
 bool HTMLParser::validateHTML(std::string htmlString)
 {
@@ -71,7 +68,7 @@ bool HTMLParser::validateHTML(std::string htmlString)
  *
  * For now, WebWhirr only supports the !html doctype.
  *
- * \return bool
+ * \return bool: true if \a htmlString has a doctype and false otherwise
  */
 bool HTMLParser::hasDoctype(std::string htmlString)
 {
@@ -113,7 +110,7 @@ bool HTMLParser::hasDoctype(std::string htmlString)
  * <html> and </html>. This is not the cleanest implementation, and needs
  * to be revised.
  *
- * \return bool
+ * \return bool: true if \a htmlString has a root element, false otherwise
  *
  * \todo Improve implementation of checking for root element.
  */
@@ -134,7 +131,9 @@ bool HTMLParser::hasRootElement(std::string htmlString)
  * different points in the parsing stage. Here, the insertion mode is 
  * determined as defined in the algorithm described at
  * http://www.w3.org/TR/2011/WD-html5-20110113/parsing.html#the-insertion-mode.
- * \return HTMLParser::insertionMode
+ *
+ * \return HTMLParser::insertionMode: the insertion mode that the parser
+ * should switch to at the current point in parsing the document
  */
 HTMLParser::insertionMode HTMLParser::resetInsertionMode()
 {

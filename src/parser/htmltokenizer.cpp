@@ -1,5 +1,5 @@
 /*! \file
- * \brief Create HTMLTokens. 
+ * \brief Create HTMLToken objects. 
  */
 #include "htmltokenizer.h"
 
@@ -23,7 +23,8 @@ HTMLTokenizer::HTMLTokenizer()
  * Emit the HTMLToken that corresponds to the HTML tag beginning at
  * \a startCharacter in \a htmlString. 
  *
- * \return HTMLToken
+ * \return HTMLToken: The HTMLToken that should be created by the tokenizer
+ * at \a startCharacter in \a htmlString.
  */
 
 /// \todo Many more states to handle

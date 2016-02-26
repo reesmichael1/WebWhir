@@ -1,5 +1,5 @@
 /*! \file 
- * \brief Implement individual tokens to be emitted by the tokenizer.
+ * \brief Implement HTMLToken objects (emitted by the HTMLTokenizer).
  *
  * An HTMLToken is an object that the tokenizer builds as the HTML input is 
  * parsed, and then the parser stores the information that the HTML
@@ -19,7 +19,7 @@ HTMLToken::HTMLToken()
 }
 
 /// \brief Check if the token is an end tag token.
-/// \return bool
+/// \return bool: true if the token is an end tag token, false otherwise
 bool HTMLToken::getIsEndTagToken()
 {
     return isEndTagToken;
@@ -54,14 +54,19 @@ void HTMLToken::addCharacterToCurrentAttributeValue(char characterToAdd)
 }
 
 /// \brief Get the name of the current token.
-/// \return std::string
+/// \return std::string: the name of the token
 std::string HTMLToken::getTokenName()
 {
     return tokenName;
 }
 
-/// \brief Get a std::unordered_map of the token's attributes.
-/// return std::unordered_map<std::string, std::string>
+/*!  
+ * \brief Get a std::unordered_map of the token's attributes.
+ *
+ * \return std::unordered_map<std::string, std::string>: a map in which the
+ * key is the name of an attribute and the value is the value of that 
+ * attribute
+ */
 std::unordered_map<std::string, std::string> HTMLToken::getAttributes()
 {
     return tokenAttributes;
