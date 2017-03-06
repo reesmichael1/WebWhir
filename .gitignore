@@ -10,3 +10,4 @@
 /docs/latex/
 *.py*
 *.swp
+build*

@@ -12,6 +12,7 @@
 #include <QStringList>
 
 #include "htmlparser.h"
+#include "elements/htmlheadelement.h"
 
 /// \todo Determine character encoding
 
@@ -200,4 +201,26 @@ HTMLParser::insertionMode HTMLParser::resetInsertionMode()
         lastNodePosition -= 1;
         lastNode = openElementsStack.at(lastNodePosition);
     }
+}
+
+HTMLElement* HTMLParser::createAnElementForAToken(HTMLToken *htmlToken)
+{
+    std::string tokenName = htmlToken->getTokenName();
+    HTMLElement *newElement;
+    if (tokenName == "head")
+    {
+        newElement = new HTMLHeadElement;
+        newElement->addAttributesToElement(htmlToken->getAttributes());
+    }
+    else
+    {
+        /// \todo Handle HTMLUnknownElement
+    }
+    return newElement;
+}
+
+void HTMLParser::insertAnElementForAToken(HTMLToken *htmlToken)
+{
+    HTMLElement *element = createAnElementForAToken(htmlToken);
+    /// \todo Handle form elements. 
 }

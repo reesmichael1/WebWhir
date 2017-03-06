@@ -15,6 +15,9 @@
 #include <string>
 #include <vector>
 
+#include "htmltokenizer.h"
+#include "elements/htmlelement.h"
+
 class HTMLParser
 {
 public:
@@ -25,6 +28,9 @@ public:
 private:
     bool hasDoctype(std::string htmlString);
     bool hasRootElement(std::string htmlString);
+    /// \todo Don't forget unknown elements.
+    HTMLElement* createAnElementForAToken(HTMLToken *htmlToken);
+    void insertAnElementForAToken(HTMLToken *htmlToken);
 
     enum insertionMode {
         initial,

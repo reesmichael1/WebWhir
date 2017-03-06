@@ -37,10 +37,9 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
     while (true)
     {
         characterIndex += 1;
+        char nextCharacter = htmlString[characterIndex];
         if (currentState == tokenizerState::dataState)
         {
-            char nextCharacter = htmlString[characterIndex];
-
             if (nextCharacter == '&')
             {
                 currentState = tokenizerState::charRefInDataState;
@@ -64,8 +63,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         // if (currentState == tokenizerState::charRefInDataState)
         if (currentState == tokenizerState::tagOpenState)
         {
-            char nextCharacter = htmlString[characterIndex];
-
             if (nextCharacter == '!')
             {
                 currentState = tokenizerState::markupDeclarationOpenState;
@@ -86,7 +83,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         }
         if (currentState == tokenizerState::endTagOpenState)
         {
-            char nextCharacter = htmlString[characterIndex];
             currentToken.setIsEndTagToken(true);
 
             if (isalpha(nextCharacter))
@@ -100,8 +96,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         }
         if (currentState == tokenizerState::tagNameState)
         {
-            char nextCharacter = htmlString[characterIndex];
-
             if (isspace(nextCharacter))
             {
                 currentState = tokenizerState::beforeAttributeNameState;
@@ -121,8 +115,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         }
         if (currentState == tokenizerState::beforeAttributeNameState)
         {
-            char nextCharacter = htmlString[characterIndex];
-
             if (isspace(nextCharacter)) 
                 continue;
             else if (nextCharacter == '/')
@@ -147,7 +139,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         if (currentState == tokenizerState::attributeNameState)
         {
             // TODO: Check for duplicate attribute names
-            char nextCharacter = htmlString[characterIndex];
             if (isspace(nextCharacter))
             {
                 currentState = tokenizerState::afterAttributeNameState;
@@ -176,7 +167,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         }
         if (currentState == tokenizerState::afterAttributeNameState)
         {
-            char nextCharacter = htmlString[characterIndex];
             if (isspace(nextCharacter)) continue;
 
             if (nextCharacter == '\"')
@@ -203,8 +193,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         }
         if (currentState == tokenizerState::beforeAttributeValueState)
         {
-            char nextCharacter = htmlString[characterIndex];
-
             if (isspace(nextCharacter)) continue;
 
             else if (nextCharacter == '\"')
@@ -232,8 +220,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         if (currentState == 
                 tokenizerState::attributeValueDoubleQuotedState)
         {
-            char nextCharacter = htmlString[characterIndex];
-
             if (nextCharacter == '\"')
             {
                 currentState = 
@@ -255,8 +241,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         if (currentState == 
                 tokenizerState::attributeValueSingleQuotedState)
         {
-            char nextCharacter = htmlString[characterIndex];
-
             if (nextCharacter == '\'')
             {
                 currentState = 
@@ -278,8 +262,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
         }
         if (currentState == tokenizerState::attributeValueUnquotedState)
         {
-            char nextCharacter = htmlString[characterIndex];
-
             if (isspace(nextCharacter))
             {
                 currentState = tokenizerState::beforeAttributeNameState;
@@ -305,8 +287,6 @@ HTMLToken HTMLTokenizer::emitNextToken(std::string htmlString,
                 tokenizerState::afterAttributeValueQuotedState)
         {
             currentToken.finalizeCurrentAttribute();
-            char nextCharacter = htmlString[characterIndex];
-
             if (isspace(nextCharacter))
             {
                 currentState = tokenizerState::beforeAttributeNameState;
