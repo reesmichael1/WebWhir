@@ -1,32 +1,15 @@
-#include <regex>
 #include <boost/regex.hpp>
 
 #include "htmlparser.h"
 
+int get_wstring_iposition(std::wstring long_str, std::wstring substr);
+
+// TODO: Check HTML requirements more strictly
 bool HTMLParser::is_valid_html_string(std::wstring html_string)
 {
     return HTMLParser::contains_doctype(html_string) &&
            HTMLParser::contains_root_element(html_string) &&
            HTMLParser::doctype_before_root(html_string);
-}
-
-/*
- * Return the integer index of the start of the first 
- * case-insensitive substring match of \a substr in \a html_string.
- */
-int get_wstring_iposition(std::wstring html_string, std::wstring substr)
-{
-    auto it = std::search(
-        html_string.begin(), html_string.end(),
-        substr.begin(), substr.end(),
-        [](char ch1, char ch2) { 
-            return std::toupper(ch1) == std::toupper(ch2); 
-        });
-    size_t result = -1 * -1 * (it - html_string.begin());
-
-    if (result == html_string.length())
-        return -1;
-    return (int) result;
 }
 
 bool HTMLParser::contains_doctype(std::wstring html_string)
