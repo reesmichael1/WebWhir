@@ -5,11 +5,18 @@ failed_tests=()
 
 make tests
 if [ "$?" == 0 ] ; then
-    echo "Running htmlparser_tests"
-    ./htmlparser_tests/htmlparser_tests
+    echo "Running htmlvalidation_tests"
+    ./htmlparser_tests/htmlvalidation_tests
     if [ "$?" != 0 ] ; then
         any_tests_failed=true
-        failed_tests=(${failed_tests[@]} "htmlparser_tests")
+        failed_tests=(${failed_tests[@]} "htmlvalidation_tests")
+    fi
+
+    echo "Running htmltokenization_tests"
+    ./htmlparser_tests/htmltokenization_tests
+    if [ "$?" != 0 ] ; then
+        any_tests_failed=true
+        failed_tests=(${failed_tests[@]} "htmltokenization_tests")
     fi
 
     if "$any_tests_failed" == true ; then

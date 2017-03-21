@@ -46,3 +46,9 @@ bool HTMLParser::doctype_before_root(std::wstring html_string)
     return get_wstring_iposition(html_string, L"<!DOCTYPE") <
         get_wstring_iposition(html_string, L"<html");
 }
+
+HTMLToken HTMLParser::create_token_from_string(std::wstring html_string)
+{
+    HTMLToken token = HTMLToken();
+    return token;
+}
