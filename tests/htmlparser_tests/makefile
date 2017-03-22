@@ -7,7 +7,8 @@ all: htmlvalidation_tests htmltokenization_tests
 htmlvalidation_tests: htmlvalidation_tests.cpp \
 	../../src/htmlparser/htmlparser.h \
 	../../src/htmlparser/htmlparser.cpp \
-	../../src/htmlparser/htmlparser_utils.cpp
+	../../src/htmlparser/htmlparser_utils.cpp \
+	../../src/htmlparser/tokens/HTMLToken.cpp
 	$(CC) $(CXXFLAGS) -o htmlvalidation_tests htmlvalidation_tests.cpp \
 		../test_skeleton.o ../../src/htmlparser/htmlparser.cpp \
 		../../src/htmlparser/tokens/HTMLToken.cpp \

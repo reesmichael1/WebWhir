@@ -5,19 +5,12 @@
 
 #include "tokens/HTMLToken.h"
 
+
+
 class HTMLParser
 {
     public:
         static bool is_valid_html_string(std::wstring html_string);
-        HTMLToken create_token_from_string(std::wstring html_string);
-
-    private:
-        static bool contains_doctype(std::wstring html_string);
-        static bool contains_root_element(std::wstring html_string);
-        static bool contains_root_open(std::wstring html_string);
-        static bool contains_root_close(std::wstring html_string);
-        static bool contains_root_open_before_close(std::wstring html_string);
-        static bool doctype_before_root(std::wstring html_string);
 
         // A reasonably sized sublist of the possible parser states
         // (although most are not yet used)
@@ -62,6 +55,18 @@ class HTMLParser
             bogus_doctype_state,
             cdata_section_state
         };
+
+        HTMLToken create_token_from_string(std::wstring html_string, 
+                tokenizer_state &state);
+        HTMLToken create_token_from_string(std::wstring html_string);
+
+    private:
+        static bool contains_doctype(std::wstring html_string);
+        static bool contains_root_element(std::wstring html_string);
+        static bool contains_root_open(std::wstring html_string);
+        static bool contains_root_close(std::wstring html_string);
+        static bool contains_root_open_before_close(std::wstring html_string);
+        static bool doctype_before_root(std::wstring html_string);
 
         tokenizer_state current_state;
 };
