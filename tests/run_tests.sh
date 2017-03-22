@@ -20,7 +20,7 @@ if [ "$?" == 0 ] ; then
     fi
 
     if "$any_tests_failed" == true ; then
-        echo "Failures in $failed_tests"
+        echo -e "Failures in:\n\t${failed_tests[@]}"
     else
         echo "All tests complete without failures"
     fi

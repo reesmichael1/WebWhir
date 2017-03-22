@@ -61,6 +61,7 @@ TEST_CASE("HTML tokenization")
                         L"<img src=\"example.png\" width='10' height='20'>");
             std::map<std::wstring, std::wstring> attributes_map = 
                 token.get_attributes();
+            CHECK(token.get_tag_name() == L"img");
             CHECK_FALSE(token.is_self_closing());
             CHECK(token.contains_attribute(L"src"));
             CHECK(token.contains_attribute(L"width"));
@@ -74,10 +75,32 @@ TEST_CASE("HTML tokenization")
         {
             HTMLToken token = 
                 parser.create_token_from_string(L"<html lang='en' lang='br'>");
+            CHECK(token.get_tag_name() == L"html");
             CHECK(token.contains_attribute(L"lang"));
             CHECK(token.get_attribute_value(L"lang") == L"en");
             CHECK_FALSE(token.get_attribute_value(L"lang") == L"br");
             CHECK_FALSE(token.is_self_closing());
+        }
+
+        SECTION("Capitalization in attribute name/value")
+        {
+            HTMLToken token = 
+                parser.create_token_from_string(L"<html lAnG='eN'>");
+            CHECK(token.get_tag_name() == L"html");
+            CHECK(token.contains_attribute(L"lang"));
+            CHECK(token.get_attribute_value(L"lang") == L"en");
+            CHECK_FALSE(token.contains_attribute(L"lAnG"));
+            CHECK_FALSE(token.is_self_closing());
+        }
+
+        SECTION("Self-closing tag with attributes")
+        {
+            HTMLToken token = 
+                parser.create_token_from_string(L"<area shape=\"circle\"/>");
+            CHECK(token.get_tag_name() == L"area");
+            CHECK(token.is_self_closing());
+            CHECK(token.contains_attribute(L"shape"));
+            CHECK(token.get_attribute_value(L"shape") == L"circle");
         }
     }
 }

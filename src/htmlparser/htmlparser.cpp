@@ -395,6 +395,9 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
                 break;
             }
 
+            case bogus_comment_state:
+                break;
+
             default:
             {
                 break;
