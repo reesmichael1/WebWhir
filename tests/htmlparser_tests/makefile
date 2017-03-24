@@ -22,6 +22,8 @@ htmlvalidation_tests: htmlvalidation_tests.cpp \
 		../../src/htmlparser/htmlparser_utils.cpp $(LIBS)
 
 htmltokenization_tests: htmltokenization_tests.cpp \
+	../../src/htmlparser/htmlparser_utils.cpp \
+	../../src/htmlparser/htmlparser.cpp \
 	../../src/htmlparser/tokens/StartToken.h \
 	../../src/htmlparser/tokens/StartToken.cpp \
 	../../src/htmlparser/tokens/EndToken.h \

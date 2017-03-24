@@ -8,11 +8,13 @@ class StartToken
 {
     public:
         StartToken();
+        StartToken(wchar_t token_name);
         std::wstring get_tag_name();
         bool is_self_closing();
         void set_self_closing(bool closing);
         std::map<std::wstring, std::wstring> get_attributes();
         void set_name(std::wstring name);
+        void add_char_to_name(wchar_t next_char);
         void add_to_current_attribute_name(wchar_t next_char);
         void add_to_current_attribute_value(wchar_t next_char);
         std::wstring get_attribute_value(std::wstring attribute_name);

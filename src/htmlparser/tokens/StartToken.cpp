@@ -11,9 +11,23 @@ StartToken::StartToken()
     current_attribute_value = L"";
 }
 
+StartToken::StartToken(wchar_t token_name)
+{
+    self_closing = false;
+    attributes = {};
+    tag_name = tolower(token_name);
+    current_attribute_name = L"";
+    current_attribute_value = L"";
+}
+
 std::wstring StartToken::get_tag_name()
 {
     return tag_name;
+}
+
+void StartToken::add_char_to_name(wchar_t next_char)
+{
+    tag_name.push_back(tolower(next_char));
 }
 
 bool StartToken::is_self_closing()

@@ -8,9 +8,20 @@ EndToken::EndToken()
     tag_name = L"";
 }
 
+EndToken::EndToken(wchar_t token_name)
+{
+    self_closing = false;
+    tag_name = tolower(token_name);
+}
+
 std::wstring EndToken::get_tag_name()
 {
     return tag_name;
+}
+
+void EndToken::add_char_to_name(wchar_t next_char)
+{
+    tag_name.push_back(tolower(next_char));
 }
 
 bool EndToken::is_self_closing()

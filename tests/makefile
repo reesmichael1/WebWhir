@@ -12,3 +12,7 @@ test_skeleton.o: test_skeleton.cpp
 
 htmlparser_tests: 
 	+$(MAKE) -C htmlparser_tests
+
+clean:
+	$(RM) htmlparser_tests/htmltokenization_tests \
+		htmlparser_tests/htmlvalidation_tests

@@ -152,5 +152,14 @@ TEST_CASE("HTML tokenization")
                 CHECK(token.get_attribute_value(L"shape") == L"circle");
             }
         }
+
+        SECTION("Creating end tags with parser")
+        {
+            EndToken token = boost::get<EndToken>(
+                    parser.create_token_from_string(L"</p>"));
+
+            CHECK(token.get_tag_name() == L"p");
+            CHECK_FALSE(token.is_self_closing());
+        }
     }
 }
