@@ -1,13 +1,13 @@
-#ifndef HTMLTOKEN_H
-#define HTMLTOKEN_H
+#ifndef STARTTOKEN_H
+#define STARTTOKEN_H
 
 #include <string>
 #include <map>
 
-class HTMLToken
+class StartToken
 {
     public:
-        HTMLToken();
+        StartToken();
         std::wstring get_tag_name();
         bool is_self_closing();
         void set_self_closing(bool closing);

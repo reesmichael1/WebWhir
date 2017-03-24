@@ -53,34 +53,35 @@ bool HTMLParser::doctype_before_root(std::wstring html_string)
         get_wstring_iposition(html_string, L"<html");
 }
 
-HTMLToken HTMLParser::create_token_from_string(std::wstring html_string)
+Token HTMLParser::create_token_from_string(std::wstring html_string)
 {
     tokenizer_state state = data_state;
     return create_token_from_string(html_string, state);
 }
 
-HTMLToken HTMLParser::create_token_from_string(std::wstring html_string, 
+Token HTMLParser::create_token_from_string(std::wstring html_string, 
         HTMLParser::tokenizer_state &state)
 {
-    HTMLToken token = HTMLToken();
+    StartToken start_token = StartToken();
+    DoctypeToken doctype_token = DoctypeToken();
 
-    for (wchar_t next_char : html_string)
+    // Can't use range-based loop, because we need to 
+    // be able to look forwards/go backwards
+    for (std::wstring::iterator it = html_string.begin(); 
+            it != html_string.end(); ++it)
     {
+        wchar_t next_char = *it;
         switch (state)
         {
             case data_state:
             {
+                // TODO: implement this state
                 if (next_char == '&')
-                {
-                    // TODO: implement this state
                     state = char_ref_in_data_state;
-                    break;
-                }
+
                 else if (next_char == '<')
-                {
                     state = tag_open_state;
-                    break;
-                }
+
                 // Handle \u0000, EOF
                 // else return character token
                 break;
@@ -89,64 +90,55 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
             case tag_open_state:
             {
                 if (next_char == '!')
-                {
                     state = markup_declaration_open_state;
-                    break;
-                }
+
                 else if (next_char == '/')
-                {
                     state = end_tag_open_state;
-                    break;
-                }
+
                 else if (isalpha(next_char))
                 {
-                    token = HTMLToken();
+                    start_token = StartToken();
                     std::wstring tag_name = L"";
                     tag_name.push_back(tolower(next_char));
-                    token.set_name(tag_name);
+                    start_token.set_name(tag_name);
                     state = tag_name_state;
                 }
+
+                // parse error
                 else if (next_char == '?')
-                {
-                    // parse error
                     state = bogus_comment_state;
-                    break;
-                }
+
                 break;
             }
 
             case tag_name_state:
             {
                 if (space_chars.count(next_char) != 0)
-                {
                     state = before_attribute_name_state;
-                    break;
-                }
+
                 else if (next_char == '/')
-                {
                     state = self_closing_start_tag_state;
-                    break;
-                }
+
                 else if (next_char == '>')
                 {
                     state = data_state;
-                    return token;
+                    return start_token;
                 }
+
                 else if (isalpha(next_char))
                 {
-                    std::wstring tag_name = token.get_tag_name();
+                    std::wstring tag_name = start_token.get_tag_name();
                     tag_name.push_back(tolower(next_char));
-                    token.set_name(tag_name);
-                    break;
+                    start_token.set_name(tag_name);
                 }
 
                 // null, EOF: parse error
                 
                 else
                 {
-                    std::wstring tag_name = token.get_tag_name() + 
+                    std::wstring tag_name = start_token.get_tag_name() + 
                         std::wstring(&next_char);
-                    token.set_name(tag_name);
+                    start_token.set_name(tag_name);
                 }
 
                 break;
@@ -162,26 +154,26 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
                 if (next_char == '>')
                 {
                     state = data_state;
-                    token.set_self_closing(true);
-                    return token;
+                    start_token.set_self_closing(true);
+                    return start_token;
                 }
 
                 // anything else: parse error
+                break;
             }
 
             case before_attribute_name_state:
             {
                 if (space_chars.count(next_char) != 0)
                     break;
+
                 else if (next_char == '/')
-                {
                     state = self_closing_start_tag_state;
-                    break;
-                }
+
                 else if (next_char == '>')
                 {
                     state = data_state;
-                    return token;
+                    return start_token;
                 }
 
                 // null, EOF, ", ', ?, = 
@@ -190,39 +182,30 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
                 else
                 {
                     state = attribute_name_state;
-                    token.add_to_current_attribute_name(next_char);
-                    break;
+                    start_token.add_to_current_attribute_name(next_char);
                 }
+
+                break;
             }
 
             case attribute_name_state:
             {
                 if (space_chars.count(next_char) != 0)
-                {
                     state = after_attribute_name_state;
-                    break;
-                }
 
                 else if (next_char == '/')
-                {
                     state = self_closing_start_tag_state;
-                    break;
-                }
 
                 else if (next_char == '=')
-                {
                     state = before_attribute_value_state;
-                    break;
-                }
 
                 // EOF, ", ', <, null
                 // parse error
                 
                 else
-                {
-                    token.add_to_current_attribute_name(next_char);
-                    break;
-                }
+                    start_token.add_to_current_attribute_name(next_char);
+
+                break;
             }
 
             case after_attribute_name_state:
@@ -231,15 +214,10 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
                     break;
 
                 if (next_char == '/')
-                {
                     state = self_closing_start_tag_state;
-                    break;
-                }
 
                 if (next_char == '=')
-                {
                     state = before_attribute_value_state;
-                }
 
                 // null, ", ', <, EOF
                 // parse error
@@ -253,29 +231,20 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
                     break;
 
                 else if (next_char == '"')
-                {
                     state = attribute_value_double_quoted_state;
-                    break;
-                }
 
+                // TODO: implement this state
                 else if (next_char == '&')
-                {
-                    // TODO: implement this state
                     state = attribute_value_unquoted_state;
-                    // do not break -- need to reconsume character
-                }
 
                 else if (next_char == '\'')
-                {
                     state = attribute_value_single_quoted_state;
-                    break;
-                }
 
                 else if (next_char == '>')
                 {
                     // parse error
                     state = data_state;
-                    return token;
+                    return start_token;
                 }
 
                 // <, =, `, EOF
@@ -283,33 +252,26 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
 
                 else
                 {
-                    token.add_to_current_attribute_name(next_char);
+                    start_token.add_to_current_attribute_name(next_char);
                     state = attribute_value_unquoted_state; 
-                    break;
                 }
+
+                break;
             }
 
             case attribute_value_double_quoted_state:
             {
                 if (next_char == '"')
-                {
                     state = after_attribute_value_quoted_state;
-                    break;
-                }
 
                 else if (next_char == '&')
-                {
                     // TODO: implement this state
                     state = char_ref_in_attribute_value_state;
-                    break;
-                }
 
                 // null, EOF: parse error
                 
                 else
-                {
-                    token.add_to_current_attribute_value(next_char);
-                }
+                    start_token.add_to_current_attribute_value(next_char);
 
                 break;
             }
@@ -317,24 +279,16 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
             case attribute_value_single_quoted_state:
             {
                 if (next_char == '\'')
-                {
                     state = after_attribute_value_quoted_state;
-                    break;
-                }
 
+                // TODO: handle this state
                 else if (next_char == '&')
-                {
-                    // TODO: handle this state
                     state = char_ref_in_attribute_value_state;
-                }
 
                 // EOF: parse error
 
                 else
-                {
-                    token.add_to_current_attribute_value(next_char);
-                    break;
-                }
+                    start_token.add_to_current_attribute_value(next_char);
 
                 break;
             }
@@ -342,53 +296,40 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
             case attribute_value_unquoted_state:
             {
                 if (space_chars.count(next_char) != 0)
-                {
                     state = before_attribute_value_state;
-                    break;
-                }
 
+                // TODO: implement this state
                 else if (next_char == '&')
-                {
-                    // TODO: implement this state
                     state = char_ref_in_attribute_value_state;
-                }
 
                 else if (next_char == '>')
                 {
                     state = data_state;
-                    return token;
+                    return start_token;
                 }
 
                 // null, ", ', <, =, `, EOF: parse error
                 
                 else
-                {
-                    token.add_to_current_attribute_value(next_char);
-                    break;
-                }
+                    start_token.add_to_current_attribute_value(next_char);
 
                 break;
             }
 
             case after_attribute_value_quoted_state:
             {
-                token.process_current_attribute();
+                start_token.process_current_attribute();
                 
                 if (space_chars.count(next_char) != 0)
-                {
                     state = before_attribute_name_state;
-                    break;
-                }
 
                 else if (next_char == '/')
-                {
                     state = self_closing_start_tag_state;
-                }
 
                 else if (next_char == '>')
                 {
                     state = data_state;
-                    return token;
+                    return start_token;
                 }
 
                 // EOF, anything else: parse error
@@ -398,6 +339,106 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
             case bogus_comment_state:
                 break;
 
+            case markup_declaration_open_state:
+            {
+                // Check if we are in a comment
+                std::wstring next_seven_chars(it, it + 7);
+
+                if (get_wstring_iposition(next_seven_chars, L"doctype") == 0)
+                {
+                    // 6, not 7, because for loop increments one extra step
+                    it += 6;
+                    state = doctype_state;
+                }
+
+                break;
+            }
+
+            case doctype_state:
+            {
+                if (space_chars.count(next_char) != 0)
+                    state = before_doctype_name_state;
+
+                // EOF: parse error
+
+                else
+                {
+                    it--;
+                    state = before_doctype_name_state;
+                }
+
+                break;
+            }
+
+            case before_doctype_name_state:
+            {
+                if (space_chars.count(next_char) != 0)
+                    break;
+
+                if (next_char == '>')
+                {
+                    state = data_state;
+                    doctype_token.set_quirks_required(true);
+                    return doctype_token;
+                }
+
+                // EOF: parse error
+
+                else
+                {
+                    doctype_token = DoctypeToken(next_char);
+                    state = doctype_name_state;
+                    break;
+                }
+            }
+
+            case doctype_name_state:
+            {
+                if (space_chars.count(next_char) != 0)
+                {
+                    state = after_doctype_name_state;
+                    doctype_token.set_is_name_set(true);
+                    break;
+                }
+
+                else if (next_char == '>')
+                {
+                    state = data_state;
+                    doctype_token.set_is_name_set(true);
+                    return doctype_token;
+                }
+
+                // null, EOF: parse error
+
+                doctype_token.add_to_name(next_char);
+                break;
+            }
+
+            case after_doctype_name_state:
+            {
+                if (space_chars.count(next_char) != 0)
+                    break;
+
+                // EOF: parse error
+                
+                // More exotic doctypes are not yet supported
+                doctype_token.set_quirks_required(true);
+                state = bogus_doctype_state;
+                break;
+            }
+
+            case bogus_doctype_state:
+            {
+                if (next_char == '>')
+                {
+                    state = data_state;
+                    return doctype_token;
+                }
+
+                // EOF: reconsume
+                break;
+            }
+
             default:
             {
                 break;
@@ -405,5 +446,6 @@ HTMLToken HTMLParser::create_token_from_string(std::wstring html_string,
         }
     }
 
-    return token;
+    // Shouldn't get here
+    return start_token;
 }

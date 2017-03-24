@@ -20,3 +20,8 @@ int get_wstring_iposition(std::wstring long_str, std::wstring substr)
     return (int) result;
 }
 
+bool wstring_constains(std::wstring long_str, std::wstring substr)
+{
+    return !(get_wstring_iposition(long_str, substr) == -1);
+}
+

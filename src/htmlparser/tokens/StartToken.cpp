@@ -1,8 +1,8 @@
-#include "HTMLToken.h"
+#include "StartToken.h"
 
 #include <iostream>
 
-HTMLToken::HTMLToken()
+StartToken::StartToken()
 {
     self_closing = false;
     attributes = {};
@@ -11,48 +11,48 @@ HTMLToken::HTMLToken()
     current_attribute_value = L"";
 }
 
-std::wstring HTMLToken::get_tag_name()
+std::wstring StartToken::get_tag_name()
 {
     return tag_name;
 }
 
-bool HTMLToken::is_self_closing()
+bool StartToken::is_self_closing()
 {
     return self_closing;
 }
 
-void HTMLToken::set_self_closing(bool closing)
+void StartToken::set_self_closing(bool closing)
 {
     self_closing = closing;
 }
 
-std::map<std::wstring, std::wstring> HTMLToken::get_attributes()
+std::map<std::wstring, std::wstring> StartToken::get_attributes()
 {
     return attributes;
 }
 
-void HTMLToken::set_name(std::wstring name)
+void StartToken::set_name(std::wstring name)
 {
     tag_name = name;
 }
 
-void HTMLToken::add_to_current_attribute_name(wchar_t next_char)
+void StartToken::add_to_current_attribute_name(wchar_t next_char)
 {
     current_attribute_name.push_back(tolower(next_char));
     current_attribute_value = L"";
 }
 
-void HTMLToken::add_to_current_attribute_value(wchar_t next_char)
+void StartToken::add_to_current_attribute_value(wchar_t next_char)
 {
     current_attribute_value.push_back(tolower(next_char));
 }
 
-bool HTMLToken::contains_attribute(std::wstring attribute_name)
+bool StartToken::contains_attribute(std::wstring attribute_name)
 {
     return (attributes.count(attribute_name) > 0);
 }
 
-std::wstring HTMLToken::get_attribute_value(std::wstring attribute_name)
+std::wstring StartToken::get_attribute_value(std::wstring attribute_name)
 {
     try
     {
@@ -69,7 +69,7 @@ std::wstring HTMLToken::get_attribute_value(std::wstring attribute_name)
     }
 }
 
-void HTMLToken::process_current_attribute()
+void StartToken::process_current_attribute()
 {
     if (contains_attribute(current_attribute_name))
         return;

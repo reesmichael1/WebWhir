@@ -2,10 +2,13 @@
 #define __HTMLParser__
 
 #include <string>
+#include <boost/variant.hpp>
 
-#include "tokens/HTMLToken.h"
+#include "tokens/StartToken.h"
+#include "tokens/DoctypeToken.h"
+#include "tokens/EndToken.h"
 
-
+typedef boost::variant<StartToken, DoctypeToken, EndToken> Token;
 
 class HTMLParser
 {
@@ -56,9 +59,9 @@ class HTMLParser
             cdata_section_state
         };
 
-        HTMLToken create_token_from_string(std::wstring html_string, 
+        Token create_token_from_string(std::wstring html_string, 
                 tokenizer_state &state);
-        HTMLToken create_token_from_string(std::wstring html_string);
+        Token create_token_from_string(std::wstring html_string);
 
     private:
         static bool contains_doctype(std::wstring html_string);
