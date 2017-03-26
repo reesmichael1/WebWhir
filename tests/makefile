@@ -1,5 +1,6 @@
 CC=g++
 CXXFLAGS=-std=c++14 -Wall -pedantic
+DIRS=htmlparser_tests
 
 .PHONY: htmlparser_tests
 
@@ -14,5 +15,4 @@ htmlparser_tests:
 	+$(MAKE) -C htmlparser_tests
 
 clean:
-	$(RM) htmlparser_tests/htmltokenization_tests \
-		htmlparser_tests/htmlvalidation_tests
+	for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
