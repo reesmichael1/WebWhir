@@ -4,7 +4,7 @@
 
 #include <boost/variant/get.hpp>
 
-#include "../../src/HTMLParser/HTMLParser.hpp"
+#include "../../src/HTMLParser/HTMLTokenizer.hpp"
 #include "../../src/HTMLParser/tokens/StartToken.hpp"
 #include "../../src/HTMLParser/tokens/DoctypeToken.hpp"
 #include "../../src/HTMLParser/tokens/EndToken.hpp"
@@ -34,16 +34,16 @@ TEST_CASE("HTML tokenization")
         }
     }
 
-    SECTION("Creating tokens with parser")
+    SECTION("Creating tokens with tokenizer")
     {
-        HTMLParser parser;
+        HTMLTokenizer tokenizer;
 
-        SECTION("Creating doctype tokens with parser")
+        SECTION("Creating doctype tokens with tokenizer")
         {
             SECTION("Normal doctype token")
             {
                 auto doctype_token = 
-                    parser.create_token_from_string(L"<!DOCTYPE html>");
+                    tokenizer.create_token_from_string(L"<!DOCTYPE html>");
 
                 REQUIRE(doctype_token->is_doctype_token());
                 CHECK_FALSE(doctype_token->quirks_required());
@@ -54,7 +54,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Doctype name not set")
             {
                 auto doctype_token = 
-                    parser.create_token_from_string(L"<!DOCTYPE>");
+                    tokenizer.create_token_from_string(L"<!DOCTYPE>");
 
                 REQUIRE(doctype_token->is_doctype_token());
                 CHECK(doctype_token->quirks_required());
@@ -67,7 +67,7 @@ TEST_CASE("HTML tokenization")
                     L"\"-//W3C//DTD HTML 4.01 Transitional//EN\" "
                     L"\"http://www.w3.org/TR/html4/loose.dtd\">";
                 std::unique_ptr<HTMLToken> doctype_token = 
-                    parser.create_token_from_string(long_doctype);
+                    tokenizer.create_token_from_string(long_doctype);
 
                 REQUIRE(doctype_token->is_doctype_token());
                 CHECK(doctype_token->quirks_required());
@@ -76,14 +76,14 @@ TEST_CASE("HTML tokenization")
             }
         }
 
-        SECTION("Creating start tokens with parser")
+        SECTION("Creating start tokens with tokenizer")
         {
             std::map<std::wstring, std::wstring> lang_map = {{L"lang", L"en"}};
 
-            SECTION("Creating html root token with parser")
+            SECTION("Creating html root token with tokenizer")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<HtMl lang=\"en\">");
+                    tokenizer.create_token_from_string(L"<HtMl lang=\"en\">");
                 std::map<std::wstring, std::wstring> attributes_map = 
                     token->get_attributes();
 
@@ -94,10 +94,10 @@ TEST_CASE("HTML tokenization")
                 CHECK(token->get_tag_name() == L"html");
             }
 
-            SECTION("Creating self-closing tag with parser")
+            SECTION("Creating self-closing tag with tokenizer")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<br/>");
+                    tokenizer.create_token_from_string(L"<br/>");
 
                 REQUIRE(token->is_start_token());
                 CHECK(token->is_self_closing());
@@ -107,7 +107,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Tag with multiple attributes")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(
+                    tokenizer.create_token_from_string(
                         L"<img src=\"example.png\" width='10' height='20'>");
                 std::map<std::wstring, std::wstring> attributes_map = 
                     token->get_attributes();
@@ -126,7 +126,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Tag with repeated attributes")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(
+                    tokenizer.create_token_from_string(
                                 L"<html lang='en' lang='br'>");
 
                 REQUIRE(token->is_start_token());
@@ -140,7 +140,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Capitalization in attribute name/value")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<html lAnG='eN'>");
+                    tokenizer.create_token_from_string(L"<html lAnG='eN'>");
 
                 REQUIRE(token->is_start_token());
                 CHECK(token->get_tag_name() == L"html");
@@ -153,7 +153,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Self-closing tag with attributes")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(
+                    tokenizer.create_token_from_string(
                                 L"<area shape=\"circle\"/>");
 
                 REQUIRE(token->is_start_token());
@@ -164,22 +164,22 @@ TEST_CASE("HTML tokenization")
             }
         }
 
-        SECTION("Creating end tags with parser")
+        SECTION("Creating end tags with tokenizer")
         {
             std::unique_ptr<HTMLToken> token = 
-                parser.create_token_from_string(L"</p>");
+                tokenizer.create_token_from_string(L"</p>");
 
             REQUIRE(token->is_end_token());
             CHECK(token->get_tag_name() == L"p");
             CHECK_FALSE(token->is_self_closing());
         }
 
-        SECTION("Creating comment tags with parser")
+        SECTION("Creating comment tags with tokenizer")
         {
             SECTION("Normal comment")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(
+                    tokenizer.create_token_from_string(
                             L"<!--This is a comment-->");
 
                 REQUIRE(token->is_comment_token());
@@ -189,7 +189,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Comment with no data")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<!---->");
+                    tokenizer.create_token_from_string(L"<!---->");
 
                 REQUIRE(token->is_comment_token());
                 CHECK(token->get_data() == L"");
@@ -198,7 +198,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Comment with hyphen in data")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<!--Test-string-->");
+                    tokenizer.create_token_from_string(L"<!--Test-string-->");
 
                 REQUIRE(token->is_comment_token());
                 CHECK(token->get_data() == L"Test-string");
@@ -207,7 +207,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Comment with hyphen before data")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<!---Test string-->");
+                    tokenizer.create_token_from_string(L"<!---Test string-->");
 
                 REQUIRE(token->is_comment_token());
                 CHECK(token->get_data() == L"-Test string");
@@ -216,7 +216,7 @@ TEST_CASE("HTML tokenization")
             SECTION("Comment with two hyphens in the middle")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<!--Test--string-->");
+                    tokenizer.create_token_from_string(L"<!--Test--string-->");
 
                 REQUIRE(token->is_comment_token());
                 CHECK(token->get_data() == L"Test--string");
@@ -225,7 +225,8 @@ TEST_CASE("HTML tokenization")
             SECTION("Comment with exclamation mark and hyphens in the middle")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<!--Test--!string-->");
+                    tokenizer.create_token_from_string(
+                            L"<!--Test--!string-->");
 
                 REQUIRE(token->is_comment_token());
                 CHECK(token->get_data() == L"Test--!string");

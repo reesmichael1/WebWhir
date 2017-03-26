@@ -1,12 +1,12 @@
-#ifndef __HTMLParser__
-#define __HTMLParser__
+#ifndef HTMLTOKENIZER_H
+#define HTMLTOKENIZER_H
 
 #include <string>
 #include <memory>
 
 #include "tokens/HTMLToken.hpp"
 
-class HTMLParser
+class HTMLTokenizer
 {
     public:
         static bool is_valid_html_string(std::wstring html_string);

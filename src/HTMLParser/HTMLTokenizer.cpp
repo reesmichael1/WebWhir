@@ -1,7 +1,7 @@
 #include <boost/regex.hpp>
 #include <algorithm>
 
-#include "HTMLParser.hpp"
+#include "HTMLTokenizer.hpp"
 #include "tokens/StartToken.hpp"
 #include "tokens/EndToken.hpp"
 #include "tokens/DoctypeToken.hpp"
@@ -15,57 +15,57 @@ std::set<wchar_t> space_chars =
     {'\u0009', '\u000A', '\u000C', '\u0020'};
 
 // TODO: Check HTML requirements more strictly
-bool HTMLParser::is_valid_html_string(std::wstring html_string)
+bool HTMLTokenizer::is_valid_html_string(std::wstring html_string)
 {
-    return HTMLParser::contains_doctype(html_string) &&
-           HTMLParser::contains_root_element(html_string) &&
-           HTMLParser::doctype_before_root(html_string);
+    return HTMLTokenizer::contains_doctype(html_string) &&
+           HTMLTokenizer::contains_root_element(html_string) &&
+           HTMLTokenizer::doctype_before_root(html_string);
 }
 
-bool HTMLParser::contains_doctype(std::wstring html_string)
+bool HTMLTokenizer::contains_doctype(std::wstring html_string)
 {
     return (get_wstring_iposition(html_string, L"<!DOCTYPE") != -1);
 }
 
-bool HTMLParser::contains_root_element(std::wstring html_string)
+bool HTMLTokenizer::contains_root_element(std::wstring html_string)
 {
-    return HTMLParser::contains_root_open(html_string) &&
-           HTMLParser::contains_root_close(html_string) &&
-           HTMLParser::contains_root_open_before_close(html_string);
+    return HTMLTokenizer::contains_root_open(html_string) &&
+           HTMLTokenizer::contains_root_close(html_string) &&
+           HTMLTokenizer::contains_root_open_before_close(html_string);
 }
 
-bool HTMLParser::contains_root_open(std::wstring html_string)
+bool HTMLTokenizer::contains_root_open(std::wstring html_string)
 {
     boost::wregex html_root(L"<html\\s+.*>|<html>");
     boost::wsmatch results;
     return boost::regex_search(html_string, results, html_root);
 }
 
-bool HTMLParser::contains_root_close(std::wstring html_string)
+bool HTMLTokenizer::contains_root_close(std::wstring html_string)
 {
     return (html_string.find(L"</html>") != std::wstring::npos);
 }
 
-bool HTMLParser::contains_root_open_before_close(std::wstring html_string)
+bool HTMLTokenizer::contains_root_open_before_close(std::wstring html_string)
 {
     return (html_string.find(L"<html") < html_string.find(L"</html>"));
 }
 
-bool HTMLParser::doctype_before_root(std::wstring html_string)
+bool HTMLTokenizer::doctype_before_root(std::wstring html_string)
 {
     return get_wstring_iposition(html_string, L"<!DOCTYPE") <
         get_wstring_iposition(html_string, L"<html");
 }
 
-std::unique_ptr<HTMLToken> HTMLParser::create_token_from_string(std::wstring 
+std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring 
         html_string)
 {
     tokenizer_state state = data_state;
     return create_token_from_string(html_string, state);
 }
 
-std::unique_ptr<HTMLToken> HTMLParser::create_token_from_string(std::wstring 
-        html_string, HTMLParser::tokenizer_state &state)
+std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring 
+        html_string, HTMLTokenizer::tokenizer_state &state)
 {
     std::unique_ptr<HTMLToken> token = std::make_unique<HTMLToken>();
 
