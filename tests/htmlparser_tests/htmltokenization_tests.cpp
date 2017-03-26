@@ -4,10 +4,10 @@
 
 #include <boost/variant/get.hpp>
 
-#include "../../src/htmlparser/htmlparser.h"
-#include "../../src/htmlparser/tokens/StartToken.h"
-#include "../../src/htmlparser/tokens/DoctypeToken.h"
-#include "../../src/htmlparser/tokens/EndToken.h"
+#include "../../src/HTMLParser/HTMLParser.hpp"
+#include "../../src/HTMLParser/tokens/StartToken.hpp"
+#include "../../src/HTMLParser/tokens/DoctypeToken.hpp"
+#include "../../src/HTMLParser/tokens/EndToken.hpp"
 
 TEST_CASE("HTML tokenization")
 {

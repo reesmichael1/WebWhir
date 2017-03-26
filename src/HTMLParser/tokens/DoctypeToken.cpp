@@ -1,4 +1,4 @@
-#include "DoctypeToken.h"
+#include "DoctypeToken.hpp"
 
 DoctypeToken::DoctypeToken()
 {

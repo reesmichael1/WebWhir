@@ -1,16 +1,16 @@
-#ifndef STARTTOKEN_H
-#define STARTTOKEN_H
+#ifndef ENDTOKEN_H
+#define ENDTOKEN_H
 
 #include <string>
 #include <map>
 
-#include "HTMLToken.h"
+#include "HTMLToken.hpp"
 
-class StartToken : public HTMLToken
+class EndToken : public HTMLToken
 {
     public:
-        StartToken();
-        StartToken(wchar_t token_name);
+        EndToken();
+        EndToken(wchar_t token_name);
         bool is_self_closing();
         void set_self_closing(bool closing);
         std::map<std::wstring, std::wstring> get_attributes();
@@ -19,13 +19,10 @@ class StartToken : public HTMLToken
         std::wstring get_attribute_value(std::wstring attribute_name);
         bool contains_attribute(std::wstring attribute_name);
         void process_current_attribute();
-        bool is_start_token();
+        bool is_end_token();
 
     private:
         bool self_closing;
-        std::map<std::wstring, std::wstring> attributes;
-        std::wstring current_attribute_name;
-        std::wstring current_attribute_value;
 };
 
 #endif

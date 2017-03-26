@@ -1,6 +1,6 @@
 #include <catch.hpp>
 
-#include "../../src/htmlparser/htmlparser.h"
+#include "../../src/HTMLParser/HTMLParser.hpp"
 
 TEST_CASE("HTML validation tests")
 {

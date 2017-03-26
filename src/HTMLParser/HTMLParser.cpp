@@ -1,10 +1,10 @@
 #include <boost/regex.hpp>
 #include <algorithm>
 
-#include "htmlparser.h"
-#include "tokens/StartToken.h"
-#include "tokens/EndToken.h"
-#include "tokens/DoctypeToken.h"
+#include "HTMLParser.hpp"
+#include "tokens/StartToken.hpp"
+#include "tokens/EndToken.hpp"
+#include "tokens/DoctypeToken.hpp"
 
 int get_wstring_iposition(std::wstring long_str, std::wstring substr);
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 
-#include "tokens/HTMLToken.h"
+#include "tokens/HTMLToken.hpp"
 
 class HTMLParser
 {

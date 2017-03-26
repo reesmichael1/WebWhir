@@ -1,4 +1,4 @@
-#include "EndToken.h"
+#include "EndToken.hpp"
 
 #include <iostream>
 

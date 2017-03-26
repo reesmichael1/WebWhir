@@ -1,4 +1,4 @@
-#include "HTMLToken.h"
+#include "HTMLToken.hpp"
 
 HTMLToken::~HTMLToken()
 {

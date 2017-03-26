@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "HTMLToken.h"
+#include "HTMLToken.hpp"
 
 class DoctypeToken : public HTMLToken
 {
