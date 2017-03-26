@@ -2,6 +2,9 @@
 #include <algorithm>
 
 #include "htmlparser.h"
+#include "tokens/StartToken.h"
+#include "tokens/EndToken.h"
+#include "tokens/DoctypeToken.h"
 
 int get_wstring_iposition(std::wstring long_str, std::wstring substr);
 
@@ -53,20 +56,17 @@ bool HTMLParser::doctype_before_root(std::wstring html_string)
         get_wstring_iposition(html_string, L"<html");
 }
 
-Token HTMLParser::create_token_from_string(std::wstring html_string)
+std::unique_ptr<HTMLToken> HTMLParser::create_token_from_string(std::wstring 
+        html_string)
 {
     tokenizer_state state = data_state;
     return create_token_from_string(html_string, state);
 }
 
-Token HTMLParser::create_token_from_string(std::wstring html_string, 
-        HTMLParser::tokenizer_state &state)
+std::unique_ptr<HTMLToken> HTMLParser::create_token_from_string(std::wstring 
+        html_string, HTMLParser::tokenizer_state &state)
 {
-    StartToken start_token = StartToken();
-    EndToken end_token = EndToken();
-    DoctypeToken doctype_token = DoctypeToken();
-
-    bool current_token_is_start_token = true;
+    std::unique_ptr<HTMLToken> token = std::make_unique<HTMLToken>();
 
     // Can't use range-based loop, because we need to 
     // be able to look forwards/go backwards
@@ -100,11 +100,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
 
                 else if (isalpha(next_char))
                 {
-                    if (current_token_is_start_token)
-                        start_token = StartToken(next_char);
-                    else
-                        end_token = EndToken(next_char);
-                    std::wstring tag_name = L"";
+                    token = std::make_unique<StartToken>(next_char);
                     state = tag_name_state;
                 }
 
@@ -126,28 +122,16 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 else if (next_char == '>')
                 {
                     state = data_state;
-                    if (current_token_is_start_token)
-                        return start_token;
-                    return end_token;
+                    return token;
                 }
 
                 else if (isalpha(next_char))
-                {
-                    if (current_token_is_start_token)
-                        start_token.add_char_to_name(next_char);
-                    else
-                        end_token.add_char_to_name(next_char);
-                }
+                    token->add_char_to_tag_name(next_char);
 
                 // null, EOF: parse error
                 
                 else
-                {
-                    if (current_token_is_start_token)
-                        start_token.add_char_to_name(next_char);
-                    else
-                        end_token.add_char_to_name(next_char);
-                }
+                    token->add_char_to_tag_name(next_char);
 
                 break;
             }
@@ -160,13 +144,8 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 if (next_char == '>')
                 {
                     state = data_state;
-                    if (current_token_is_start_token)
-                    {
-                        start_token.set_self_closing(true);
-                        return start_token;
-                    }
-                    end_token.set_self_closing(true);
-                    return end_token;
+                    token->set_self_closing(true);
+                    return token;
                 }
 
                 // anything else: parse error
@@ -175,6 +154,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
 
             case before_attribute_name_state:
             {
+                // End tokens should never have attributes
                 if (space_chars.count(next_char) != 0)
                     break;
 
@@ -184,9 +164,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 else if (next_char == '>')
                 {
                     state = data_state;
-                    if (current_token_is_start_token)
-                        return start_token;
-                    return end_token;
+                    return token;
                 }
 
                 // null, EOF, ", ', ?, = 
@@ -195,7 +173,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 else
                 {
                     state = attribute_name_state;
-                    start_token.add_to_current_attribute_name(next_char);
+                    token->add_to_current_attribute_name(next_char);
                 }
 
                 break;
@@ -216,7 +194,9 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 // parse error
                 
                 else
-                    start_token.add_to_current_attribute_name(next_char);
+                {
+                    token->add_to_current_attribute_name(next_char);
+                }
 
                 break;
             }
@@ -257,9 +237,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 {
                     // parse error
                     state = data_state;
-                    if (current_token_is_start_token)
-                        return start_token;
-                    return end_token;
+                    return token;
                 }
 
                 // <, =, `, EOF
@@ -267,7 +245,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
 
                 else
                 {
-                    start_token.add_to_current_attribute_name(next_char);
+                    token->add_to_current_attribute_name(next_char);
                     state = attribute_value_unquoted_state; 
                 }
 
@@ -279,14 +257,14 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 if (next_char == '"')
                     state = after_attribute_value_quoted_state;
 
+                // TODO: implement this state
                 else if (next_char == '&')
-                    // TODO: implement this state
                     state = char_ref_in_attribute_value_state;
 
                 // null, EOF: parse error
                 
                 else
-                    start_token.add_to_current_attribute_value(next_char);
+                    token->add_to_current_attribute_value(next_char);
 
                 break;
             }
@@ -303,7 +281,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 // EOF: parse error
 
                 else
-                    start_token.add_to_current_attribute_value(next_char);
+                    token->add_to_current_attribute_value(next_char);
 
                 break;
             }
@@ -320,23 +298,20 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 else if (next_char == '>')
                 {
                     state = data_state;
-                    
-                    if (current_token_is_start_token)
-                        return start_token;
-                    return end_token;
+                    return token;
                 }
 
                 // null, ", ', <, =, `, EOF: parse error
                 
                 else
-                    start_token.add_to_current_attribute_value(next_char);
+                    token->add_to_current_attribute_value(next_char);
 
                 break;
             }
 
             case after_attribute_value_quoted_state:
             {
-                start_token.process_current_attribute();
+                token->process_current_attribute();
                 
                 if (space_chars.count(next_char) != 0)
                     state = before_attribute_name_state;
@@ -347,10 +322,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 else if (next_char == '>')
                 {
                     state = data_state;
-
-                    if (current_token_is_start_token)
-                        return start_token;
-                    return end_token;
+                    return token;
                 }
 
                 // EOF, anything else: parse error
@@ -396,18 +368,20 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 if (space_chars.count(next_char) != 0)
                     break;
 
+                token = std::make_unique<DoctypeToken>();
+
                 if (next_char == '>')
                 {
                     state = data_state;
-                    doctype_token.set_quirks_required(true);
-                    return doctype_token;
+                    token->set_quirks_required(true);
+                    return token;
                 }
 
                 // EOF: parse error
 
                 else
                 {
-                    doctype_token = DoctypeToken(next_char);
+                    token->add_char_to_tag_name(next_char);
                     state = doctype_name_state;
                     break;
                 }
@@ -418,20 +392,20 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 if (space_chars.count(next_char) != 0)
                 {
                     state = after_doctype_name_state;
-                    doctype_token.set_is_name_set(true);
+                    token->set_is_name_set(true);
                     break;
                 }
 
                 else if (next_char == '>')
                 {
                     state = data_state;
-                    doctype_token.set_is_name_set(true);
-                    return doctype_token;
+                    token->set_is_name_set(true);
+                    return token;
                 }
 
                 // null, EOF: parse error
 
-                doctype_token.add_to_name(next_char);
+                token->add_char_to_tag_name(next_char);
                 break;
             }
 
@@ -443,8 +417,9 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 // EOF: parse error
                 
                 // More exotic doctypes are not yet supported
-                doctype_token.set_quirks_required(true);
+                token->set_quirks_required(true);
                 state = bogus_doctype_state;
+
                 break;
             }
 
@@ -453,7 +428,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
                 if (next_char == '>')
                 {
                     state = data_state;
-                    return doctype_token;
+                    return token;
                 }
 
                 // EOF: reconsume
@@ -464,8 +439,7 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
             {
                 if (isalpha(next_char))
                 {
-                    end_token = EndToken(next_char);
-                    current_token_is_start_token = false;
+                    token = std::make_unique<EndToken>(next_char);
                     state = tag_name_state;
                 }
 
@@ -482,7 +456,5 @@ Token HTMLParser::create_token_from_string(std::wstring html_string,
     }
 
     // Shouldn't get here
-    if (current_token_is_start_token)
-        return start_token;
-    return end_token;
+    return token;
 }

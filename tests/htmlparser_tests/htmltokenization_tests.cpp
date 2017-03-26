@@ -7,6 +7,7 @@
 #include "../../src/htmlparser/htmlparser.h"
 #include "../../src/htmlparser/tokens/StartToken.h"
 #include "../../src/htmlparser/tokens/DoctypeToken.h"
+#include "../../src/htmlparser/tokens/EndToken.h"
 
 TEST_CASE("HTML tokenization")
 {
@@ -40,24 +41,28 @@ TEST_CASE("HTML tokenization")
         {
             SECTION("Normal doctype token")
             {
+                auto token = 
+                    parser.create_token_from_string(L"<!DOCTYPE html>");
+                DoctypeToken *doctype_token = 
+                    dynamic_cast<DoctypeToken*>(token.get());
 
-                DoctypeToken token = 
-                    boost::get<DoctypeToken>(parser.create_token_from_string(
-                                L"<!DOCTYPE html>"));
-
-                CHECK_FALSE(token.quirks_required());
-                CHECK(token.is_name_set());
-                CHECK(token.get_name() == L"html");
+                REQUIRE(token->is_doctype_token());
+                CHECK_FALSE(doctype_token->quirks_required());
+                CHECK(doctype_token->is_name_set());
+                CHECK(doctype_token->get_tag_name() == L"html");
             }
 
             SECTION("Doctype name not set")
             {
-                DoctypeToken token = 
-                    boost::get<DoctypeToken>(parser.create_token_from_string(
-                                L"<!DOCTYPE>"));
+                // std::unique_ptr<HTMLToken> token = 
+                auto token = 
+                    parser.create_token_from_string(L"<!DOCTYPE>");
+                DoctypeToken *doctype_token = 
+                    dynamic_cast<DoctypeToken*>(token.get());
 
-                CHECK(token.quirks_required());
-                CHECK_FALSE(token.is_name_set());
+                REQUIRE(token->is_doctype_token());
+                CHECK(doctype_token->quirks_required());
+                CHECK_FALSE(doctype_token->is_name_set());
             }
 
             SECTION("Correctly handles extra identifiers")
@@ -65,13 +70,15 @@ TEST_CASE("HTML tokenization")
                 std::wstring long_doctype = L"<!DOCTYPE HTML PUBLIC "  
                     L"\"-//W3C//DTD HTML 4.01 Transitional//EN\" "
                     L"\"http://www.w3.org/TR/html4/loose.dtd\">";
-                DoctypeToken token = 
-                    boost::get<DoctypeToken>(parser.create_token_from_string(
-                                long_doctype));
+                std::unique_ptr<HTMLToken> token = 
+                    parser.create_token_from_string(long_doctype);
+                DoctypeToken *doctype_token = 
+                    dynamic_cast<DoctypeToken*>(token.get());
 
-                CHECK(token.quirks_required());
-                CHECK(token.get_name() == L"html");
-                CHECK(token.is_name_set());
+                REQUIRE(token->is_doctype_token());
+                CHECK(doctype_token->quirks_required());
+                CHECK(doctype_token->get_tag_name() == L"html");
+                CHECK(doctype_token->is_name_set());
             }
         }
 
@@ -81,85 +88,104 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Creating html root token with parser")
             {
-                StartToken token = 
-                    boost::get<StartToken>(parser.create_token_from_string(
-                                L"<HtMl lang=\"en\">"));
+                // std::unique_ptr<HTMLToken> token = 
+                auto token = 
+                    parser.create_token_from_string(L"<HtMl lang=\"en\">");
+                StartToken *start_token = 
+                    dynamic_cast<StartToken*>(token.get());
                 std::map<std::wstring, std::wstring> attributes_map = 
-                    token.get_attributes();
-                CHECK_FALSE(token.is_self_closing());
-                CHECK(token.contains_attribute(L"lang"));
-                CHECK(token.get_attribute_value(L"lang") == L"en");
-                CHECK(token.get_tag_name() == L"html");
+                    start_token->get_attributes();
+
+                CHECK_FALSE(start_token->is_self_closing());
+                CHECK(start_token->contains_attribute(L"lang"));
+                CHECK(start_token->get_attribute_value(L"lang") == L"en");
+                CHECK(start_token->get_tag_name() == L"html");
             }
 
             SECTION("Creating self-closing tag with parser")
             {
-                StartToken token = boost::get<StartToken>
-                    (parser.create_token_from_string(L"<br/>"));
-                CHECK(token.is_self_closing());
-                CHECK(token.get_tag_name() == L"br");
+                std::unique_ptr<HTMLToken> token = 
+                    parser.create_token_from_string(L"<br/>");
+                StartToken *start_token = 
+                    dynamic_cast<StartToken*>(token.get());
+
+                CHECK(start_token->is_self_closing());
+                CHECK(start_token->get_tag_name() == L"br");
             }
 
             SECTION("Tag with multiple attributes")
             {
-                StartToken token = 
-                    boost::get<StartToken>(parser.create_token_from_string(
-                        L"<img src=\"example.png\" width='10' height='20'>"));
+                std::unique_ptr<HTMLToken> token = 
+                    parser.create_token_from_string(
+                        L"<img src=\"example.png\" width='10' height='20'>");
+                StartToken *start_token = 
+                    dynamic_cast<StartToken*>(token.get());
                 std::map<std::wstring, std::wstring> attributes_map = 
-                    token.get_attributes();
-                CHECK(token.get_tag_name() == L"img");
-                CHECK_FALSE(token.is_self_closing());
-                CHECK(token.contains_attribute(L"src"));
-                CHECK(token.contains_attribute(L"width"));
-                CHECK(token.contains_attribute(L"height"));
-                CHECK(token.get_attribute_value(L"src") == L"example.png");
-                CHECK(token.get_attribute_value(L"width") == L"10");
-                CHECK(token.get_attribute_value(L"height") == L"20");
+                    start_token->get_attributes();
+
+                CHECK(start_token->get_tag_name() == L"img");
+                CHECK_FALSE(start_token->is_self_closing());
+                CHECK(start_token->contains_attribute(L"src"));
+                CHECK(start_token->contains_attribute(L"width"));
+                CHECK(start_token->contains_attribute(L"height"));
+                CHECK(start_token->get_attribute_value(L"src") == L"example.png");
+                CHECK(start_token->get_attribute_value(L"width") == L"10");
+                CHECK(start_token->get_attribute_value(L"height") == L"20");
             }
 
             SECTION("Tag with repeated attributes")
             {
-                StartToken token = 
-                    boost::get<StartToken>(parser.create_token_from_string(
-                                L"<html lang='en' lang='br'>"));
-                CHECK(token.get_tag_name() == L"html");
-                CHECK(token.contains_attribute(L"lang"));
-                CHECK(token.get_attribute_value(L"lang") == L"en");
-                CHECK_FALSE(token.get_attribute_value(L"lang") == L"br");
-                CHECK_FALSE(token.is_self_closing());
+                std::unique_ptr<HTMLToken> token = 
+                    parser.create_token_from_string(
+                                L"<html lang='en' lang='br'>");
+                StartToken *start_token = 
+                    dynamic_cast<StartToken*>(token.get());
+
+                CHECK(start_token->get_tag_name() == L"html");
+                CHECK(start_token->contains_attribute(L"lang"));
+                CHECK(start_token->get_attribute_value(L"lang") == L"en");
+                CHECK_FALSE(start_token->get_attribute_value(L"lang") == L"br");
+                CHECK_FALSE(start_token->is_self_closing());
             }
 
             SECTION("Capitalization in attribute name/value")
             {
-                StartToken token = 
-                    boost::get<StartToken>(parser.create_token_from_string(
-                                L"<html lAnG='eN'>"));
-                CHECK(token.get_tag_name() == L"html");
-                CHECK(token.contains_attribute(L"lang"));
-                CHECK(token.get_attribute_value(L"lang") == L"en");
-                CHECK_FALSE(token.contains_attribute(L"lAnG"));
-                CHECK_FALSE(token.is_self_closing());
+                std::unique_ptr<HTMLToken> token = 
+                    parser.create_token_from_string(L"<html lAnG='eN'>");
+                StartToken *start_token = 
+                    dynamic_cast<StartToken*>(token.get());
+
+                CHECK(start_token->get_tag_name() == L"html");
+                CHECK(start_token->contains_attribute(L"lang"));
+                CHECK(start_token->get_attribute_value(L"lang") == L"en");
+                CHECK_FALSE(start_token->contains_attribute(L"lAnG"));
+                CHECK_FALSE(start_token->is_self_closing());
             }
 
             SECTION("Self-closing tag with attributes")
             {
-                StartToken token = 
-                    boost::get<StartToken>(parser.create_token_from_string(
-                                L"<area shape=\"circle\"/>"));
-                CHECK(token.get_tag_name() == L"area");
-                CHECK(token.is_self_closing());
-                CHECK(token.contains_attribute(L"shape"));
-                CHECK(token.get_attribute_value(L"shape") == L"circle");
+                std::unique_ptr<HTMLToken> token = 
+                    parser.create_token_from_string(
+                                L"<area shape=\"circle\"/>");
+                StartToken *start_token = 
+                    dynamic_cast<StartToken*>(token.get());
+
+                CHECK(start_token->get_tag_name() == L"area");
+                CHECK(start_token->is_self_closing());
+                CHECK(start_token->contains_attribute(L"shape"));
+                CHECK(start_token->get_attribute_value(L"shape") == L"circle");
             }
         }
 
         SECTION("Creating end tags with parser")
         {
-            EndToken token = boost::get<EndToken>(
-                    parser.create_token_from_string(L"</p>"));
+            std::unique_ptr<HTMLToken> token = 
+                parser.create_token_from_string(L"</p>");
+            EndToken *end_token = 
+                dynamic_cast<EndToken*>(token.get());
 
-            CHECK(token.get_tag_name() == L"p");
-            CHECK_FALSE(token.is_self_closing());
+            CHECK(end_token->get_tag_name() == L"p");
+            CHECK_FALSE(end_token->is_self_closing());
         }
     }
 }

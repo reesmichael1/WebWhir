@@ -20,16 +20,6 @@ StartToken::StartToken(wchar_t token_name)
     current_attribute_value = L"";
 }
 
-std::wstring StartToken::get_tag_name()
-{
-    return tag_name;
-}
-
-void StartToken::add_char_to_name(wchar_t next_char)
-{
-    tag_name.push_back(tolower(next_char));
-}
-
 bool StartToken::is_self_closing()
 {
     return self_closing;
@@ -43,11 +33,6 @@ void StartToken::set_self_closing(bool closing)
 std::map<std::wstring, std::wstring> StartToken::get_attributes()
 {
     return attributes;
-}
-
-void StartToken::set_name(std::wstring name)
-{
-    tag_name = name;
 }
 
 void StartToken::add_to_current_attribute_name(wchar_t next_char)
@@ -92,4 +77,9 @@ void StartToken::process_current_attribute()
 
     current_attribute_name = L"";
     current_attribute_value = L"";
+}
+
+bool StartToken::is_start_token()
+{
+    return true;
 }

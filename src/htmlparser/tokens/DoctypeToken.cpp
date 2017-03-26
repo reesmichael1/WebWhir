@@ -14,7 +14,7 @@ DoctypeToken::DoctypeToken(wchar_t token_name)
     name_set = false;
     public_identifier_set = false;
     system_identifier_set = false;
-    name = tolower(token_name);
+    tag_name = tolower(token_name);
 }
 
 bool DoctypeToken::quirks_required()
@@ -42,11 +42,6 @@ void DoctypeToken::set_is_name_set(bool is_set)
     name_set = is_set;
 }
 
-std::wstring DoctypeToken::get_name()
-{
-    return name;
-}
-
 std::wstring DoctypeToken::get_public_identifier()
 {
     return public_identifier;
@@ -62,7 +57,7 @@ void DoctypeToken::set_quirks_required(bool required)
     require_quirks = required;
 }
 
-void DoctypeToken::add_to_name(wchar_t char_to_add)
+bool DoctypeToken::is_doctype_token()
 {
-    name.push_back(tolower(char_to_add));
+    return true;
 }
