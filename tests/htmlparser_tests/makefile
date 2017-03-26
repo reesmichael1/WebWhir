@@ -4,8 +4,8 @@ LIBS=/usr/lib/libboost_regex.a
 ODIR=../build
 SDIR=../../src
 
-_OBJS = HTMLToken.o StartToken.o EndToken.o DoctypeToken.o HTMLParser.o \
-		HTMLParser_utils.o
+_OBJS = HTMLToken.o StartToken.o EndToken.o DoctypeToken.o CommentToken.o \
+		HTMLParser.o HTMLParser_utils.o 
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
 all: $(OBJS) htmlvalidation_tests htmltokenization_tests
@@ -30,13 +30,19 @@ $(ODIR)/DoctypeToken.o: $(SDIR)/HTMLParser/tokens/DoctypeToken.cpp \
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/DoctypeToken.cpp \
 		-o $(ODIR)/DoctypeToken.o
 
+$(ODIR)/CommentToken.o: $(SDIR)/HTMLParser/tokens/CommentToken.cpp \
+	$(SDIR)/HTMLParser/tokens/CommentToken.hpp
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/CommentToken.cpp \
+		-o $(ODIR)/CommentToken.o
+
 $(ODIR)/HTMLParser_utils.o: $(SDIR)/HTMLParser/HTMLParser_utils.cpp
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLParser_utils.cpp \
 		-o $(ODIR)/HTMLParser_utils.o
 
 $(ODIR)/HTMLParser.o: $(SDIR)/HTMLParser/HTMLParser.hpp \
 	$(SDIR)/HTMLParser/HTMLParser_utils.cpp \
-	$(SDIR)/HTMLParser/HTMLParser.cpp $(ODIR)/HTMLToken.o
+	$(SDIR)/HTMLParser/HTMLParser.cpp $(ODIR)/HTMLToken.o \
+	$(ODIR)/StartToken.o $(ODIR)/EndToken.o $(ODIR)/CommentToken.o
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLParser.cpp \
 		-o $(ODIR)/HTMLParser.o
 

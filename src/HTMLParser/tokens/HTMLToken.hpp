@@ -20,6 +20,7 @@ class HTMLToken
         virtual bool quirks_required() { return false; }
         virtual void set_quirks_required(bool required) {}
         virtual void set_is_name_set(bool is_set) {}
+        virtual bool is_name_set() { return false; }
         virtual bool is_public_identifier_set() { return false; }
         virtual bool is_system_identifier_set() { return false; }
         virtual std::wstring get_public_identifier() { return NULL; }
@@ -34,6 +35,12 @@ class HTMLToken
         virtual std::wstring get_attribute_value(std::wstring attribute_name) { return NULL; }
         virtual bool contains_attribute(std::wstring attribute_name) { return false; }
         virtual void process_current_attribute() {}
+
+        // Comment Token functions
+        virtual bool is_comment_token() { return false; }
+        virtual std::wstring get_data() { return NULL; }
+        virtual void add_char_to_data(wchar_t next_char) {}
+        virtual void set_data(std::wstring data_string) {}
 
     protected:
         std::wstring tag_name;

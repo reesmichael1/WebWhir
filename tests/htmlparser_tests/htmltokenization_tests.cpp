@@ -216,19 +216,19 @@ TEST_CASE("HTML tokenization")
             SECTION("Comment with two hyphens in the middle")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<!--Test--string->");
+                    parser.create_token_from_string(L"<!--Test--string-->");
 
                 REQUIRE(token->is_comment_token());
-                CHECK(token->get_data() == L"-Test--string");
+                CHECK(token->get_data() == L"Test--string");
             }
 
             SECTION("Comment with exclamation mark and hyphens in the middle")
             {
                 std::unique_ptr<HTMLToken> token = 
-                    parser.create_token_from_string(L"<!--Test--!string->");
+                    parser.create_token_from_string(L"<!--Test--!string-->");
 
                 REQUIRE(token->is_comment_token());
-                CHECK(token->get_data() == L"-Test--!string");
+                CHECK(token->get_data() == L"Test--!string");
             }
         }
     }

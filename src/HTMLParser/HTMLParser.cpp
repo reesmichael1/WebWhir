@@ -5,6 +5,7 @@
 #include "tokens/StartToken.hpp"
 #include "tokens/EndToken.hpp"
 #include "tokens/DoctypeToken.hpp"
+#include "tokens/CommentToken.hpp"
 
 int get_wstring_iposition(std::wstring long_str, std::wstring substr);
 
@@ -334,7 +335,13 @@ std::unique_ptr<HTMLToken> HTMLParser::create_token_from_string(std::wstring
 
             case markup_declaration_open_state:
             {
-                // Check if we are in a comment
+                if (std::wstring(it, it + 2) == L"--")
+                {
+                    it += 1;
+                    token = std::make_unique<CommentToken>();
+                    state = comment_start_state;
+                }
+
                 std::wstring next_seven_chars(it, it + 7);
 
                 if (get_wstring_iposition(next_seven_chars, L"doctype") == 0)
@@ -444,6 +451,135 @@ std::unique_ptr<HTMLToken> HTMLParser::create_token_from_string(std::wstring
                 }
 
                 // anything else: parse error
+
+                break;
+            }
+
+            case comment_start_state:
+            {
+                if (next_char == '-')
+                    state = comment_start_dash_state;
+
+                // NULL, EOF: parse error
+                
+                else if (next_char == '>')
+                {
+                    state = data_state;
+                    return token;
+                }
+
+                else
+                {
+                    token->add_char_to_data(next_char);
+                    state = comment_state;
+                }
+
+                break;
+            }
+
+            case comment_start_dash_state:
+            {
+                if (next_char == '-')
+                    state = comment_end_state;
+
+                else if (next_char == '>')
+                {
+                    state = data_state;
+                    return token;
+                }
+
+                // EOF: parse error
+                
+                else
+                {
+                    token->add_char_to_data('-');
+                    token->add_char_to_data(next_char);
+                    state = comment_state;
+                }
+
+                break;
+            }
+
+            case comment_state:
+            {
+                if (next_char == '-')
+                    state = comment_end_dash_state;
+
+                // null, EOF: parse error
+
+                else
+                    token->add_char_to_data(next_char);
+
+                break;
+            }
+
+            case comment_end_dash_state:
+            {
+                if (next_char == '-')
+                    state = comment_end_state;
+
+                else
+                {
+                    token->add_char_to_data('-');
+                    token->add_char_to_data(next_char);
+                    state = comment_state;
+                }
+
+                break;
+            }
+
+            case comment_end_state:
+            {
+                if (next_char == '>')
+                {
+                    state = data_state;
+                    return token;
+                }
+
+                // parse error
+                else if (next_char == '!')
+                    state = comment_end_bang_state;
+
+                else if (next_char == '-')
+                    token->add_char_to_data(next_char);
+
+                else
+                {
+                    token->add_char_to_data('-');
+                    token->add_char_to_data('-');
+                    token->add_char_to_data(next_char);
+                    state = comment_state;
+                }
+
+                break;
+            }
+
+            case comment_end_bang_state:
+            {
+                if (next_char == '-')
+                {
+                    token->add_char_to_data('-');
+                    token->add_char_to_data('-');
+                    token->add_char_to_data('!');
+                    state = comment_end_dash_state;
+                }
+
+                else if (next_char == '>')
+                {
+                    state = data_state;
+                    return token;
+                }
+
+                // null, EOF: parse error
+
+                else
+                {
+                    token->add_char_to_data('-');
+                    token->add_char_to_data('-');
+                    token->add_char_to_data('!');
+                    token->add_char_to_data(next_char);
+                    state = comment_state;
+                }
 
                 break;
             }
