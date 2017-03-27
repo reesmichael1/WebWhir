@@ -233,4 +233,39 @@ TEST_CASE("HTML tokenization")
             }
         }
     }
+
+    SECTION("Tokenizing multi-tag strings")
+    {
+        HTMLTokenizer tokenizer;
+
+        SECTION("Well-formatted minimal string")
+        {
+            std::list<std::unique_ptr<HTMLToken>> tokens = 
+                tokenizer.tokenize_string(
+                        L"<!DOCTYPE html><html><head></head><body></body></html>");
+
+            std::list<std::unique_ptr<HTMLToken>>::iterator it = 
+                tokens.begin();
+            CHECK((*it)->is_doctype_token());
+            CHECK((*it)->get_tag_name() == L"html");
+            std::advance(it, 1);
+            CHECK((*it)->is_start_token());
+            CHECK((*it)->get_tag_name() == L"html");
+            std::advance(it, 1);
+            CHECK((*it)->is_start_token());
+            CHECK((*it)->get_tag_name() == L"head");
+            std::advance(it, 1);
+            CHECK((*it)->get_tag_name() == L"head");
+            CHECK((*it)->is_end_token());
+            std::advance(it, 1);
+            CHECK((*it)->is_start_token());
+            CHECK((*it)->get_tag_name() == L"body");
+            std::advance(it, 1);
+            CHECK((*it)->get_tag_name() == L"body");
+            CHECK((*it)->is_end_token());
+            std::advance(it, 1);
+            CHECK((*it)->get_tag_name() == L"html");
+            CHECK((*it)->is_end_token());
+        }
+    }
 }

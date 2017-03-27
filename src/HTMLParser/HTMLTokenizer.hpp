@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <list>
 
 #include "tokens/HTMLToken.hpp"
 
@@ -56,9 +57,11 @@ class HTMLTokenizer
         };
 
         std::unique_ptr<HTMLToken> create_token_from_string(std::wstring 
-                html_string, tokenizer_state &state);
+            html_string, tokenizer_state &state, std::wstring::iterator &it);
         std::unique_ptr<HTMLToken> create_token_from_string(std::wstring 
-                html_string);
+            html_string);
+        std::list<std::unique_ptr<HTMLToken>> 
+            tokenize_string(std::wstring html_string);
 
     private:
         static bool contains_doctype(std::wstring html_string);

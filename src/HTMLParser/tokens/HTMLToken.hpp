@@ -11,7 +11,7 @@ class HTMLToken
         virtual ~HTMLToken();
         std::wstring get_tag_name();
         void add_char_to_tag_name(wchar_t next_char);
-        void set_name(std::wstring name);
+        void set_tag_name(std::wstring name);
 
         // Doctype Token functions
         virtual bool is_doctype_token() { return false; }

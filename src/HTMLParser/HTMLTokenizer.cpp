@@ -11,8 +11,7 @@ int get_wstring_iposition(std::wstring long_str, std::wstring substr);
 
 // A list of commonly used Unicode whitespace characters 
 // In order: tab, line feed, form feed, space
-std::set<wchar_t> space_chars = 
-    {'\u0009', '\u000A', '\u000C', '\u0020'};
+std::set<wchar_t> space_chars = {'\u0009', '\u000A', '\u000C', '\u0020'};
 
 // TODO: Check HTML requirements more strictly
 bool HTMLTokenizer::is_valid_html_string(std::wstring html_string)
@@ -58,21 +57,23 @@ bool HTMLTokenizer::doctype_before_root(std::wstring html_string)
 }
 
 std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring 
-        html_string)
+    html_string)
 {
     tokenizer_state state = data_state;
-    return create_token_from_string(html_string, state);
+    std::wstring::iterator it = html_string.begin();
+    return create_token_from_string(html_string, state, it);
 }
 
-std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring 
-        html_string, HTMLTokenizer::tokenizer_state &state)
+std::unique_ptr<HTMLToken> 
+    HTMLTokenizer::create_token_from_string(std::wstring html_string,
+        HTMLTokenizer::tokenizer_state &state, 
+        std::wstring::iterator &it)
 {
     std::unique_ptr<HTMLToken> token = std::make_unique<HTMLToken>();
 
     // Can't use range-based loop, because we need to 
     // be able to look forwards/go backwards
-    for (std::wstring::iterator it = html_string.begin(); 
-            it != html_string.end(); ++it)
+    for (; it != html_string.end(); ++it)
     {
         wchar_t next_char = *it;
         switch (state)
@@ -123,6 +124,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 else if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -146,6 +148,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 {
                     state = data_state;
                     token->set_self_closing(true);
+                    it++;
                     return token;
                 }
 
@@ -165,6 +168,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 else if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -238,6 +242,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 {
                     // parse error
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -299,6 +304,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 else if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -323,6 +329,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 else if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -381,6 +388,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 {
                     state = data_state;
                     token->set_quirks_required(true);
+                    it++;
                     return token;
                 }
 
@@ -407,6 +415,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 {
                     state = data_state;
                     token->set_is_name_set(true);
+                    it++;
                     return token;
                 }
 
@@ -435,6 +444,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -465,6 +475,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 else if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -485,6 +496,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 else if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -533,6 +545,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -567,6 +580,7 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
                 else if (next_char == '>')
                 {
                     state = data_state;
+                    it++;
                     return token;
                 }
 
@@ -593,4 +607,23 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
 
     // Shouldn't get here
     return token;
+}
+
+std::list<std::unique_ptr<HTMLToken>> 
+    HTMLTokenizer::tokenize_string(std::wstring html_string)
+{
+    std::wstring::iterator it = html_string.begin();
+    tokenizer_state state = data_state;
+
+    std::unique_ptr<HTMLToken> token = 
+        create_token_from_string(html_string, state, it);
+    std::list<std::unique_ptr<HTMLToken>> tokens;
+
+    while (!(it > html_string.end()))
+    {
+        tokens.push_back(std::move(token));
+        token = create_token_from_string(html_string, state, it);
+    }
+
+    return tokens;
 }
