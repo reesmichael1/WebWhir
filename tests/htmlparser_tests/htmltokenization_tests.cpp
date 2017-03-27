@@ -9,6 +9,7 @@
 #include "../../src/HTMLParser/tokens/DoctypeToken.hpp"
 #include "../../src/HTMLParser/tokens/EndToken.hpp"
 #include "../../src/HTMLParser/tokens/CommentToken.hpp"
+#include "../../src/HTMLParser/tokens/CharacterToken.hpp"
 
 TEST_CASE("HTML tokenization")
 {
@@ -174,6 +175,16 @@ TEST_CASE("HTML tokenization")
             CHECK_FALSE(token->is_self_closing());
         }
 
+        SECTION("Creating character tokens with tokenizer")
+        {
+            std::unique_ptr<HTMLToken> token = 
+                tokenizer.create_token_from_string(L"a");
+
+            REQUIRE(token->is_char_token());
+            CHECK(token->get_char() == L'a');
+            CHECK_FALSE(token->is_self_closing());
+        }
+
         SECTION("Creating comment tags with tokenizer")
         {
             SECTION("Normal comment")
@@ -242,7 +253,7 @@ TEST_CASE("HTML tokenization")
         {
             std::list<std::unique_ptr<HTMLToken>> tokens = 
                 tokenizer.tokenize_string(
-                        L"<!DOCTYPE html><html><head></head><body></body></html>");
+                    L"<!DOCTYPE html><html><head></head><body></body></html>");
 
             std::list<std::unique_ptr<HTMLToken>>::iterator it = 
                 tokens.begin();
@@ -260,6 +271,49 @@ TEST_CASE("HTML tokenization")
             std::advance(it, 1);
             CHECK((*it)->is_start_token());
             CHECK((*it)->get_tag_name() == L"body");
+            std::advance(it, 1);
+            CHECK((*it)->get_tag_name() == L"body");
+            CHECK((*it)->is_end_token());
+            std::advance(it, 1);
+            CHECK((*it)->get_tag_name() == L"html");
+            CHECK((*it)->is_end_token());
+        }
+
+
+        SECTION("Well-formatted string with character tokens")
+        {
+            std::list<std::unique_ptr<HTMLToken>> tokens = 
+                tokenizer.tokenize_string(
+                L"<!DOCTYPE html><html><head></head><body>Test</body></html>");
+
+            std::list<std::unique_ptr<HTMLToken>>::iterator it = 
+                tokens.begin();
+            CHECK((*it)->is_doctype_token());
+            CHECK((*it)->get_tag_name() == L"html");
+            std::advance(it, 1);
+            CHECK((*it)->is_start_token());
+            CHECK((*it)->get_tag_name() == L"html");
+            std::advance(it, 1);
+            CHECK((*it)->is_start_token());
+            CHECK((*it)->get_tag_name() == L"head");
+            std::advance(it, 1);
+            CHECK((*it)->get_tag_name() == L"head");
+            CHECK((*it)->is_end_token());
+            std::advance(it, 1);
+            CHECK((*it)->is_start_token());
+            CHECK((*it)->get_tag_name() == L"body");
+            std::advance(it, 1);
+            CHECK((*it)->get_char() == L'T');
+            CHECK((*it)->is_char_token());
+            std::advance(it, 1);
+            CHECK((*it)->get_char() == L'e');
+            CHECK((*it)->is_char_token());
+            std::advance(it, 1);
+            CHECK((*it)->get_char() == L's');
+            CHECK((*it)->is_char_token());
+            std::advance(it, 1);
+            CHECK((*it)->get_char() == L't');
+            CHECK((*it)->is_char_token());
             std::advance(it, 1);
             CHECK((*it)->get_tag_name() == L"body");
             CHECK((*it)->is_end_token());

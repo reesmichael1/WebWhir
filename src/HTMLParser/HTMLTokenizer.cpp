@@ -6,6 +6,7 @@
 #include "tokens/EndToken.hpp"
 #include "tokens/DoctypeToken.hpp"
 #include "tokens/CommentToken.hpp"
+#include "tokens/CharacterToken.hpp"
 
 int get_wstring_iposition(std::wstring long_str, std::wstring substr);
 
@@ -88,7 +89,13 @@ std::unique_ptr<HTMLToken>
                     state = tag_open_state;
 
                 // Handle \u0000, EOF
-                // else return character token
+                else 
+                {
+                    token = std::make_unique<CharacterToken>(next_char);
+                    it++;
+                    return token;
+                }
+
                 break;
             }
 

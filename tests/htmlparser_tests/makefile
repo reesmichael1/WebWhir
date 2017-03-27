@@ -5,7 +5,7 @@ ODIR=../build
 SDIR=../../src
 
 _OBJS = HTMLToken.o StartToken.o EndToken.o DoctypeToken.o CommentToken.o \
-		HTMLTokenizer.o HTMLTokenizer_utils.o 
+		HTMLTokenizer.o HTMLTokenizer_utils.o CharacterToken.o
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
 all: $(OBJS) htmlvalidation_tests htmltokenization_tests
@@ -35,6 +35,11 @@ $(ODIR)/CommentToken.o: $(SDIR)/HTMLParser/tokens/CommentToken.cpp \
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/CommentToken.cpp \
 		-o $(ODIR)/CommentToken.o
 
+$(ODIR)/CharacterToken.o: $(SDIR)/HTMLParser/tokens/CharacterToken.cpp \
+	$(SDIR)/HTMLParser/tokens/CharacterToken.hpp
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/CharacterToken.cpp \
+		-o $(ODIR)/CharacterToken.o
+
 $(ODIR)/HTMLTokenizer_utils.o: $(SDIR)/HTMLParser/HTMLTokenizer_utils.cpp
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLTokenizer_utils.cpp \
 		-o $(ODIR)/HTMLTokenizer_utils.o
@@ -42,7 +47,8 @@ $(ODIR)/HTMLTokenizer_utils.o: $(SDIR)/HTMLParser/HTMLTokenizer_utils.cpp
 $(ODIR)/HTMLTokenizer.o: $(SDIR)/HTMLParser/HTMLTokenizer.hpp \
 	$(SDIR)/HTMLParser/HTMLTokenizer_utils.cpp \
 	$(SDIR)/HTMLParser/HTMLTokenizer.cpp $(ODIR)/HTMLToken.o \
-	$(ODIR)/StartToken.o $(ODIR)/EndToken.o $(ODIR)/CommentToken.o
+	$(ODIR)/StartToken.o $(ODIR)/EndToken.o \
+	$(ODIR)/CommentToken.o $(ODIR)/CharacterToken.o
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLTokenizer.cpp \
 		-o $(ODIR)/HTMLTokenizer.o
 

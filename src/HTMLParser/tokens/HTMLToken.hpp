@@ -29,11 +29,14 @@ class HTMLToken
         // Start and End Token functions
         virtual bool is_self_closing() { return false; }
         virtual void set_self_closing(bool closing) {}
-        virtual std::map<std::wstring, std::wstring> get_attributes() { return {}; }
+        virtual std::map<std::wstring, std::wstring> get_attributes() 
+            { return {}; }
         virtual void add_to_current_attribute_name(wchar_t next_char) {}
         virtual void add_to_current_attribute_value(wchar_t next_char) {}
-        virtual std::wstring get_attribute_value(std::wstring attribute_name) { return NULL; }
-        virtual bool contains_attribute(std::wstring attribute_name) { return false; }
+        virtual std::wstring get_attribute_value(std::wstring attribute_name) 
+            { return NULL; }
+        virtual bool contains_attribute(std::wstring attribute_name) 
+            { return false; }
         virtual void process_current_attribute() {}
 
         // Comment Token functions
@@ -41,6 +44,11 @@ class HTMLToken
         virtual std::wstring get_data() { return NULL; }
         virtual void add_char_to_data(wchar_t next_char) {}
         virtual void set_data(std::wstring data_string) {}
+
+        // Character Token functions
+        virtual bool is_char_token() { return false; }
+        virtual wchar_t get_char() { return L'\0'; };
+        virtual void set_char(wchar_t char_to_set) {}
 
     protected:
         std::wstring tag_name;
