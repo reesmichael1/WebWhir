@@ -616,7 +616,7 @@ std::unique_ptr<HTMLToken>
     return token;
 }
 
-std::list<std::unique_ptr<HTMLToken>> 
+std::vector<std::unique_ptr<HTMLToken>> 
     HTMLTokenizer::tokenize_string(std::wstring html_string)
 {
     std::wstring::iterator it = html_string.begin();
@@ -624,7 +624,7 @@ std::list<std::unique_ptr<HTMLToken>>
 
     std::unique_ptr<HTMLToken> token = 
         create_token_from_string(html_string, state, it);
-    std::list<std::unique_ptr<HTMLToken>> tokens;
+    std::vector<std::unique_ptr<HTMLToken>> tokens;
 
     while (!(it > html_string.end()))
     {

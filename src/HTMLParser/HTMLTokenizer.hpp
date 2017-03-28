@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-#include <list>
+#include <vector>
 
 #include "tokens/HTMLToken.hpp"
 
@@ -60,7 +60,7 @@ class HTMLTokenizer
             html_string, tokenizer_state &state, std::wstring::iterator &it);
         std::unique_ptr<HTMLToken> create_token_from_string(std::wstring 
             html_string);
-        std::list<std::unique_ptr<HTMLToken>> 
+        std::vector<std::unique_ptr<HTMLToken>> 
             tokenize_string(std::wstring html_string);
 
     private:

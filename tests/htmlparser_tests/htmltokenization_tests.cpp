@@ -251,11 +251,11 @@ TEST_CASE("HTML tokenization")
 
         SECTION("Well-formatted minimal string")
         {
-            std::list<std::unique_ptr<HTMLToken>> tokens = 
+            std::vector<std::unique_ptr<HTMLToken>> tokens = 
                 tokenizer.tokenize_string(
                     L"<!DOCTYPE html><html><head></head><body></body></html>");
 
-            std::list<std::unique_ptr<HTMLToken>>::iterator it = 
+            std::vector<std::unique_ptr<HTMLToken>>::iterator it = 
                 tokens.begin();
             CHECK((*it)->is_doctype_token());
             CHECK((*it)->get_tag_name() == L"html");
@@ -282,11 +282,11 @@ TEST_CASE("HTML tokenization")
 
         SECTION("Well-formatted string with character tokens")
         {
-            std::list<std::unique_ptr<HTMLToken>> tokens = 
+            std::vector<std::unique_ptr<HTMLToken>> tokens = 
                 tokenizer.tokenize_string(
                 L"<!DOCTYPE html><html><head></head><body>Test</body></html>");
 
-            std::list<std::unique_ptr<HTMLToken>>::iterator it = 
+            std::vector<std::unique_ptr<HTMLToken>>::iterator it = 
                 tokens.begin();
             CHECK((*it)->is_doctype_token());
             CHECK((*it)->get_tag_name() == L"html");
