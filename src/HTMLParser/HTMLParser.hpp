@@ -17,14 +17,24 @@ class HTMLParser
         HTMLParser();
         Document construct_document_from_string(std::wstring html);
         std::shared_ptr<HTMLElement> 
-            construct_element_from_token(const std::unique_ptr<HTMLToken> &token);
+            construct_element_from_token(const std::unique_ptr<HTMLToken> 
+                    &token);
 
     protected:
         std::shared_ptr<HTMLElement> construct_html_element();
+        std::shared_ptr<HTMLHeadElement> construct_head_element();
+        std::shared_ptr<HTMLHeadElement> 
+            construct_head_from_token(const std::unique_ptr<HTMLToken> 
+                    &head_token);
         HTMLTokenizer tokenizer;
         std::stack<std::shared_ptr<HTMLElement>> open_elements;
         std::shared_ptr<HTMLHeadElement> head_element_pointer;
         Document finalize_document(Document document);
+        void reconstruct_active_formatting_elements();
+        void add_element_to_formatting_list(std::shared_ptr<HTMLElement> 
+                element);
+        std::list<std::shared_ptr<HTMLElement>> active_formatting_elements;
+        bool is_element_in_scope(std::shared_ptr<HTMLElement> element);
 
         enum insertion_mode
         {
