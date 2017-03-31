@@ -10,9 +10,9 @@ This list is primarily included as a reminder to myself as to what needs to be d
 - Handle more types of parse errors
 - Handle additional states in the tokenization stage
 - Develop HTMLElement interface more fully
+- Handle more doctype tokens
 - Implement graphical layout
 - Include CSS support
 - Implement scripting 
-- Load pages from network
 
-Finally, one can never have too many tests in a project!
+Finally, one can never have too many tests in a project! Even writing HTML strings that reveal interesting edge cases would be an important contribution.

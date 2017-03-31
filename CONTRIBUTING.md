@@ -4,7 +4,7 @@ I would be happy to accept help! The [TODO list](TODOS.md) is generally organize
 
 ## Requirements
 
-The most important requirement for a pull request is that it MUST include tests that provide a reasonable coverage of the changed code.
+The most important requirement for a pull request is that it MUST include tests that provide a reasonable coverage of the changed code. See the [tests](tests/) directory for examples.
 
 If you begin working on a feature, please open a pull request or an issue letting me know that you are doing so.
 
