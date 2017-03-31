@@ -5,10 +5,11 @@ ODIR=../build
 SDIR=../../src
 
 _OBJS = HTMLToken.o StartToken.o EndToken.o DoctypeToken.o CommentToken.o \
-		HTMLTokenizer.o HTMLTokenizer_utils.o CharacterToken.o
+		HTMLTokenizer.o HTMLTokenizer_utils.o CharacterToken.o Document.o \
+		HTMLElement.o HTMLHeadElement.o DocumentType.o HTMLParser.o
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
-all: $(OBJS) htmlvalidation_tests htmltokenization_tests
+all: $(OBJS) htmlvalidation_tests htmltokenization_tests htmlparser_tests
 
 $(ODIR)/HTMLToken.o: $(SDIR)/HTMLParser/tokens/HTMLToken.cpp \
 	$(SDIR)/HTMLParser/tokens/HTMLToken.hpp
@@ -44,11 +45,33 @@ $(ODIR)/HTMLTokenizer_utils.o: $(SDIR)/HTMLParser/HTMLTokenizer_utils.cpp
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLTokenizer_utils.cpp \
 		-o $(ODIR)/HTMLTokenizer_utils.o
 
+$(ODIR)/Document.o: $(SDIR)/Document/Document.hpp \
+	$(SDIR)/Document/Document.cpp
+	$(CC) $(CXXFLAGS) -c $(SDIR)/Document/Document.cpp -o $(ODIR)/Document.o
+
+$(ODIR)/DocumentType.o: $(SDIR)/Document/DocumentType.hpp \
+	$(SDIR)/Document/DocumentType.cpp
+	$(CC) $(CXXFLAGS) -c $(SDIR)/Document/DocumentType.cpp \
+		-o $(ODIR)/DocumentType.o
+
+$(ODIR)/HTMLElement.o: $(SDIR)/HTMLElements/HTMLElement.hpp \
+	$(SDIR)/HTMLElements/HTMLElement.cpp
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLElement.cpp \
+		-o $(ODIR)/HTMLElement.o
+
+$(ODIR)/HTMLHeadElement.o: $(SDIR)/HTMLElements/HTMLHeadElement.hpp \
+	$(SDIR)/HTMLElements/HTMLHeadElement.cpp
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLHeadElement.cpp \
+		-o $(ODIR)/HTMLHeadElement.o
+
+$(ODIR)/HTMLParser.o: $(SDIR)/HTMLParser/HTMLParser.hpp \
+	$(SDIR)/HTMLParser/HTMLParser.cpp
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLParser.cpp \
+		-o $(ODIR)/HTMLParser.o
+
 $(ODIR)/HTMLTokenizer.o: $(SDIR)/HTMLParser/HTMLTokenizer.hpp \
 	$(SDIR)/HTMLParser/HTMLTokenizer_utils.cpp \
-	$(SDIR)/HTMLParser/HTMLTokenizer.cpp $(ODIR)/HTMLToken.o \
-	$(ODIR)/StartToken.o $(ODIR)/EndToken.o \
-	$(ODIR)/CommentToken.o $(ODIR)/CharacterToken.o
+	$(SDIR)/HTMLParser/HTMLTokenizer.cpp $(OBJS)
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLTokenizer.cpp \
 		-o $(ODIR)/HTMLTokenizer.o
 
@@ -60,6 +83,10 @@ htmltokenization_tests: htmltokenization_tests.cpp $(OBJS)
 	$(CC) $(CXXFLAGS) -o htmltokenization_tests htmltokenization_tests.cpp \
 		../test_skeleton.o $(OBJS) $(LIBS)
 
+htmlparser_tests: htmlparser_tests.cpp $(OBJS)
+	$(CC) $(CXXFLAGS) -o htmlparser_tests htmlparser_tests.cpp \
+		../test_skeleton.o $(OBJS) $(LIBS)
+
 clean:
 	$(RM) $(ODIR)/*.o
-	$(RM) htmltokenization_tests htmlvalidation_tests
+	$(RM) htmltokenization_tests htmlvalidation_tests htmlparser_tests

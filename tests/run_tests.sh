@@ -19,6 +19,13 @@ if [ "$?" == 0 ] ; then
         failed_tests=(${failed_tests[@]} "htmltokenization_tests")
     fi
 
+    echo "Running htmlparser_tests"
+    ./htmlparser_tests/htmlparser_tests
+    if [ "$?" != 0 ] ; then
+        any_tests_failed=true
+        failed_tests=(${failed_tests[@]} "htmlparser_tests")
+    fi
+
     if "$any_tests_failed" == true ; then
         echo -e "Failures in:\n\t${failed_tests[@]}"
     else
