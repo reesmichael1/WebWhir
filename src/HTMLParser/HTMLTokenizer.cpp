@@ -57,7 +57,7 @@ bool HTMLTokenizer::doctype_before_root(std::wstring html_string)
         get_wstring_iposition(html_string, L"<html");
 }
 
-std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring 
+std::shared_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring 
     html_string)
 {
     tokenizer_state state = data_state;
@@ -65,12 +65,12 @@ std::unique_ptr<HTMLToken> HTMLTokenizer::create_token_from_string(std::wstring
     return create_token_from_string(html_string, state, it);
 }
 
-std::unique_ptr<HTMLToken> 
+std::shared_ptr<HTMLToken> 
     HTMLTokenizer::create_token_from_string(std::wstring html_string,
         HTMLTokenizer::tokenizer_state &state, 
         std::wstring::iterator &it)
 {
-    std::unique_ptr<HTMLToken> token = std::make_unique<HTMLToken>();
+    std::shared_ptr<HTMLToken> token = std::make_shared<HTMLToken>();
 
     // Can't use range-based loop, because we need to 
     // be able to look forwards/go backwards
@@ -91,7 +91,7 @@ std::unique_ptr<HTMLToken>
                 // Handle \u0000, EOF
                 else 
                 {
-                    token = std::make_unique<CharacterToken>(next_char);
+                    token = std::make_shared<CharacterToken>(next_char);
                     it++;
                     return token;
                 }
@@ -109,7 +109,7 @@ std::unique_ptr<HTMLToken>
 
                 else if (isalpha(next_char))
                 {
-                    token = std::make_unique<StartToken>(next_char);
+                    token = std::make_shared<StartToken>(next_char);
                     state = tag_name_state;
                 }
 
@@ -352,7 +352,7 @@ std::unique_ptr<HTMLToken>
                 if (std::wstring(it, it + 2) == L"--")
                 {
                     it += 1;
-                    token = std::make_unique<CommentToken>();
+                    token = std::make_shared<CommentToken>();
                     state = comment_start_state;
                 }
 
@@ -389,7 +389,7 @@ std::unique_ptr<HTMLToken>
                 if (space_chars.count(next_char) != 0)
                     break;
 
-                token = std::make_unique<DoctypeToken>();
+                token = std::make_shared<DoctypeToken>();
 
                 if (next_char == '>')
                 {
@@ -463,7 +463,7 @@ std::unique_ptr<HTMLToken>
             {
                 if (isalpha(next_char))
                 {
-                    token = std::make_unique<EndToken>(next_char);
+                    token = std::make_shared<EndToken>(next_char);
                     state = tag_name_state;
                 }
 
@@ -616,15 +616,15 @@ std::unique_ptr<HTMLToken>
     return token;
 }
 
-std::vector<std::unique_ptr<HTMLToken>> 
+std::vector<std::shared_ptr<HTMLToken>> 
     HTMLTokenizer::tokenize_string(std::wstring html_string)
 {
     std::wstring::iterator it = html_string.begin();
     tokenizer_state state = data_state;
 
-    std::unique_ptr<HTMLToken> token = 
+    std::shared_ptr<HTMLToken> token = 
         create_token_from_string(html_string, state, it);
-    std::vector<std::unique_ptr<HTMLToken>> tokens;
+    std::vector<std::shared_ptr<HTMLToken>> tokens;
 
     while (!(it > html_string.end()))
     {

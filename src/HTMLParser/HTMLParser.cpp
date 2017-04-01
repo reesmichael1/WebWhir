@@ -3,8 +3,6 @@
 
 #include "HTMLParser.hpp"
 
-#include <iostream>
-
 HTMLParser::HTMLParser()
 {
     tokenizer = HTMLTokenizer();
@@ -21,26 +19,32 @@ void HTMLParser::add_element_to_formatting_list(std::shared_ptr<HTMLElement>
 {
 }
 
-bool HTMLParser::is_element_in_scope(std::shared_ptr<HTMLElement> element)
+bool HTMLParser::is_element_in_scope(std::wstring element_title)
 {
     return true;
+}
+
+void HTMLParser::insert_html_element(std::shared_ptr<HTMLElement> element)
+{
+    open_elements.back()->add_child(element);
+    open_elements.push_back(element);
 }
 
 Document HTMLParser::construct_document_from_string(std::wstring html)
 {
     Document document = Document();
 
-    std::vector<std::unique_ptr<HTMLToken>> tokens = 
+    std::vector<std::shared_ptr<HTMLToken>> tokens = 
         tokenizer.tokenize_string(html);
 
     state = initial;
 
     std::shared_ptr<HTMLElement> current_node;
 
-    for (std::vector<std::unique_ptr<HTMLToken>>::iterator it = tokens.begin(); 
+    for (std::vector<std::shared_ptr<HTMLToken>>::iterator it = tokens.begin(); 
             it != tokens.end(); it++)
     {
-        const std::unique_ptr<HTMLToken> &token = *it;
+        const std::shared_ptr<HTMLToken> &token = *it;
 
         switch (state)
         {
@@ -73,7 +77,7 @@ Document HTMLParser::construct_document_from_string(std::wstring html)
                     if (token->get_tag_name() == L"html")
                     {
                         current_node = construct_element_from_token(token);
-                        open_elements.push(current_node);
+                        open_elements.push_back(current_node);
                         document.add_element(current_node);
 
                         state = before_head;
@@ -95,7 +99,7 @@ Document HTMLParser::construct_document_from_string(std::wstring html)
 
                 std::shared_ptr<HTMLElement> html = construct_html_element();
 
-                open_elements.push(html);
+                open_elements.push_back(html);
                 document.add_element(html);
 
                 current_node = construct_element_from_token(token);
@@ -112,13 +116,9 @@ Document HTMLParser::construct_document_from_string(std::wstring html)
                 if (token->is_start_token() && 
                         token->get_tag_name() == L"head")
                 {
-                    std::cout << "Before initializing head pointer" << std::endl;
-                    // std::shared_ptr<HTMLHeadElement> head = 
-                    //     std::make_shared<HTMLHeadElement>();
                     std::shared_ptr<HTMLHeadElement> head = 
                         construct_head_from_token(token);
-                    std::cout << "Past initializing head pointer" << std::endl;
-                    open_elements.push(head);
+                    open_elements.push_back(head);
                     head_element_pointer = head;
                 }
 
@@ -131,10 +131,8 @@ Document HTMLParser::construct_document_from_string(std::wstring html)
 
                 else
                 {
-                    // std::shared_ptr<HTMLHeadElement> head = 
-                    //     std::make_shared<HTMLHeadElement>();
                     std::shared_ptr<HTMLHeadElement> head = construct_head_element();
-                    open_elements.push(head);
+                    open_elements.push_back(head);
                     head_element_pointer = head;
                     it--;
                 }
@@ -146,11 +144,11 @@ Document HTMLParser::construct_document_from_string(std::wstring html)
             {
                 if (token->is_end_token() && token->get_tag_name() == L"head")
                 {
-                    open_elements.pop();
+                    open_elements.pop_back();
                     state = after_head;
                 }
 
-                // Many more states to implement
+                // Many more cases to implement
 
                 break;
             }
@@ -162,12 +160,13 @@ Document HTMLParser::construct_document_from_string(std::wstring html)
                 {
                     std::shared_ptr<HTMLElement> body = 
                         construct_element_from_token(token);
-                    open_elements.push(body);
+
+                    insert_html_element(body);
 
                     state = in_body;
                 }
 
-                // Many more states to implement
+                // Many more cases to implement
 
                 break;
             }
@@ -179,22 +178,34 @@ Document HTMLParser::construct_document_from_string(std::wstring html)
                     std::shared_ptr<HTMLElement> char_node = 
                         construct_element_from_token(token);
 
-                    reconstruct_active_formatting_elements();                    
-                    open_elements.top()->add_text(char_node);
+                    reconstruct_active_formatting_elements();
+                    open_elements.back()->add_text(char_node);
                 }
 
-                // Many more states to implement
+                if (token->is_end_token() && token->get_tag_name() == L"body")
+                {
+                    // Other elements to check later
+                    if (is_element_in_scope(L"body"))
+                        state = after_body;    
+                }
+
+                // Many more cases to implement
 
                 break;
             }
 
             case after_body:
             {
+                if (token->is_end_token() && token->get_tag_name() == L"html")
+                    state = after_after_body;
+
+                // Many more cases to implement
                 break;
             }
 
             case after_after_body:
             {
+                // Many more cases to implement
                 break;
             }
 
@@ -214,20 +225,19 @@ Document HTMLParser::finalize_document(Document document)
 }
 
 std::shared_ptr<HTMLElement> 
-    HTMLParser::construct_element_from_token(const std::unique_ptr<HTMLToken> 
+    HTMLParser::construct_element_from_token(const std::shared_ptr<HTMLToken> 
             &token)
 {
     std::shared_ptr<HTMLElement> element = std::make_shared<HTMLElement>();
-    return element;
-
-    std::cout << "In construct_element_from_token" << std::endl;
 
     if (token->get_tag_name() == L"html")
+    {
+        element->set_title(L"html");
         return element;
+    }
 
     else if (token->get_tag_name() == L"head")
     {
-        std::cout << "Constructing head element" << std::endl;
         element = std::make_shared<HTMLHeadElement>();
         return element;
     }
@@ -240,8 +250,11 @@ std::shared_ptr<HTMLElement>
 
     else if (token->is_char_token())
     {
-        element = std::make_shared<HTMLTextElement>();
-        return element;
+        std::shared_ptr<HTMLTextElement> text = 
+            std::make_shared<HTMLTextElement>();
+        text->add_char(token->get_char());
+
+        return text;
     }
 
     else
@@ -265,7 +278,7 @@ std::shared_ptr<HTMLHeadElement> HTMLParser::construct_head_element()
 }
 
 std::shared_ptr<HTMLHeadElement> 
-    HTMLParser::construct_head_from_token(const std::unique_ptr<HTMLToken> 
+    HTMLParser::construct_head_from_token(const std::shared_ptr<HTMLToken> 
             &head_token)
 {
     std::shared_ptr<HTMLHeadElement> element = 

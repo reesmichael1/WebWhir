@@ -2,15 +2,15 @@
 #define HTMLTEXTELEMENT_H
 
 #include "HTMLElement.hpp"
-#include "../HTMLParser/tokens/HTMLToken.hpp"
 
 class HTMLTextElement : public HTMLElement
 {
     public:
         HTMLTextElement();
         bool is_text_node();
+        void add_char(wchar_t next_char);
+        void add_char(std::wstring next_char);
         std::wstring get_text();
-        void add_char(std::shared_ptr<HTMLToken> char_token);
 
     protected:
         std::wstring text;

@@ -16,7 +16,12 @@ std::wstring HTMLTextElement::get_text()
     return text;
 }
 
-void HTMLTextElement::add_char(std::shared_ptr<HTMLToken> char_token)
+void HTMLTextElement::add_char(wchar_t next_char)
 {
-    text.push_back(char_token->get_char());
+    text.push_back(next_char);
+}
+
+void HTMLTextElement::add_char(std::wstring next_char)
+{
+    text += next_char;
 }

@@ -46,7 +46,7 @@ void HTMLElement::set_title(std::wstring element_title)
 void HTMLElement::add_text(std::shared_ptr<HTMLElement> text_node)
 {
     if (child_nodes.size() > 0 && child_nodes.back()->is_text_node())
-        child_nodes.back()->add_char(text_node->get_char());
+        child_nodes.back()->add_char(text_node->get_text());
     else
         add_child(text_node);
 }

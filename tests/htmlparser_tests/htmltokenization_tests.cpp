@@ -67,7 +67,7 @@ TEST_CASE("HTML tokenization")
                 std::wstring long_doctype = L"<!DOCTYPE HTML PUBLIC "  
                     L"\"-//W3C//DTD HTML 4.01 Transitional//EN\" "
                     L"\"http://www.w3.org/TR/html4/loose.dtd\">";
-                std::unique_ptr<HTMLToken> doctype_token = 
+                std::shared_ptr<HTMLToken> doctype_token = 
                     tokenizer.create_token_from_string(long_doctype);
 
                 REQUIRE(doctype_token->is_doctype_token());
@@ -83,7 +83,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Creating html root token with tokenizer")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(L"<HtMl lang=\"en\">");
                 std::map<std::wstring, std::wstring> attributes_map = 
                     token->get_attributes();
@@ -97,7 +97,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Creating self-closing tag with tokenizer")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(L"<br/>");
 
                 REQUIRE(token->is_start_token());
@@ -107,7 +107,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Tag with multiple attributes")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(
                         L"<img src=\"example.png\" width='10' height='20'>");
                 std::map<std::wstring, std::wstring> attributes_map = 
@@ -126,7 +126,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Tag with repeated attributes")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(
                                 L"<html lang='en' lang='br'>");
 
@@ -140,7 +140,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Capitalization in attribute name/value")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(L"<html lAnG='eN'>");
 
                 REQUIRE(token->is_start_token());
@@ -153,7 +153,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Self-closing tag with attributes")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(
                                 L"<area shape=\"circle\"/>");
 
@@ -167,7 +167,7 @@ TEST_CASE("HTML tokenization")
 
         SECTION("Creating end tags with tokenizer")
         {
-            std::unique_ptr<HTMLToken> token = 
+            std::shared_ptr<HTMLToken> token = 
                 tokenizer.create_token_from_string(L"</p>");
 
             REQUIRE(token->is_end_token());
@@ -177,7 +177,7 @@ TEST_CASE("HTML tokenization")
 
         SECTION("Creating character tokens with tokenizer")
         {
-            std::unique_ptr<HTMLToken> token = 
+            std::shared_ptr<HTMLToken> token = 
                 tokenizer.create_token_from_string(L"a");
 
             REQUIRE(token->is_char_token());
@@ -189,7 +189,7 @@ TEST_CASE("HTML tokenization")
         {
             SECTION("Normal comment")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(
                             L"<!--This is a comment-->");
 
@@ -199,7 +199,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Comment with no data")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(L"<!---->");
 
                 REQUIRE(token->is_comment_token());
@@ -208,7 +208,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Comment with hyphen in data")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(L"<!--Test-string-->");
 
                 REQUIRE(token->is_comment_token());
@@ -217,7 +217,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Comment with hyphen before data")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(L"<!---Test string-->");
 
                 REQUIRE(token->is_comment_token());
@@ -226,7 +226,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Comment with two hyphens in the middle")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(L"<!--Test--string-->");
 
                 REQUIRE(token->is_comment_token());
@@ -235,7 +235,7 @@ TEST_CASE("HTML tokenization")
 
             SECTION("Comment with exclamation mark and hyphens in the middle")
             {
-                std::unique_ptr<HTMLToken> token = 
+                std::shared_ptr<HTMLToken> token = 
                     tokenizer.create_token_from_string(
                             L"<!--Test--!string-->");
 
@@ -251,11 +251,11 @@ TEST_CASE("HTML tokenization")
 
         SECTION("Well-formatted minimal string")
         {
-            std::vector<std::unique_ptr<HTMLToken>> tokens = 
+            std::vector<std::shared_ptr<HTMLToken>> tokens = 
                 tokenizer.tokenize_string(
                     L"<!DOCTYPE html><html><head></head><body></body></html>");
 
-            std::vector<std::unique_ptr<HTMLToken>>::iterator it = 
+            std::vector<std::shared_ptr<HTMLToken>>::iterator it = 
                 tokens.begin();
             CHECK((*it)->is_doctype_token());
             CHECK((*it)->get_tag_name() == L"html");
@@ -282,11 +282,11 @@ TEST_CASE("HTML tokenization")
 
         SECTION("Well-formatted string with character tokens")
         {
-            std::vector<std::unique_ptr<HTMLToken>> tokens = 
+            std::vector<std::shared_ptr<HTMLToken>> tokens = 
                 tokenizer.tokenize_string(
                 L"<!DOCTYPE html><html><head></head><body>Test</body></html>");
 
-            std::vector<std::unique_ptr<HTMLToken>>::iterator it = 
+            std::vector<std::shared_ptr<HTMLToken>>::iterator it = 
                 tokens.begin();
             CHECK((*it)->is_doctype_token());
             CHECK((*it)->get_tag_name() == L"html");

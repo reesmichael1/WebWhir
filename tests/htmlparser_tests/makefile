@@ -1,7 +1,8 @@
 CC=g++
 CXXFLAGS=-std=c++14 -Wall -pedantic
 LIBS=/usr/lib/libboost_regex.a
-ODIR=../build
+ODIR=../build/obj
+BDIR=../build/bin
 SDIR=../../src
 
 _OBJS = HTMLToken.o StartToken.o EndToken.o DoctypeToken.o CommentToken.o \
@@ -10,7 +11,8 @@ _OBJS = HTMLToken.o StartToken.o EndToken.o DoctypeToken.o CommentToken.o \
 		DocumentType.o HTMLParser.o
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
-all: $(OBJS) htmlvalidation_tests htmltokenization_tests htmlparser_tests
+all: $(OBJS) $(BDIR)/htmlvalidation_tests $(BDIR)/htmltokenization_tests \
+	$(BDIR)/htmlparser_tests
 
 $(ODIR)/HTMLToken.o: $(SDIR)/HTMLParser/tokens/HTMLToken.cpp \
 	$(SDIR)/HTMLParser/tokens/HTMLToken.hpp
@@ -86,18 +88,18 @@ $(ODIR)/HTMLTokenizer.o: $(SDIR)/HTMLParser/HTMLTokenizer.hpp \
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLTokenizer.cpp \
 		-o $(ODIR)/HTMLTokenizer.o
 
-htmlvalidation_tests: htmlvalidation_tests.cpp $(OBJS)
-	$(CC) $(CXXFLAGS) -o htmlvalidation_tests htmlvalidation_tests.cpp \
-		../test_skeleton.o $(OBJS) $(LIBS)
+$(BDIR)/htmlvalidation_tests: htmlvalidation_tests.cpp $(OBJS)
+	$(CC) $(CXXFLAGS) htmlvalidation_tests.cpp $(ODIR)/test_skeleton.o \
+		$(OBJS) $(LIBS) -o $(BDIR)/htmlvalidation_tests 
 
-htmltokenization_tests: htmltokenization_tests.cpp $(OBJS)
-	$(CC) $(CXXFLAGS) -o htmltokenization_tests htmltokenization_tests.cpp \
-		../test_skeleton.o $(OBJS) $(LIBS)
+$(BDIR)/htmltokenization_tests: htmltokenization_tests.cpp $(OBJS)
+	$(CC) $(CXXFLAGS) htmltokenization_tests.cpp $(ODIR)/test_skeleton.o \
+		$(OBJS) $(LIBS) -o $(BDIR)/htmltokenization_tests
 
-htmlparser_tests: htmlparser_tests.cpp $(OBJS)
-	$(CC) $(CXXFLAGS) -o htmlparser_tests htmlparser_tests.cpp \
-		../test_skeleton.o $(OBJS) $(LIBS) -g
+$(BDIR)/htmlparser_tests: htmlparser_tests.cpp $(OBJS)
+	$(CC) $(CXXFLAGS) htmlparser_tests.cpp $(ODIR)/test_skeleton.o \
+		$(OBJS) $(LIBS) -o $(BDIR)/htmlparser_tests
 
 clean:
 	$(RM) $(ODIR)/*.o
-	$(RM) htmltokenization_tests htmlvalidation_tests htmlparser_tests
+	$(RM) $(BDIR)/*_tests

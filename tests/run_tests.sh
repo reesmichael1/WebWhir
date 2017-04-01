@@ -5,26 +5,15 @@ failed_tests=()
 
 make tests
 if [ "$?" == 0 ] ; then
-    echo "Running htmlvalidation_tests"
-    ./htmlparser_tests/htmlvalidation_tests
-    if [ "$?" != 0 ] ; then
-        any_tests_failed=true
-        failed_tests=(${failed_tests[@]} "htmlvalidation_tests")
-    fi
-
-    echo "Running htmltokenization_tests"
-    ./htmlparser_tests/htmltokenization_tests
-    if [ "$?" != 0 ] ; then
-        any_tests_failed=true
-        failed_tests=(${failed_tests[@]} "htmltokenization_tests")
-    fi
-
-    echo "Running htmlparser_tests"
-    ./htmlparser_tests/htmlparser_tests
-    if [ "$?" != 0 ] ; then
-        any_tests_failed=true
-        failed_tests=(${failed_tests[@]} "htmlparser_tests")
-    fi
+    for test_file in build/bin/*_tests
+    do
+        echo "Running $test_file"
+        $test_file
+        if [ "$?" != 0 ] ; then
+            any_tests_failed=true
+            failed_tests=(${failed_tests[@]} ${test_file##*/})
+        fi
+    done
 
     if "$any_tests_failed" == true ; then
         echo -e "Failures in:\n\t${failed_tests[@]}"

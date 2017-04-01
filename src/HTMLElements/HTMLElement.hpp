@@ -21,7 +21,9 @@ class HTMLElement
         // Text Node functions
         virtual bool is_text_node() { return false; }
         virtual void add_char(wchar_t next_char) {};
+        virtual void add_char(std::wstring next_char) {};
         virtual wchar_t get_char() { return L'\0'; };
+        virtual std::wstring get_text() { return L""; };
 
     protected:
         std::wstring id;

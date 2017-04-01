@@ -56,11 +56,11 @@ class HTMLTokenizer
             cdata_section_state
         };
 
-        std::unique_ptr<HTMLToken> create_token_from_string(std::wstring 
+        std::shared_ptr<HTMLToken> create_token_from_string(std::wstring 
             html_string, tokenizer_state &state, std::wstring::iterator &it);
-        std::unique_ptr<HTMLToken> create_token_from_string(std::wstring 
+        std::shared_ptr<HTMLToken> create_token_from_string(std::wstring 
             html_string);
-        std::vector<std::unique_ptr<HTMLToken>> 
+        std::vector<std::shared_ptr<HTMLToken>> 
             tokenize_string(std::wstring html_string);
 
     private:
