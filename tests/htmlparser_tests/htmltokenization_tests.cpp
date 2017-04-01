@@ -163,6 +163,17 @@ TEST_CASE("HTML tokenization")
                 CHECK(token->contains_attribute(L"shape"));
                 CHECK(token->get_attribute_value(L"shape") == L"circle");
             }
+
+            SECTION("Newline inside of tag")
+            {
+                auto token = 
+                    tokenizer.create_token_from_string(L"<html\nlang=\"en\">");
+                REQUIRE(token->is_start_token());
+                CHECK(token->get_tag_name() == L"html");
+                CHECK(token->contains_attribute(L"lang"));
+                CHECK(token->get_attribute_value(L"lang") == L"en");
+                CHECK_FALSE(token->is_self_closing());
+            }
         }
 
         SECTION("Creating end tags with tokenizer")
@@ -173,6 +184,15 @@ TEST_CASE("HTML tokenization")
             REQUIRE(token->is_end_token());
             CHECK(token->get_tag_name() == L"p");
             CHECK_FALSE(token->is_self_closing());
+
+            SECTION("Newline inside of tag")
+            {
+                auto token = 
+                    tokenizer.create_token_from_string(L"</p\n>");
+                REQUIRE(token->is_end_token());
+                CHECK(token->get_tag_name() == L"p");
+                CHECK_FALSE(token->is_self_closing());
+            }
         }
 
         SECTION("Creating character tokens with tokenizer")
@@ -195,6 +215,16 @@ TEST_CASE("HTML tokenization")
 
                 REQUIRE(token->is_comment_token());
                 CHECK(token->get_data() == L"This is a comment");
+            }
+
+            SECTION("Normal comment with newline")
+            {
+                std::shared_ptr<HTMLToken> token = 
+                    tokenizer.create_token_from_string(
+                            L"<!--This is\na comment-->");
+
+                REQUIRE(token->is_comment_token());
+                CHECK(token->get_data() == L"This is\na comment");
             }
 
             SECTION("Comment with no data")
