@@ -1,5 +1,6 @@
 #include "../HTMLElements/HTMLBodyElement.hpp"
 #include "../HTMLElements/HTMLTextElement.hpp"
+#include "../HTMLElements/HTMLParagraphElement.hpp"
 
 #include "HTMLParser.hpp"
 
@@ -182,11 +183,36 @@ Document HTMLParser::construct_document_from_string(std::wstring html)
                     open_elements.back()->add_text(char_node);
                 }
 
-                if (token->is_end_token() && token->get_tag_name() == L"body")
+                else if (token->is_end_token())
                 {
-                    // Other elements to check later
-                    if (is_element_in_scope(L"body"))
-                        state = after_body;    
+                    if (token->get_tag_name() == L"body")
+                    {
+                        // Other elements to check later
+                        if (is_element_in_scope(L"body"))
+                            state = after_body;    
+                    }
+
+                    else if (token->get_tag_name() == L"p")
+                    {
+                        // TODO
+                        // Check if stack has element in button scope
+                        // Generate implied end tags
+                        // Check if current node is p node before popping
+                        open_elements.pop_back();
+                    }
+                }
+                
+                else if (token->is_start_token())
+                {
+                    if (token->get_tag_name() == L"p")
+                    {
+                        // Other elements to check 
+                        if (is_element_in_scope(L"p"))
+                        {
+                            current_node = construct_element_from_token(token);
+                            insert_html_element(current_node);
+                        }
+                    }
                 }
 
                 // Many more cases to implement
@@ -245,6 +271,12 @@ std::shared_ptr<HTMLElement>
     else if (token->get_tag_name() == L"body")
     {
         element = std::make_shared<HTMLBodyElement>();
+        return element;
+    }
+
+    else if (token->get_tag_name() == L"p")
+    {
+        element = std::make_shared<HTMLParagraphElement>();
         return element;
     }
 

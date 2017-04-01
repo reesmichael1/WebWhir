@@ -8,7 +8,7 @@ SDIR=../../src
 _OBJS = HTMLToken.o StartToken.o EndToken.o DoctypeToken.o CommentToken.o \
 		HTMLTokenizer.o HTMLTokenizer_utils.o CharacterToken.o Document.o \
 		HTMLElement.o HTMLHeadElement.o HTMLTextElement.o HTMLBodyElement.o \
-		DocumentType.o HTMLParser.o
+		HTMLParagraphElement.o DocumentType.o HTMLParser.o
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
 all: $(OBJS) $(BDIR)/htmlvalidation_tests $(BDIR)/htmltokenization_tests \
@@ -76,6 +76,11 @@ $(ODIR)/HTMLBodyElement.o: $(SDIR)/HTMLElements/HTMLBodyElement.hpp \
 	$(SDIR)/HTMLElements/HTMLBodyElement.cpp
 	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLBodyElement.cpp \
 		-o $(ODIR)/HTMLBodyElement.o
+
+$(ODIR)/HTMLParagraphElement.o: $(SDIR)/HTMLElements/HTMLParagraphElement.hpp \
+	$(SDIR)/HTMLElements/HTMLParagraphElement.cpp
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLParagraphElement.cpp \
+		-o $(ODIR)/HTMLParagraphElement.o
 
 $(ODIR)/HTMLParser.o: $(SDIR)/HTMLParser/HTMLParser.hpp \
 	$(SDIR)/HTMLParser/HTMLParser.cpp
