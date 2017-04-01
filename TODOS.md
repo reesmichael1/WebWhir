@@ -12,6 +12,7 @@ This list is primarily included as a reminder to myself as to what needs to be d
 - Develop HTMLElement interface more fully
 - Handle more doctype tokens
 - Implement graphical layout
+- Correctly determine character encoding
 - Include CSS support
 - Implement scripting 
 
