@@ -14,6 +14,12 @@ Therefore, with several more years of experience, I am beginning a complete rewr
 
 ## Rewrite Roadmap
 
-The first step will be to reconstruct a parser. The original parser was entirely designed by myself, and, although it worked surprisingly well, had no sense of how to handle malformed HTML, and became so complicated that it was exceedingly difficult to maintain. To avoid this happening again, the new parser will follow the W3C guidelines for [parsing HTML documents](https://www.w3.org/TR/2011/WD-html5-20110113/parsing.html). This parser is well underway.
+The philosophy of the rewrite is to get the necessary skeletal structure into place to demonstrate how other cases will be handled. For example, in the [HTML tokenizer](src/HTMLParser/HTMLTokenizer.cpp), there are well over 30 possible states that the tokenizer state machine can enter (as defined in the [specification](https://www.w3.org/TR/2011/WD-html5-20110113/parsing.html)). The current implementation of the tokenizer only handles the few of these that were necessary to parse simple and well-formatted strings. This choice was made to allow development of as many pieces of the final program as quickly as possible, rather than spending significant amounts of time handling countless edge cases. Of course, as time goes on, more and more of these edge cases will be implemented.
 
-After completing a basic parser, I will then start to write a new painter, which will actually display the parsed HTML. The original version of WebWhir used Qt, but I will carefully consider what graphics library to use this time around.
+In this sense, the basic framework of the new parser is now complete.
+
+Now that the beginnings of the parser are finished, work is now shifting to writing a painter which will actually display the parsed HTML.
+
+## Contributing
+
+Additional contributors would be appreciated! Please see the [contributing guide](CONTRIBUTING.md) for more information.
