@@ -4,6 +4,3 @@ target_link_libraries(layout_tests sfml-system sfml-graphics test_skeleton
     CommentToken DocumentType DoctypeToken CharacterToken boost_regex 
     HTMLTokenizer_utils HTMLElement HTMLHeadElement HTMLBodyElement 
     HTMLParagraphElement HTMLTextElement)
-
-
-INSTALL(TARGETS layout_tests DESTINATION ${WebWhirTests_SOURCE_DIR}/build)
