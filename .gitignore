@@ -1,4 +1,5 @@
 *.o
 tests/*/*_tests
+build/*
 tests/build/*
 .ycm_extra_conf.py

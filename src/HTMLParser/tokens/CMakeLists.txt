@@ -1,0 +1,6 @@
+add_library(CharacterToken CharacterToken.cpp)
+add_library(CommentToken CommentToken.cpp)
+add_library(DoctypeToken DoctypeToken.cpp)
+add_library(EndToken EndToken.cpp)
+add_library(HTMLToken HTMLToken.cpp)
+add_library(StartToken StartToken.cpp)

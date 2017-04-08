@@ -3,11 +3,16 @@
 any_tests_failed=false
 failed_tests=()
 
-make tests
+cd build
+cmake ../../
+make
+
 if [ "$?" == 0 ] ; then
-    for test_file in build/bin/*_tests
+    cp ./tests/*_tests/*_tests ./
+    for test_file in ../build/*_tests
     do
-        echo "Running $test_file"
+        file_name=${test_file##*/}
+        echo "Running $file_name"
         $test_file
         if [ "$?" != 0 ] ; then
             any_tests_failed=true

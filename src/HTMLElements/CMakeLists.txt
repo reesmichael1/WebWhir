@@ -1,0 +1,5 @@
+add_library(HTMLBodyElement HTMLBodyElement.cpp)
+add_library(HTMLElement HTMLElement.cpp)
+add_library(HTMLHeadElement HTMLHeadElement.cpp)
+add_library(HTMLParagraphElement HTMLParagraphElement.cpp)
+add_library(HTMLTextElement HTMLTextElement.cpp)
