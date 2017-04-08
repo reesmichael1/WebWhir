@@ -1,16 +1,95 @@
 CC=g++
 CXXFLAGS=-std=c++14 -Wall -pedantic
-DIRS=htmlparser_tests
+DIRS=htmlparser_tests layout_tests
 ODIR=build/obj
+SDIR=../src
+
+_WWOBJS = HTMLToken.o StartToken.o EndToken.o DoctypeToken.o CommentToken.o \
+		HTMLTokenizer.o HTMLTokenizer_utils.o CharacterToken.o Document.o \
+		HTMLElement.o HTMLHeadElement.o HTMLTextElement.o HTMLBodyElement.o \
+		HTMLParagraphElement.o DocumentType.o HTMLParser.o Box.o Layout.o
+WWOBJS = $(patsubst %,$(ODIR)/%,$(_WWOBJS))
 
 .PHONY: htmlparser_tests layout_tests
 
 all: tests
 
-tests: htmlparser_tests layout_tests $(ODIR)/test_skeleton.o
+tests: $(ODIR)/test_skeleton.o ww_objects htmlparser_tests \
+	layout_tests ww_objects
 
 $(ODIR)/test_skeleton.o: test_skeleton.cpp
 	$(CC) $(CXXFLAGS) -c test_skeleton.cpp -o $(ODIR)/test_skeleton.o
+
+ww_objects: $(WWOBJS)
+
+$(ODIR)/HTMLToken.o: $(SDIR)/HTMLParser/tokens/HTMLToken.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/HTMLToken.cpp \
+		-o $(ODIR)/HTMLToken.o
+
+$(ODIR)/StartToken.o: $(SDIR)/HTMLParser/tokens/StartToken.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/StartToken.cpp \
+		-o $(ODIR)/StartToken.o
+
+$(ODIR)/EndToken.o: $(SDIR)/HTMLParser/tokens/EndToken.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/EndToken.cpp \
+		-o $(ODIR)/EndToken.o
+
+$(ODIR)/DoctypeToken.o: $(SDIR)/HTMLParser/tokens/DoctypeToken.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/DoctypeToken.cpp \
+		-o $(ODIR)/DoctypeToken.o
+
+$(ODIR)/CommentToken.o: $(SDIR)/HTMLParser/tokens/CommentToken.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/CommentToken.cpp \
+		-o $(ODIR)/CommentToken.o
+
+$(ODIR)/CharacterToken.o: $(SDIR)/HTMLParser/tokens/CharacterToken.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/tokens/CharacterToken.cpp \
+		-o $(ODIR)/CharacterToken.o
+
+$(ODIR)/HTMLTokenizer_utils.o: $(SDIR)/HTMLParser/HTMLTokenizer_utils.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLTokenizer_utils.cpp \
+		-o $(ODIR)/HTMLTokenizer_utils.o
+
+$(ODIR)/Document.o: $(SDIR)/Document/Document.* 
+	$(CC) $(CXXFLAGS) -c $(SDIR)/Document/Document.cpp -o $(ODIR)/Document.o
+
+$(ODIR)/DocumentType.o: $(SDIR)/Document/DocumentType.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/Document/DocumentType.cpp \
+		-o $(ODIR)/DocumentType.o
+
+$(ODIR)/HTMLElement.o: $(SDIR)/HTMLElements/HTMLElement.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLElement.cpp \
+		-o $(ODIR)/HTMLElement.o
+
+$(ODIR)/HTMLHeadElement.o: $(SDIR)/HTMLElements/HTMLHeadElement.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLHeadElement.cpp \
+		-o $(ODIR)/HTMLHeadElement.o
+
+$(ODIR)/HTMLTextElement.o: $(SDIR)/HTMLElements/HTMLTextElement.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLTextElement.cpp \
+		-o $(ODIR)/HTMLTextElement.o
+
+$(ODIR)/HTMLBodyElement.o: $(SDIR)/HTMLElements/HTMLBodyElement.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLBodyElement.cpp \
+		-o $(ODIR)/HTMLBodyElement.o
+
+$(ODIR)/HTMLParagraphElement.o: $(SDIR)/HTMLElements/HTMLParagraphElement.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLElements/HTMLParagraphElement.cpp \
+		-o $(ODIR)/HTMLParagraphElement.o
+
+$(ODIR)/HTMLParser.o: $(SDIR)/HTMLParser/HTMLParser.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLParser.cpp \
+		-o $(ODIR)/HTMLParser.o
+
+$(ODIR)/HTMLTokenizer.o: $(SDIR)/HTMLParser/HTMLTokenizer.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/HTMLParser/HTMLTokenizer.cpp \
+		-o $(ODIR)/HTMLTokenizer.o
+
+$(ODIR)/Box.o: $(SDIR)/Layout/Box.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/Layout/Box.cpp -o $(ODIR)/Box.o
+
+$(ODIR)/Layout.o: $(SDIR)/Layout/Layout.*
+	$(CC) $(CXXFLAGS) -c $(SDIR)/Layout/Layout.cpp -o $(ODIR)/Layout.o
 
 htmlparser_tests: 
 	+$(MAKE) -C htmlparser_tests
@@ -20,3 +99,4 @@ layout_tests:
 
 clean:
 	for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
+	$(RM) $(WWOBJS) $(ODIR)/test_skeleton.o

@@ -19,11 +19,14 @@ class HTMLElement
         void add_text(std::shared_ptr<HTMLElement> text_node);
         
         // Text Node functions
-        virtual bool is_text_node() { return false; }
+        virtual bool is_text_node() { return false; };
         virtual void add_char(wchar_t next_char) {};
         virtual void add_char(std::wstring next_char) {};
         virtual wchar_t get_char() { return L'\0'; };
         virtual std::wstring get_text() { return L""; };
+
+        // Paragraph Node functions
+        virtual bool is_paragraph_node() { return false; };
 
     protected:
         std::wstring id;
