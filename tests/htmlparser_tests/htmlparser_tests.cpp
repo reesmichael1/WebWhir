@@ -4,8 +4,6 @@
 #include "../../src/HTMLElements/HTMLElement.hpp"
 #include "../../src/Document/Document.hpp"
 
-#include <iostream>
-
 TEST_CASE("HTMLParser tests")
 {
     HTMLParser parser;
