@@ -1,0 +1,2 @@
+add_executable(loader_tests loader_tests.cpp)
+target_link_libraries(loader_tests test_skeleton Loader)

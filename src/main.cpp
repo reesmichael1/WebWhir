@@ -1,20 +1,32 @@
 #include <string>
 
+#include <iostream>
+
 #include "WW_Window/WW_Window.hpp"
 #include "Document/Document.hpp"
 #include "HTMLParser/HTMLParser.hpp"
+#include "Loader/Loader.hpp"
 
 #define WINDOW_WIDTH 500
 #define WINDOW_HEIGHT 500
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::wstring html(L"<!DOCTYPE html><html><head></head><body>"
-        "<p>Hello world!</p>"
-        "<p>This is a simple test HTML string that demonstrates "
-        "WebWhir's rendering capabilities.</p>"
-        "<p>Although work is still in the early stages, this example "
-        "shows the foundation of the progress to come.");
+    Loader loader;
+    std::wstring html;
+
+    if (argc < 2)
+    {
+        std::cout << "Loading default demo." << std::endl << 
+            "Pass path to executable to load different file." << std::endl;
+        html = loader.load_from_file("../../tests/html_files/demo.html");
+    }
+
+    else
+        html = loader.load_from_file(std::string(argv[1]));
+
+    if (html == L"")
+        return -1;
 
     WW_Window window(WINDOW_WIDTH, WINDOW_HEIGHT);
 
