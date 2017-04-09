@@ -3,13 +3,15 @@
 any_tests_failed=false
 failed_tests=()
 
-cd build
-cmake ../../
+cd ../build
+cmake ..
 make
 
 if [ "$?" == 0 ] ; then
-    cp ./tests/*_tests/*_tests ./
-    for test_file in ../build/*_tests
+    cd ../tests/build
+    cp ../../build/tests/*_tests/*_tests ./
+
+    for test_file in ./*_tests
     do
         file_name=${test_file##*/}
         echo "Running $file_name"
@@ -28,4 +30,3 @@ if [ "$?" == 0 ] ; then
 else
     echo "Compilation error, giving up"
 fi
-
