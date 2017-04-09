@@ -4,6 +4,7 @@
 #include "Layout.hpp"
 
 #define PARAGRAPH_BREAK_PADDING 14
+#define LEADING 2
 
 Layout::Layout()
 {
@@ -143,12 +144,14 @@ void Layout::add_string(std::wstring string)
             current_box.set_height(text.getLocalBounds().height);
             boxes.push_back(current_box);
             is_last_box_finalized = true;
+            cursor_y += current_box.get_height() + LEADING;
 
             current_box = Box();
 
-            cursor_y += current_box.get_height();
             current_string = word;
             old_string = current_string;
+            current_box.set_box_string(current_string);
+            current_box.set_coordinates({cursor_x, cursor_y});
         }
 
 
