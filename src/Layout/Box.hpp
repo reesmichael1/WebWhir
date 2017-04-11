@@ -17,12 +17,15 @@ class Box
         void set_box_string(std::wstring string);
         void set_width(int new_width);
         void set_height(int new_height);
+        void set_visible(bool v);
+        bool is_visible();
 
     protected:
         int width;
         int height;
         std::vector<int> coordinates;
         std::wstring string_in_box;
+        bool visible;
 };
 
 #endif

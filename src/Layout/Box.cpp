@@ -51,3 +51,13 @@ void Box::set_height(int new_height)
 {
     height = new_height;
 }
+
+void Box::set_visible(bool v)
+{
+    visible = v;
+}
+
+bool Box::is_visible()
+{
+    return visible;
+}

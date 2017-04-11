@@ -35,7 +35,7 @@ TEST_CASE("Constructing Layout from strings")
             auto boxes = layout.get_boxes();
 
             REQUIRE(boxes.size() == 1);
-            CHECK(boxes.at(0).get_width() == 276);
+            CHECK(boxes.at(0).get_width() == 275);
             CHECK(boxes.at(0).get_height() == 14);
             CHECK(boxes.at(0).get_coordinates() == zero_vector);
             CHECK(boxes.at(0).get_box_string() == 
@@ -60,10 +60,10 @@ TEST_CASE("Constructing Layout from strings")
             auto boxes = layout.get_boxes();
 
             REQUIRE(boxes.size() == 2);
-            CHECK(boxes.at(0).get_width() == 409);
+            CHECK(boxes.at(0).get_width() == 412);
             CHECK(boxes.at(0).get_height() == 14);
             CHECK(boxes.at(0).get_box_string() == line1);
-            CHECK(boxes.at(1).get_width() == 443);
+            CHECK(boxes.at(1).get_width() == 442);
             CHECK(boxes.at(1).get_height() == 14);
             CHECK(boxes.at(1).get_box_string() == line2);
         }
@@ -87,8 +87,7 @@ TEST_CASE("Constructing Layout from Documents")
             "<body><p>Test</p></body></html>");
     std::wstring two_p(L"<!DOCTYPE html><html><head></head>"
             "<body><p>Test</p><p>Test 2</p></body></html>");
-    std::wstring two_p_long(L"<!DOCTYPE html><html><head></head><body>"
-        "<p>Hello world!</p>"
+    std::wstring p_long(L"<!DOCTYPE html><html><head></head><body>"
         "<p>This is a string with a line break in "
         "just the right place to catch a bug."
         "</p></body></html>");
@@ -109,7 +108,6 @@ TEST_CASE("Constructing Layout from Documents")
 
     SECTION("With paragraph nodes in Document")
     {
-        std::vector<int> two_p_coordinates{0, 25};
         SECTION("One paragraph node in document")
         {
             Document doc = parser.construct_document_from_string(with_p);
@@ -128,6 +126,7 @@ TEST_CASE("Constructing Layout from Documents")
         {
             Document doc = parser.construct_document_from_string(two_p);
             layout.construct_from_document(doc);
+            std::vector<int> two_p_coordinates{0, 25};
 
             auto boxes = layout.get_boxes();
 
@@ -140,20 +139,22 @@ TEST_CASE("Constructing Layout from Documents")
 
         SECTION("Line breaks in paragraph nodes with one word on second line")
         {
-            std::vector<int> third_p_coordinates{0, 41};
-            Document doc = parser.construct_document_from_string(two_p_long);
+            std::vector<int> second_line_coordinates{0, 16};
+            Document doc = parser.construct_document_from_string(p_long);
             layout.construct_from_document(doc);
+            layout.set_view(sf::View());
+            layout.update();
 
             auto boxes = layout.get_boxes();
 
-            REQUIRE(boxes.size() == 3);
-            CHECK(boxes.at(0).get_box_string() == L"Hello world!");
-            CHECK(boxes.at(0).get_coordinates() == zero_vector);
-            CHECK(boxes.at(1).get_box_string() == L"This is a string with a "
+            REQUIRE(boxes.size() == 2);
+            CHECK(boxes.at(0).get_box_string() == L"This is a string with a "
                     "line break in just the right place to catch a");
-            CHECK(boxes.at(1).get_coordinates() == two_p_coordinates);
-            CHECK(boxes.at(2).get_box_string() == L"bug.");
-            CHECK(boxes.at(2).get_coordinates() == third_p_coordinates);
+            CHECK(boxes.at(0).get_coordinates() == zero_vector);
+            CHECK(boxes.at(0).is_visible());
+            CHECK(boxes.at(1).get_box_string() == L"bug.");
+            CHECK(boxes.at(1).get_coordinates() == second_line_coordinates);
+            CHECK(boxes.at(1).is_visible());
         }
     }
 }

@@ -1,5 +1,4 @@
 #include <string>
-
 #include <iostream>
 
 #include "WW_Window/WW_Window.hpp"
@@ -30,14 +29,13 @@ int main(int argc, char* argv[])
 
     WW_Window window(WINDOW_WIDTH, WINDOW_HEIGHT);
 
+    HTMLParser parser;
+    Document document = parser.construct_document_from_string(html);
+
     Layout layout;
     layout.set_width(WINDOW_WIDTH);
-
-    HTMLParser parser;
-
-    Document document = parser.construct_document_from_string(html);
+    layout.set_view(window.getView());
     layout.construct_from_document(document);
-    window.load_from_layout(layout);
 
     while (window.isOpen())
     {
@@ -62,13 +60,13 @@ int main(int argc, char* argv[])
 
                 case sf::Event::Resized:
                 {
-                    sf::Vector2f size = static_cast<sf::Vector2f>(window.getSize());
-                    sf::View newView(sf::FloatRect(0.f, 0.f, size.x, size.y));
-                    window.setView(newView);
-
+                    sf::Vector2f size = 
+                        static_cast<sf::Vector2f>(window.getSize());
+                    sf::View view(sf::FloatRect(0.f, 0.f, size.x, size.y));
+                    window.setView(view);
+                    layout.set_view(view);
                     layout.set_width(size.x);
-                    layout.construct_from_document(document);
-                    window.load_from_layout(layout);
+                    layout.update();
 
                     break;
                 }
@@ -78,6 +76,7 @@ int main(int argc, char* argv[])
             }
         }
 
+        window.load_from_layout(layout);
         window.clear(sf::Color::White);
         window.show_layout();
         window.display();
