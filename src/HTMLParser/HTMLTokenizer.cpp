@@ -59,22 +59,22 @@ bool HTMLTokenizer::doctype_before_root(const std::wstring &html_string)
 }
 
 std::shared_ptr<HTMLToken> 
-    HTMLTokenizer::create_token_from_string(std::wstring html_string)
+    HTMLTokenizer::create_token_from_string(const std::wstring &html_string)
 {
     tokenizer_state state = data_state;
-    std::wstring::iterator it = html_string.begin();
+    std::wstring::const_iterator it = html_string.cbegin();
     return create_token_from_string(html_string, state, it);
 }
 
 std::shared_ptr<HTMLToken> 
-    HTMLTokenizer::create_token_from_string(std::wstring html_string,
-        HTMLTokenizer::tokenizer_state &state, std::wstring::iterator &it)
+    HTMLTokenizer::create_token_from_string(const std::wstring &html_string,
+        HTMLTokenizer::tokenizer_state &state, std::wstring::const_iterator &it)
 {
     std::shared_ptr<HTMLToken> token = std::make_shared<HTMLToken>();
 
     // Can't use range-based loop, because we need to 
     // be able to look forwards/go backwards
-    for (; it != html_string.end(); ++it)
+    for (; it != html_string.cend(); ++it)
     {
         wchar_t next_char = *it;
         switch (state)
@@ -617,20 +617,23 @@ std::shared_ptr<HTMLToken>
 }
 
 std::vector<std::shared_ptr<HTMLToken>> 
-    HTMLTokenizer::tokenize_string(std::wstring html_string)
+    HTMLTokenizer::tokenize_string(const std::wstring &html_string)
 {
-    std::wstring::iterator it = html_string.begin();
+    std::wstring::const_iterator it = html_string.cbegin();
     tokenizer_state state = data_state;
 
     std::shared_ptr<HTMLToken> token = 
         create_token_from_string(html_string, state, it);
     std::vector<std::shared_ptr<HTMLToken>> tokens;
 
-    while (!(it > html_string.end()))
+    while (!(it >= html_string.cend()))
     {
-        tokens.push_back(std::move(token));
+        tokens.push_back(token);
         token = create_token_from_string(html_string, state, it);
     }
+
+    if (it == html_string.cend())
+        tokens.push_back(token);
 
     return tokens;
 }

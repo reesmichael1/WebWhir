@@ -11,7 +11,7 @@ class Document
 {
     public:
         Document();
-        void add_element(const std::shared_ptr<HTMLElement> element);
+        void add_element(const std::shared_ptr<HTMLElement> &element);
         std::list<std::shared_ptr<HTMLElement>> get_elements() const;
         DocumentType get_document_type() const;
         void set_quirks_mode(bool quirks);

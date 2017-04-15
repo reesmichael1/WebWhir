@@ -5,7 +5,7 @@ Document::Document() : doc_type(L"")
     quirks_mode = false;
 }
 
-void Document::add_element(const std::shared_ptr<HTMLElement> element)
+void Document::add_element(const std::shared_ptr<HTMLElement> &element)
 {
     elements.push_back(element);
 }

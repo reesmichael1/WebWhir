@@ -56,13 +56,13 @@ class HTMLTokenizer
             cdata_section_state
         };
 
-        std::shared_ptr<HTMLToken> create_token_from_string(std::wstring 
-            html_string, tokenizer_state &state, 
-            std::wstring::iterator &it);
-        std::shared_ptr<HTMLToken> create_token_from_string(std::wstring 
-            html_string);
+        std::shared_ptr<HTMLToken> create_token_from_string(const std::wstring 
+            &html_string, tokenizer_state &state, 
+            std::wstring::const_iterator &it);
+        std::shared_ptr<HTMLToken> create_token_from_string(const std::wstring 
+            &html_string);
         std::vector<std::shared_ptr<HTMLToken>> 
-            tokenize_string(std::wstring html_string);
+            tokenize_string(const std::wstring &html_string);
 
     private:
         static bool contains_doctype(const std::wstring &html_string);

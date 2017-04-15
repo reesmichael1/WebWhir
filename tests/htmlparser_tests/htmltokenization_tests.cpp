@@ -43,6 +43,7 @@ TEST_CASE("HTML tokenization")
         {
             SECTION("Normal doctype token")
             {
+                // auto doctype_string = L"<!DOCTYPE html>";
                 auto doctype_string = L"<!DOCTYPE html>";
                 auto doctype_token = 
                     tokenizer.create_token_from_string(doctype_string);
@@ -286,6 +287,7 @@ TEST_CASE("HTML tokenization")
                 tokenizer.tokenize_string(
                     L"<!DOCTYPE html><html><head></head><body></body></html>");
 
+            REQUIRE(tokens.size() == 7);
             std::vector<std::shared_ptr<HTMLToken>>::iterator it = 
                 tokens.begin();
             CHECK((*it)->is_doctype_token());
@@ -317,6 +319,7 @@ TEST_CASE("HTML tokenization")
                 tokenizer.tokenize_string(
                 L"<!DOCTYPE html><html><head></head><body>Test</body></html>");
 
+            REQUIRE(tokens.size() == 11);
             std::vector<std::shared_ptr<HTMLToken>>::iterator it = 
                 tokens.begin();
             CHECK((*it)->is_doctype_token());

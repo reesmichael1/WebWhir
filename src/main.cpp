@@ -24,6 +24,8 @@ int main(int argc, char* argv[])
     else
         html = loader.load_from_file(std::string(argv[1]));
 
+    std::cout << "Loaded string" << std::endl;
+
     if (html == L"")
         return -1;
 
@@ -32,10 +34,14 @@ int main(int argc, char* argv[])
     HTMLParser parser;
     Document document = parser.construct_document_from_string(html);
 
+    std::cout << "Constructed document" << std::endl;
+
     Layout layout;
     layout.set_width(WINDOW_WIDTH);
     layout.set_view(window.getView());
     layout.construct_from_document(document);
+
+    std::cout << "Constructed layout" << std::endl;
 
     while (window.isOpen())
     {

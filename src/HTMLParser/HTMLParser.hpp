@@ -29,13 +29,13 @@ class HTMLParser
         HTMLTokenizer tokenizer;
         std::vector<std::shared_ptr<HTMLElement>> open_elements;
         std::shared_ptr<HTMLHeadElement> head_element_pointer;
-        Document finalize_document(Document document);
+        Document finalize_document(const Document &document);
         void reconstruct_active_formatting_elements();
         void add_element_to_formatting_list(const std::shared_ptr<HTMLElement> 
-                element);
+                &element);
         std::list<std::shared_ptr<HTMLElement>> active_formatting_elements;
         bool is_element_in_scope(const std::wstring &element_title);
-        void insert_html_element(const std::shared_ptr<HTMLElement> element);
+        void insert_html_element(const std::shared_ptr<HTMLElement> &element);
 
         enum insertion_mode
         {

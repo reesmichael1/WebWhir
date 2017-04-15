@@ -1,7 +1,6 @@
 #include "../HTMLElements/HTMLBodyElement.hpp"
 #include "../HTMLElements/HTMLTextElement.hpp"
 #include "../HTMLElements/HTMLParagraphElement.hpp"
-
 #include "HTMLParser.hpp"
 
 HTMLParser::HTMLParser()
@@ -15,8 +14,8 @@ void HTMLParser::reconstruct_active_formatting_elements()
 {
 }
 
-void HTMLParser::add_element_to_formatting_list(std::shared_ptr<HTMLElement> 
-        element)
+void HTMLParser::add_element_to_formatting_list(const 
+        std::shared_ptr<HTMLElement> &element)
 {
 }
 
@@ -25,7 +24,7 @@ bool HTMLParser::is_element_in_scope(const std::wstring &element_title)
     return true;
 }
 
-void HTMLParser::insert_html_element(std::shared_ptr<HTMLElement> element)
+void HTMLParser::insert_html_element(const std::shared_ptr<HTMLElement> &element)
 {
     open_elements.back()->add_child(element);
     open_elements.push_back(element);
@@ -244,7 +243,7 @@ Document HTMLParser::construct_document_from_string(std::wstring &html)
     return finalize_document(document);
 }
 
-Document HTMLParser::finalize_document(Document document)
+Document HTMLParser::finalize_document(const Document &document)
 {
     // https://www.w3.org/TR/2011/WD-html5-20110113/the-end.html#stop-parsing
     return document;
