@@ -14,7 +14,7 @@ EndToken::EndToken(wchar_t token_name)
     tag_name = tolower(token_name);
 }
 
-bool EndToken::is_self_closing()
+bool EndToken::is_self_closing() const
 {
     return self_closing;
 }
@@ -24,7 +24,7 @@ void EndToken::set_self_closing(bool closing)
     self_closing = closing;
 }
 
-std::map<std::wstring, std::wstring> EndToken::get_attributes()
+std::map<std::wstring, std::wstring> EndToken::get_attributes() const
 {
     std::wcerr << "PARSE ERROR: Attempt to access attributes " << 
         " in end token" << std::endl;
@@ -43,13 +43,13 @@ void EndToken::add_to_current_attribute_value(wchar_t next_char)
     return;
 }
 
-bool EndToken::contains_attribute(std::wstring attribute_name)
+bool EndToken::contains_attribute(std::wstring attribute_name) const
 {
     // EndTokens should never have attributes
     return false;
 }
 
-std::wstring EndToken::get_attribute_value(std::wstring attribute_name)
+std::wstring EndToken::get_attribute_value(std::wstring attribute_name) const
 {
     std::wcerr << "PARSE ERROR: Attempt to access attribute " << 
         attribute_name << " in end token" << std::endl;
@@ -62,7 +62,7 @@ void EndToken::process_current_attribute()
     return;
 }
 
-bool EndToken::is_end_token()
+bool EndToken::is_end_token() const
 {
     return true;
 }

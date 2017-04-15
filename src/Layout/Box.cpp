@@ -22,7 +22,7 @@ std::vector<int> Box::get_coordinates()
     return coordinates;
 }
 
-void Box::set_coordinates(std::vector<int> coords)
+void Box::set_coordinates(const std::vector<int> &coords)
 {
     coordinates = coords;
 }
@@ -32,22 +32,22 @@ std::wstring Box::get_box_string()
     return string_in_box;
 }
 
-void Box::add_to_string(std::wstring string)
+void Box::add_to_string(const std::wstring &string)
 {
     string_in_box += string;
 }
 
-void Box::set_box_string(std::wstring string)
+void Box::set_box_string(const std::wstring &string)
 {
     string_in_box = string;
 }
 
-void Box::set_width(int new_width)
+void Box::set_width(const int &new_width)
 {
     width = new_width;
 }
 
-void Box::set_height(int new_height)
+void Box::set_height(const int &new_height)
 {
     height = new_height;
 }

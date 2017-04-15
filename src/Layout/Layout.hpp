@@ -13,14 +13,14 @@ class Layout
 {
     public:
         Layout();
-        void set_width(int new_width);
-        void construct_from_document(Document doc);
-        void add_string(std::wstring string);
-        std::vector<Box> get_boxes();
+        void set_width(const int &new_width);
+        void construct_from_document(const Document &doc);
+        void add_string(const std::wstring &string);
+        std::vector<Box> get_boxes() const;
         int get_max_width();
         int get_max_height();
         void update();
-        void set_view(sf::View new_view);
+        void set_view(const sf::View &new_view);
 
     protected:
         int cursor_x;

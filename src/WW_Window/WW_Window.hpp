@@ -12,7 +12,7 @@ class WW_Window : public sf::RenderWindow
 {
     public:
         WW_Window(int w, int h);
-        void load_from_layout(Layout layout);
+        void load_from_layout(const Layout &layout);
         void show_layout();
 
     protected:

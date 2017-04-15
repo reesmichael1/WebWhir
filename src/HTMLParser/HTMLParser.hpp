@@ -15,7 +15,7 @@ class HTMLParser
 {
     public:
         HTMLParser();
-        Document construct_document_from_string(std::wstring html);
+        Document construct_document_from_string(std::wstring &html);
         std::shared_ptr<HTMLElement> 
             construct_element_from_token(const std::shared_ptr<HTMLToken> 
                     &token);
@@ -31,11 +31,11 @@ class HTMLParser
         std::shared_ptr<HTMLHeadElement> head_element_pointer;
         Document finalize_document(Document document);
         void reconstruct_active_formatting_elements();
-        void add_element_to_formatting_list(std::shared_ptr<HTMLElement> 
+        void add_element_to_formatting_list(const std::shared_ptr<HTMLElement> 
                 element);
         std::list<std::shared_ptr<HTMLElement>> active_formatting_elements;
-        bool is_element_in_scope(std::wstring element_title);
-        void insert_html_element(std::shared_ptr<HTMLElement> element);
+        bool is_element_in_scope(const std::wstring &element_title);
+        void insert_html_element(const std::shared_ptr<HTMLElement> element);
 
         enum insertion_mode
         {

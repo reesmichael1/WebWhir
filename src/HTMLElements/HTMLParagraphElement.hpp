@@ -7,7 +7,7 @@ class HTMLParagraphElement : public HTMLElement
 {
     public:
         HTMLParagraphElement();
-        bool is_paragraph_node();
+        bool is_paragraph_node() const;
 };
 
 #endif

@@ -43,8 +43,9 @@ TEST_CASE("HTML tokenization")
         {
             SECTION("Normal doctype token")
             {
+                auto doctype_string = L"<!DOCTYPE html>";
                 auto doctype_token = 
-                    tokenizer.create_token_from_string(L"<!DOCTYPE html>");
+                    tokenizer.create_token_from_string(doctype_string);
 
                 REQUIRE(doctype_token->is_doctype_token());
                 CHECK_FALSE(doctype_token->quirks_required());

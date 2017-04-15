@@ -6,9 +6,9 @@
 class DocumentType
 {
     public:
-        DocumentType(std::wstring type_name);
-        std::wstring get_name();
-        void set_name(std::wstring type_name);
+        DocumentType(const std::wstring &type_name);
+        std::wstring get_name() const;
+        void set_name(const std::wstring &type_name);
 
     protected:
         std::wstring name;

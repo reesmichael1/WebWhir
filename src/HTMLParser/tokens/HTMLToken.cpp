@@ -4,7 +4,7 @@ HTMLToken::~HTMLToken()
 {
 }
 
-std::wstring HTMLToken::get_tag_name()
+std::wstring HTMLToken::get_tag_name() const
 {
     return tag_name;
 }

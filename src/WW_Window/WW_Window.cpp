@@ -16,7 +16,7 @@ void WW_Window::show_layout()
         draw(drawable);
 }
 
-void WW_Window::load_from_layout(Layout layout)
+void WW_Window::load_from_layout(const Layout &layout)
 {
     sf::Text text;
     drawables = {};

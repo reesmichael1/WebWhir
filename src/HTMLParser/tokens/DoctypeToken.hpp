@@ -10,15 +10,15 @@ class DoctypeToken : public HTMLToken
     public:
         DoctypeToken();
         DoctypeToken(wchar_t token_name);
-        bool quirks_required();
-        bool is_name_set();
+        bool quirks_required() const;
+        bool is_name_set() const;
         void set_is_name_set(bool is_set);
-        bool is_public_identifier_set();
-        bool is_system_identifier_set();
-        std::wstring get_public_identifier();
-        std::wstring get_system_identifier();
+        bool is_public_identifier_set() const;
+        bool is_system_identifier_set() const;
+        std::wstring get_public_identifier() const;
+        std::wstring get_system_identifier() const;
         void set_quirks_required(bool required);
-        bool is_doctype_token();
+        bool is_doctype_token() const;
 
     private:
         bool require_quirks;

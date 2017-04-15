@@ -11,34 +11,34 @@ HTMLElement::~HTMLElement()
 {
 }
 
-HTMLElement::HTMLElement(const HTMLElement& element)
+HTMLElement::HTMLElement(const HTMLElement &element)
 {
     child_nodes = element.child_nodes;
     id = element.id;
     title = element.title;
 }
 
-std::wstring HTMLElement::get_title()
+std::wstring HTMLElement::get_title() const
 {
     return title;
 }
 
-std::wstring HTMLElement::get_id()
+std::wstring HTMLElement::get_id() const
 {
     return id;
 }
 
-void HTMLElement::add_child(std::shared_ptr<HTMLElement> child_node)
+void HTMLElement::add_child(const std::shared_ptr<HTMLElement> child_node)
 {
     child_nodes.push_back(std::move(child_node));
 }
 
-std::vector<std::shared_ptr<HTMLElement>> HTMLElement::get_children()
+std::vector<std::shared_ptr<HTMLElement>> HTMLElement::get_children() const
 {
     return child_nodes;
 }
 
-void HTMLElement::set_title(std::wstring element_title)
+void HTMLElement::set_title(const std::wstring &element_title)
 {
     title = element_title;
 }

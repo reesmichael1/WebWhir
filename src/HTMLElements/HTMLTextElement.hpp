@@ -7,10 +7,10 @@ class HTMLTextElement : public HTMLElement
 {
     public:
         HTMLTextElement();
-        bool is_text_node();
-        void add_char(wchar_t next_char);
-        void add_char(std::wstring next_char);
-        std::wstring get_text();
+        bool is_text_node() const;
+        void add_char(const wchar_t &next_char);
+        void add_char(const std::wstring &next_char);
+        std::wstring get_text() const;
 
     protected:
         std::wstring text;

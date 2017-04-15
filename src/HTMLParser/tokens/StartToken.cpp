@@ -20,7 +20,7 @@ StartToken::StartToken(wchar_t token_name)
     current_attribute_value = L"";
 }
 
-bool StartToken::is_self_closing()
+bool StartToken::is_self_closing() const
 {
     return self_closing;
 }
@@ -30,7 +30,7 @@ void StartToken::set_self_closing(bool closing)
     self_closing = closing;
 }
 
-std::map<std::wstring, std::wstring> StartToken::get_attributes()
+std::map<std::wstring, std::wstring> StartToken::get_attributes() const
 {
     return attributes;
 }
@@ -46,12 +46,12 @@ void StartToken::add_to_current_attribute_value(wchar_t next_char)
     current_attribute_value.push_back(tolower(next_char));
 }
 
-bool StartToken::contains_attribute(std::wstring attribute_name)
+bool StartToken::contains_attribute(std::wstring attribute_name) const
 {
     return (attributes.count(attribute_name) > 0);
 }
 
-std::wstring StartToken::get_attribute_value(std::wstring attribute_name)
+std::wstring StartToken::get_attribute_value(std::wstring attribute_name) const
 {
     try
     {
@@ -79,7 +79,7 @@ void StartToken::process_current_attribute()
     current_attribute_value = L"";
 }
 
-bool StartToken::is_start_token()
+bool StartToken::is_start_token() const
 {
     return true;
 }

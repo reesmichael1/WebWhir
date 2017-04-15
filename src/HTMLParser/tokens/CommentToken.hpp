@@ -7,8 +7,8 @@ class CommentToken : public HTMLToken
 {
     public:
         CommentToken();
-        bool is_comment_token();
-        std::wstring get_data();
+        bool is_comment_token() const;
+        std::wstring get_data() const;
         void add_char_to_data(wchar_t next_char);
         void set_data(std::wstring data_string);
 

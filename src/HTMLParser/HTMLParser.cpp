@@ -20,7 +20,7 @@ void HTMLParser::add_element_to_formatting_list(std::shared_ptr<HTMLElement>
 {
 }
 
-bool HTMLParser::is_element_in_scope(std::wstring element_title)
+bool HTMLParser::is_element_in_scope(const std::wstring &element_title)
 {
     return true;
 }
@@ -31,7 +31,7 @@ void HTMLParser::insert_html_element(std::shared_ptr<HTMLElement> element)
     open_elements.push_back(element);
 }
 
-Document HTMLParser::construct_document_from_string(std::wstring html)
+Document HTMLParser::construct_document_from_string(std::wstring &html)
 {
     Document document = Document();
 

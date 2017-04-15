@@ -6,10 +6,10 @@
 class CharacterToken : public HTMLToken
 {
     public:
-        CharacterToken(wchar_t char_to_set);
-        bool is_char_token();
-        wchar_t get_char();
-        void set_char(wchar_t char_to_set);
+        CharacterToken(const wchar_t &char_to_set);
+        bool is_char_token() const;
+        wchar_t get_char() const;
+        void set_char(const wchar_t &char_to_set);
 
     protected:
         wchar_t token_char;

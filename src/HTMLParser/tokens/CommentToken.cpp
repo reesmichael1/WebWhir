@@ -5,12 +5,12 @@ CommentToken::CommentToken()
     data = L"";
 }
 
-bool CommentToken::is_comment_token()
+bool CommentToken::is_comment_token() const
 {
     return true;
 }
 
-std::wstring CommentToken::get_data()
+std::wstring CommentToken::get_data() const
 {
     return data;
 }

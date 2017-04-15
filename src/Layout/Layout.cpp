@@ -71,7 +71,7 @@ Layout::Layout()
 
 }
 
-void push_remaining_children(std::vector<std::shared_ptr<HTMLElement>> c, 
+void push_remaining_children(const std::vector<std::shared_ptr<HTMLElement>> &c, 
         std::stack<std::vector<std::shared_ptr<HTMLElement>>> &r)
 {
     if (c.size() <= 1)
@@ -86,7 +86,7 @@ void push_remaining_children(std::vector<std::shared_ptr<HTMLElement>> c,
     }
 }
 
-void Layout::construct_from_document(Document doc)
+void Layout::construct_from_document(const Document &doc)
 {
     boxes = {};
     cursor_x = 0;
@@ -143,12 +143,12 @@ void Layout::construct_from_document(Document doc)
     }
 }
 
-void Layout::set_width(int new_width)
+void Layout::set_width(const int &new_width)
 {
     width = new_width;
 }
 
-void Layout::add_string(std::wstring string)
+void Layout::add_string(const std::wstring &string)
 {
     std::vector<std::wstring> words;
     boost::split(words, string, boost::is_any_of(L" "));
@@ -238,7 +238,7 @@ void Layout::add_string(std::wstring string)
     cursor_y += box_height;
 }
 
-std::vector<Box> Layout::get_boxes()
+std::vector<Box> Layout::get_boxes() const
 {
     return boxes;
 }
@@ -286,7 +286,7 @@ void Layout::update()
     }
 }
 
-void Layout::set_view(sf::View new_view)
+void Layout::set_view(const sf::View &new_view)
 {
     view = new_view;
 }
