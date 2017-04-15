@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "../HTMLElements/HTMLBodyElement.hpp"
 #include "../HTMLElements/HTMLTextElement.hpp"
 #include "../HTMLElements/HTMLParagraphElement.hpp"
@@ -32,6 +34,9 @@ void HTMLParser::insert_html_element(const std::shared_ptr<HTMLElement> &element
 
 Document HTMLParser::construct_document_from_string(std::wstring &html)
 {
+    if (!tokenizer.is_valid_html_string(html))
+        std::cerr << "ERROR: HTML string is not valid! "
+            "Bad things may happen." << std::endl;
     Document document = Document();
 
     std::vector<std::shared_ptr<HTMLToken>> tokens = 
